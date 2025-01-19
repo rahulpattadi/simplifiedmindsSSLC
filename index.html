@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Questions and Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            padding: 20px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 12px;
+        }
+
+        .question-number {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .marks {
+            color: #6b7280;
+            font-size: 14px;
+            background: #f3f4f6;
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .year {
+            color: #6b7280;
+            font-size: 14px;
+            text-align: right;
+            margin-top: 16px;
+            font-style: italic;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 16px;
+            margin: 8px 0;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+
+        .option-btn:hover {
+            background-color: #f9fafb;
+            border-color: #3b82f6;
+        }
+
+        .option-btn.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .solution-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3b82f6;
+            background: #f0f7ff;
+            border: none;
+            cursor: pointer;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 16px;
+            transition: all 0.2s;
+        }
+
+        .solution-btn:hover {
+            background: #e0f2fe;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .solution-step {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .solution-step:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+        }
+
+        .formula {
+            font-family: "Courier New", monospace;
+            background-color: #e5e7eb;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+
+        .video-container {
+            margin-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+
+        .video-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ef4444;
+            background: #fef2f2;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .video-btn:hover {
+            background: #fee2e2;
+        }
+
+        .video-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 12px;
+        }
+
+        .difficulty.easy {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .difficulty.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .difficulty.hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+
+            .question-card {
+                padding: 16px;
+            }
+
+            .question-header {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .marks {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Questions will go here - I'll provide the first few as an example -->
+        <div class="question-card">
+            <div class="question-header">
+                <div style="display: flex; align-items: center;">
+                    <span class="question-number">1</span>
+                    <h3>Resistors of resistance 100 Ω each are connected in parallel in an electric circuit. Then the number of resistors have to be connected to obtain 25 Ω as equivalent resistance is</h3>
+                </div>
+                <div>
+                    <span class="marks">1 mark</span>
+                    <span class="difficulty easy">Easy</span>
+                </div>
+            </div>
+            <div class="options-container">
+                <button class="option-btn" data-index="0">(A) 10</button>
+                <button class="option-btn" data-index="1">(B) 5</button>
+                <button class="option-btn" data-index="2">(C) 40</button>
+                <button class="option-btn" data-index="3">(D) 4</button>
+            </div>
+            <button class="solution-btn" onclick="toggleSolution('solution1')">
+                <span class="arrow">▶</span> View Step-by-Step Solution
+            </button>
+            <div id="solution1" class="solution-content">
+                <div class="solution-step">For parallel resistors: 1/R₁ + 1/R₂ + ... = 1/Rₑq</div>
+                <div class="solution-step">Since all resistors are equal (100Ω): n/100 = 1/25</div>
+                <div class="solution-step">Where n is the number of resistors</div>
+                <div class="solution-step">n = 100/25 = 4 resistors</div>
+                <div class="solution-step">Therefore, option (D) 4 is correct.</div>
+                <div class="video-container">
+                    <button class="video-btn" onclick="openVideo('abc123xyz')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Watch Video Solution
+                    </button>
+                </div>
+            </div>
+            <div class="year">2023 Model Q4</div>
+        </div>
+
+        <!-- More questions will follow... -->
+
+    <!-- Question 2 -->
+    <div class="question-card">
+        <div class="question-header">
+            <div style="display: flex; align-items: center;">
+                <span class="question-number">2</span>
+                <h3>Is it possible to connect a refrigerator rated 1320W to a domestic circuit of 220 V with an electric fuse rated 5 A? Clarify the reason for your answer.</h3>
+            </div>
+            <div>
+                <span class="marks">2 marks</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+        </div>
+        <button class="solution-btn" onclick="toggleSolution('solution2')">
+            <span class="arrow">▶</span> View Step-by-Step Solution
+        </button>
+        <div id="solution2" class="solution-content">
+            <div class="solution-step">Step 1: Let's use the power equation to find current</div>
+            <div class="solution-step">Given: Power (P) = 1320W, Voltage (V) = 220V</div>
+            <div class="solution-step">Using P = V × I</div>
+            <div class="solution-step">1320 = 220 × I</div>
+            <div class="solution-step">I = 1320/220 = 6 amperes</div>
+            <div class="solution-step">Step 2: Compare with fuse rating of 5A</div>
+            <div class="solution-step">Since 6A > 5A, the current required exceeds the fuse rating</div>
+            <div class="solution-step">Therefore, it's not possible to connect the refrigerator as it will blow the fuse</div>
+            <div class="video-container">
+                <button class="video-btn" onclick="openVideo('xyz789')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Watch Video Solution
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question-card">
+        <div class="question-header">
+            <div style="display: flex; align-items: center;">
+                <span class="question-number">3</span>
+                <h3>It is advantageous to connect electric devices in parallel instead of connecting them in series. Why?</h3>
+            </div>
+            <div>
+                <span class="marks">3 marks</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+        </div>
+        <p class="question-text">OR</p>
+        <p class="question-text">According to Joule's law of heating, mention the factors on which heat produced in a resistor depends. According to this law write the formula used to calculate the heat produced.</p>
+        <button class="solution-btn" onclick="toggleSolution('solution3')">
+            <span class="arrow">▶</span> View Solution
+        </button>
+        <div id="solution3" class="solution-content">
+            <div class="solution-step">Part 1: Advantages of parallel connection:</div>
+            <div class="solution-step">1. The parallel circuit divides current through the electrical gadgets based on their resistance</div>
+            <div class="solution-step">2. When one component fails, other components continue to work</div>
+            <div class="solution-step">3. Each electrical appliance can be operated independently</div>
+            <div class="solution-step">4. Devices get the required current based on their individual resistance</div>
+            <div class="solution-step">OR</div>
+            <div class="solution-step">Joule's Law of Heating:</div>
+            <div class="solution-step">1. Heat is directly proportional to square of current (I²)</div>
+            <div class="solution-step">2. Heat is directly proportional to resistance (R)</div>
+            <div class="solution-step">3. Heat is directly proportional to time (t)</div>
+            <div class="solution-step">4. Formula: H = I²Rt</div>
+            <div class="video-container">
+                <button class="video-btn" onclick="openVideo('abc456')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Watch Video Solution
+                </button>
+            </div>
+        </div>
+        <div class="year">2019 Annual Q26</div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question-card">
+        <div class="question-header">
+            <div style="display: flex; align-items: center;">
+                <span class="question-number">4</span>
+                <h3>The device used to produce electricity is</h3>
+            </div>
+            <div>
+                <span class="marks">1 mark</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+        </div>
+        <div class="options-container">
+            <button class="option-btn" data-index="0">(A) Galvanometer</button>
+            <button class="option-btn" data-index="1">(B) Electric generator</button>
+            <button class="option-btn" data-index="2">(C) Ammeter</button>
+            <button class="option-btn" data-index="3">(D) Electric motor</button>
+        </div>
+        <button class="solution-btn" onclick="toggleSolution('solution2')">
+            <span class="arrow">▶</span> View Solution
+        </button>
+        <div id="solution4" class="solution-content">
+            <div class="solution-step">Option (B) Electric generator is correct</div>
+            <div class="solution-step">- A galvanometer measures small electric currents</div>
+            <div class="solution-step">- An ammeter measures electric current</div>
+            <div class="solution-step">- An electric motor converts electrical energy to mechanical energy</div>
+            <div class="solution-step">- An electric generator converts mechanical energy to electrical energy</div>
+            <div class="video-container">
+                <button class="video-btn" onclick="openVideo('def789')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Watch Video Solution
+                </button>
+            </div>
+        </div>
+        <div class="year">2022 Annual Q1</div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question-card">
+        <div class="question-header">
+            <div style="display: flex; align-items: center;">
+                <span class="question-number">5</span>
+                <h3>The correct formula that shows the relationship between potential difference, electric current and resistance in an electric circuit is</h3>
+            </div>
+            <div>
+                <span class="marks">1 mark</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+        </div>
+        <div class="options-container">
+            <button class="option-btn" data-index="0">(A) I = R/V</button>
+            <button class="option-btn" data-index="1">(B) I = VR</button>
+            <button class="option-btn" data-index="2">(C) V = I/R</button>
+            <button class="option-btn" data-index="3">(D) R = V/I</button>
+        </div>
+        <button class="solution-btn" onclick="toggleSolution('solution5')">
+            <span class="arrow">▶</span> View Solution
+        </button>
+        <div id="solution5" class="solution-content">
+            <div class="solution-step">Option (D) R = V/I is correct</div>
+            <div class="solution-step">This is Ohm's law which states that:</div>
+            <div class="solution-step">- The ratio of potential difference (V) to current (I) is constant</div>
+            <div class="solution-step">- This constant is called resistance (R)</div>
+            <div class="solution-step">- Therefore, R = V/I is the correct relationship</div>
+            <div class="video-container">
+                <button class="video-btn" onclick="openVideo('ghi123')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Watch Video Solution
+                </button>
+            </div>
+        </div>
+        <div class="year">2022 Annual Q2</div>
+    </div>
+</div>
+    </div>
+
+    <script>
+        // Enhanced MCQ handling with feedback
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const selectedIndex = parseInt(this.dataset.index);
+                const questionCard = this.closest('.question-card');
+                const options = questionCard.querySelectorAll('.option-btn');
+                const solution = questionCard.querySelector('.solution-content');
+                
+                options.forEach(btn => {
+                    btn.classList.remove('correct', 'incorrect');
+                    btn.disabled = true; // Disable after selection
+                });
+                
+                // Set correct answer based on question number
+                const correctAnswer = 3; // For question 1
+                
+                if (selectedIndex === correctAnswer) {
+                    this.classList.add('correct');
+                    solution.classList.add('show'); // Automatically show solution on correct answer
+                } else {
+                    this.classList.add('incorrect');
+                    options[correctAnswer].classList.add('correct');
+                    setTimeout(() => {
+                        solution.classList.add('show'); // Show solution after delay on incorrect answer
+                    }, 1000);
+                }
+            });
+        });
+
+        // Enhanced solution toggle with animation
+        function toggleSolution(solutionId) {
+            const solution = document.getElementById(solutionId);
+            const button = solution.previousElementSibling;
+            const arrow = button.querySelector('.arrow');
+            
+            if (solution.classList.contains('show')) {
+                solution.classList.remove('show');
+                arrow.textContent = '▶';
+                button.style.backgroundColor = '#f0f7ff';
+            } else {
+                solution.classList.add('show');
+                arrow.textContent = '▼';
+                button.style.backgroundColor = '#e0f2fe';
+            }
+        }
+
+        // Video handling
+        function openVideo(videoId) {
+            window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+        }
+    </script>
+</body>
+</html>
