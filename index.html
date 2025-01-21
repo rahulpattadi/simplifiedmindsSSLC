@@ -3,19 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Physics Questions and Solutions</title>
+    <title>Quiz Application</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
+        /* Prevent text selection */
         body {
-            background-color: #f3f4f6;
+            user-select: none;
+            font-family: Arial, sans-serif;
+            margin: 0;
             padding: 20px;
-            color: #1f2937;
+            background-color: #f3f4f6;
         }
 
         .container {
@@ -23,482 +19,347 @@
             margin: 0 auto;
         }
 
-        .question-card {
+        /* Timer styles */
+        .timer {
             background: white;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .question-card:hover {
-            transform: translateY(-2px);
+        .timer.warning {
+            background: #ef4444;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        /* Question card styles */
+        .question-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         .question-header {
             display: flex;
             justify-content: space-between;
-            align-items: start;
+            align-items: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 12px;
         }
 
-        .question-number {
-            background: #3b82f6;
+        .subject-badge {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .marks-badge {
+            background: #e5e7eb;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+        }
+
+        /* Google-inspired theme colors */
+        .physics { color: #4285F4; }
+        .chemistry { color: #DB4437; }
+        .biology { color: #0F9D58; }
+        .maths { color: #F4B400; }
+
+        .bg-physics { background-color: #4285F4; }
+        .bg-chemistry { background-color: #DB4437; }
+        .bg-biology { background-color: #0F9D58; }
+        .bg-maths { background-color: #F4B400; }
+
+        .light-physics { background-color: #4285F420; }
+        .light-chemistry { background-color: #DB443720; }
+        .light-biology { background-color: #0F9D5820; }
+        .light-maths { background-color: #F4B40020; }
+
+        /* Button styles */
+        .btn {
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            margin-right: 12px;
-        }
-
-        .question-text {
+            padding: 8px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
             font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
         }
 
-        .marks {
-            color: #6b7280;
-            font-size: 14px;
-            background: #f3f4f6;
-            padding: 4px 12px;
-            border-radius: 20px;
-            white-space: nowrap;
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .year {
-            color: #6b7280;
-            font-size: 14px;
-            text-align: right;
-            margin-top: 16px;
-            font-style: italic;
-        }
-
-        .option-btn {
-            width: 100%;
-            text-align: left;
+        /* Solution styles */
+        .solution {
+            margin-top: 20px;
             padding: 16px;
-            margin: 8px 0;
-            border: 2px solid #e5e7eb;
             border-radius: 8px;
-            background: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 15px;
         }
 
-        .option-btn:hover {
-            background-color: #f9fafb;
-            border-color: #3b82f6;
-        }
-
-        .option-btn.correct {
-            background-color: #dcfce7;
-            border-color: #22c55e;
-        }
-
-        .option-btn.incorrect {
-            background-color: #fee2e2;
-            border-color: #ef4444;
-        }
-
-        .solution-btn {
+        /* Navigation styles */
+        .navigation {
             display: flex;
+            justify-content: space-between;
             align-items: center;
+        }
+
+        .dots {
+            display: flex;
             gap: 8px;
-            color: #3b82f6;
-            background: #f0f7ff;
-            border: none;
-            cursor: pointer;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 500;
-            width: 100%;
-            margin-top: 16px;
-            transition: all 0.2s;
         }
 
-        .solution-btn:hover {
-            background: #e0f2fe;
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d1d5db;
         }
 
-        .solution-content {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f8fafc;
-            border-radius: 8px;
-            border-left: 4px solid #3b82f6;
+        .dot.active {
+            background: currentColor;
         }
 
-        .solution-content.show {
-            display: block;
-            animation: slideDown 0.3s ease-out;
+        /* Question content */
+        .question-content {
+            font-size: 18px;
+            color: #1f2937;
+            margin-bottom: 24px;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .solution-step {
-            margin-bottom: 12px;
+        .sub-questions {
             padding-left: 24px;
-            position: relative;
-            line-height: 1.6;
         }
 
-        .solution-step:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #3b82f6;
-        }
-
-        .formula {
-            font-family: "Courier New", monospace;
-            background-color: #e5e7eb;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin: 0 2px;
-        }
-
-        .video-container {
-            margin-top: 20px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
-        }
-
-        .video-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #ef4444;
-            background: #fef2f2;
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .video-btn:hover {
-            background: #fee2e2;
-        }
-
-        .video-btn svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .difficulty {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-left: 12px;
-        }
-
-        .difficulty.easy {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .difficulty.medium {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .difficulty.hard {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
+        /* Make it responsive */
         @media (max-width: 640px) {
             body {
                 padding: 12px;
             }
 
-            .question-card {
-                padding: 16px;
-            }
-
             .question-header {
                 flex-direction: column;
+                align-items: flex-start;
                 gap: 8px;
             }
 
-            .marks {
-                align-self: flex-start;
+            .navigation {
+                flex-direction: column;
+                gap: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Questions will go here - I'll provide the first few as an example -->
+        <div class="timer">
+            <span>⏰</span>
+            <span id="time-display">Time Left: 1:00</span>
+        </div>
+
         <div class="question-card">
             <div class="question-header">
+                <h2 id="question-number">Question 1</h2>
                 <div style="display: flex; align-items: center;">
-                    <span class="question-number">1</span>
-                    <h3>Resistors of resistance 100 Ω each are connected in parallel in an electric circuit. Then the number of resistors have to be connected to obtain 25 Ω as equivalent resistance is</h3>
-                </div>
-                <div>
-                    <span class="marks">1 mark</span>
-                    <span class="difficulty easy">Easy</span>
+                    <span id="subject-badge" class="subject-badge physics">Physics</span>
+                    <span id="marks-badge" class="marks-badge">1 Mark</span>
                 </div>
             </div>
-            <div class="options-container">
-                <button class="option-btn" data-index="0">(A) 10</button>
-                <button class="option-btn" data-index="1">(B) 5</button>
-                <button class="option-btn" data-index="2">(C) 40</button>
-                <button class="option-btn" data-index="3">(D) 4</button>
+
+            <div id="question-content" class="question-content">
+                <p>Write the symbols of the following components used in an electric circuit:</p>
+                <ol class="sub-questions">
+                    <li>A rheostat</li>
+                    <li>A wire joint</li>
+                </ol>
             </div>
-            <button class="solution-btn" onclick="toggleSolution('solution1')">
-                <span class="arrow">▶</span> View Step-by-Step Solution
-            </button>
-            <div id="solution1" class="solution-content">
-                <div class="solution-step">For parallel resistors: 1/R₁ + 1/R₂ + ... = 1/Rₑq</div>
-                <div class="solution-step">Since all resistors are equal (100Ω): n/100 = 1/25</div>
-                <div class="solution-step">Where n is the number of resistors</div>
-                <div class="solution-step">n = 100/25 = 4 resistors</div>
-                <div class="solution-step">Therefore, option (D) 4 is correct.</div>
-                <div class="video-container">
-                    <button class="video-btn" onclick="openVideo('abc123xyz')">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Watch Video Solution
-                    </button>
+
+            <button id="solution-btn" class="btn bg-physics">Show Solution</button>
+
+            <div id="solution-content" class="solution light-physics" style="display: none;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span>📹</span>
+                    <span style="font-weight: 600;">Solution</span>
                 </div>
+                <p id="solution-text">
+                    Rheostat symbol: ⏭<br>
+                    Wire joint symbol: •
+                </p>
             </div>
-            <div class="year">2023 Model Q4</div>
         </div>
 
-        <!-- More questions will follow... -->
-
-    <!-- Question 2 -->
-    <div class="question-card">
-        <div class="question-header">
-            <div style="display: flex; align-items: center;">
-                <span class="question-number">2</span>
-                <h3>Is it possible to connect a refrigerator rated 1320W to a domestic circuit of 220 V with an electric fuse rated 5 A? Clarify the reason for your answer.</h3>
+        <div class="navigation">
+            <button id="prev-btn" class="btn bg-physics" disabled>← Previous</button>
+            <div id="dots" class="dots physics">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
             </div>
-            <div>
-                <span class="marks">2 marks</span>
-                <span class="difficulty medium">Medium</span>
-            </div>
+            <button id="next-btn" class="btn bg-physics">Next →</button>
         </div>
-        <button class="solution-btn" onclick="toggleSolution('solution2')">
-            <span class="arrow">▶</span> View Step-by-Step Solution
-        </button>
-        <div id="solution2" class="solution-content">
-            <div class="solution-step">Step 1: Let's use the power equation to find current</div>
-            <div class="solution-step">Given: Power (P) = 1320W, Voltage (V) = 220V</div>
-            <div class="solution-step">Using P = V × I</div>
-            <div class="solution-step">1320 = 220 × I</div>
-            <div class="solution-step">I = 1320/220 = 6 amperes</div>
-            <div class="solution-step">Step 2: Compare with fuse rating of 5A</div>
-            <div class="solution-step">Since 6A > 5A, the current required exceeds the fuse rating</div>
-            <div class="solution-step">Therefore, it's not possible to connect the refrigerator as it will blow the fuse</div>
-            <div class="video-container">
-                <button class="video-btn" onclick="openVideo('xyz789')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Watch Video Solution
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Question 3 -->
-    <div class="question-card">
-        <div class="question-header">
-            <div style="display: flex; align-items: center;">
-                <span class="question-number">3</span>
-                <h3>It is advantageous to connect electric devices in parallel instead of connecting them in series. Why?</h3>
-            </div>
-            <div>
-                <span class="marks">3 marks</span>
-                <span class="difficulty medium">Medium</span>
-            </div>
-        </div>
-        <p class="question-text">OR</p>
-        <p class="question-text">According to Joule's law of heating, mention the factors on which heat produced in a resistor depends. According to this law write the formula used to calculate the heat produced.</p>
-        <button class="solution-btn" onclick="toggleSolution('solution3')">
-            <span class="arrow">▶</span> View Solution
-        </button>
-        <div id="solution3" class="solution-content">
-            <div class="solution-step">Part 1: Advantages of parallel connection:</div>
-            <div class="solution-step">1. The parallel circuit divides current through the electrical gadgets based on their resistance</div>
-            <div class="solution-step">2. When one component fails, other components continue to work</div>
-            <div class="solution-step">3. Each electrical appliance can be operated independently</div>
-            <div class="solution-step">4. Devices get the required current based on their individual resistance</div>
-            <div class="solution-step">OR</div>
-            <div class="solution-step">Joule's Law of Heating:</div>
-            <div class="solution-step">1. Heat is directly proportional to square of current (I²)</div>
-            <div class="solution-step">2. Heat is directly proportional to resistance (R)</div>
-            <div class="solution-step">3. Heat is directly proportional to time (t)</div>
-            <div class="solution-step">4. Formula: H = I²Rt</div>
-            <div class="video-container">
-                <button class="video-btn" onclick="openVideo('abc456')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Watch Video Solution
-                </button>
-            </div>
-        </div>
-        <div class="year">2019 Annual Q26</div>
-    </div>
-
-    <!-- Question 4 -->
-    <div class="question-card">
-        <div class="question-header">
-            <div style="display: flex; align-items: center;">
-                <span class="question-number">4</span>
-                <h3>The device used to produce electricity is</h3>
-            </div>
-            <div>
-                <span class="marks">1 mark</span>
-                <span class="difficulty easy">Easy</span>
-            </div>
-        </div>
-        <div class="options-container">
-            <button class="option-btn" data-index="0">(A) Galvanometer</button>
-            <button class="option-btn" data-index="1">(B) Electric generator</button>
-            <button class="option-btn" data-index="2">(C) Ammeter</button>
-            <button class="option-btn" data-index="3">(D) Electric motor</button>
-        </div>
-        <button class="solution-btn" onclick="toggleSolution('solution2')">
-            <span class="arrow">▶</span> View Solution
-        </button>
-        <div id="solution4" class="solution-content">
-            <div class="solution-step">Option (B) Electric generator is correct</div>
-            <div class="solution-step">- A galvanometer measures small electric currents</div>
-            <div class="solution-step">- An ammeter measures electric current</div>
-            <div class="solution-step">- An electric motor converts electrical energy to mechanical energy</div>
-            <div class="solution-step">- An electric generator converts mechanical energy to electrical energy</div>
-            <div class="video-container">
-                <button class="video-btn" onclick="openVideo('def789')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Watch Video Solution
-                </button>
-            </div>
-        </div>
-        <div class="year">2022 Annual Q1</div>
-    </div>
-
-    <!-- Question 5 -->
-    <div class="question-card">
-        <div class="question-header">
-            <div style="display: flex; align-items: center;">
-                <span class="question-number">5</span>
-                <h3>The correct formula that shows the relationship between potential difference, electric current and resistance in an electric circuit is</h3>
-            </div>
-            <div>
-                <span class="marks">1 mark</span>
-                <span class="difficulty easy">Easy</span>
-            </div>
-        </div>
-        <div class="options-container">
-            <button class="option-btn" data-index="0">(A) I = R/V</button>
-            <button class="option-btn" data-index="1">(B) I = VR</button>
-            <button class="option-btn" data-index="2">(C) V = I/R</button>
-            <button class="option-btn" data-index="3">(D) R = V/I</button>
-        </div>
-        <button class="solution-btn" onclick="toggleSolution('solution5')">
-            <span class="arrow">▶</span> View Solution
-        </button>
-        <div id="solution5" class="solution-content">
-            <div class="solution-step">Option (D) R = V/I is correct</div>
-            <div class="solution-step">This is Ohm's law which states that:</div>
-            <div class="solution-step">- The ratio of potential difference (V) to current (I) is constant</div>
-            <div class="solution-step">- This constant is called resistance (R)</div>
-            <div class="solution-step">- Therefore, R = V/I is the correct relationship</div>
-            <div class="video-container">
-                <button class="video-btn" onclick="openVideo('ghi123')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Watch Video Solution
-                </button>
-            </div>
-        </div>
-        <div class="year">2022 Annual Q2</div>
-    </div>
-</div>
     </div>
 
     <script>
-        // Enhanced MCQ handling with feedback
-        document.querySelectorAll('.option-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const selectedIndex = parseInt(this.dataset.index);
-                const questionCard = this.closest('.question-card');
-                const options = questionCard.querySelectorAll('.option-btn');
-                const solution = questionCard.querySelector('.solution-content');
-                
-                options.forEach(btn => {
-                    btn.classList.remove('correct', 'incorrect');
-                    btn.disabled = true; // Disable after selection
-                });
-                
-                // Set correct answer based on question number
-                const correctAnswer = 3; // For question 1
-                
-                if (selectedIndex === correctAnswer) {
-                    this.classList.add('correct');
-                    solution.classList.add('show'); // Automatically show solution on correct answer
-                } else {
-                    this.classList.add('incorrect');
-                    options[correctAnswer].classList.add('correct');
-                    setTimeout(() => {
-                        solution.classList.add('show'); // Show solution after delay on incorrect answer
-                    }, 1000);
-                }
-            });
-        });
+        // Sample questions data
+        const questions = [
+            {
+                subject: 'physics',
+                question: 'Write the symbols of the following components used in an electric circuit:',
+                subQuestions: ['A rheostat', 'A wire joint'],
+                marks: 1,
+                timeAllowed: 60,
+                solution: 'Rheostat symbol: ⏭<br>Wire joint symbol: •'
+            },
+            {
+                subject: 'chemistry',
+                question: 'What happens when sulfuric acid is added to copper oxide?',
+                marks: 2,
+                timeAllowed: 120,
+                solution: 'When sulfuric acid reacts with copper oxide, it forms copper sulfate and water:<br>CuO + H2SO4 → CuSO4 + H2O'
+            },
+            {
+                subject: 'biology',
+                question: 'Explain the process of photosynthesis in plants.',
+                marks: 3,
+                timeAllowed: 180,
+                solution: '6CO2 + 6H2O + Light Energy → C6H12O6 + 6O2'
+            }
+        ];
 
-        // Enhanced solution toggle with animation
-        function toggleSolution(solutionId) {
-            const solution = document.getElementById(solutionId);
-            const button = solution.previousElementSibling;
-            const arrow = button.querySelector('.arrow');
-            
-            if (solution.classList.contains('show')) {
-                solution.classList.remove('show');
-                arrow.textContent = '▶';
-                button.style.backgroundColor = '#f0f7ff';
-            } else {
-                solution.classList.add('show');
-                arrow.textContent = '▼';
-                button.style.backgroundColor = '#e0f2fe';
+        // State management
+        let currentQuestionIndex = 0;
+        let timeLeft = questions[0].timeAllowed;
+        let timerInterval;
+        let savedTimes = {};
+
+        // DOM elements
+        const timeDisplay = document.getElementById('time-display');
+        const questionNumber = document.getElementById('question-number');
+        const subjectBadge = document.getElementById('subject-badge');
+        const marksBadge = document.getElementById('marks-badge');
+        const questionContent = document.getElementById('question-content');
+        const solutionBtn = document.getElementById('solution-btn');
+        const solutionContent = document.getElementById('solution-content');
+        const solutionText = document.getElementById('solution-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const dots = document.getElementById('dots');
+        const timer = document.querySelector('.timer');
+
+        // Functions
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                timeDisplay.textContent = `Time Left: ${formatTime(timeLeft)}`;
+                if (timeLeft <= 5) {
+                    timer.classList.add('warning');
+                }
             }
         }
 
-        // Video handling
-        function openVideo(videoId) {
-            window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+        function updateQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            // Update question number and subject
+            questionNumber.textContent = `Question ${currentQuestionIndex + 1}`;
+            
+            // Update subject styling
+            ['physics', 'chemistry', 'biology', 'maths'].forEach(subject => {
+                subjectBadge.classList.remove(subject);
+                solutionBtn.classList.remove(`bg-${subject}`);
+                solutionContent.classList.remove(`light-${subject}`);
+                dots.classList.remove(subject);
+            });
+            
+            subjectBadge.classList.add(question.subject);
+            solutionBtn.classList.add(`bg-${question.subject}`);
+            solutionContent.classList.add(`light-${question.subject}`);
+            dots.classList.add(question.subject);
+            
+            subjectBadge.textContent = question.subject.charAt(0).toUpperCase() + question.subject.slice(1);
+            marksBadge.textContent = `${question.marks} ${question.marks === 1 ? 'Mark' : 'Marks'}`;
+
+            // Update question content
+            let content = `<p>${question.question}</p>`;
+            if (question.subQuestions) {
+                content += '<ol class="sub-questions">';
+                question.subQuestions.forEach(sq => {
+                    content += `<li>${sq}</li>`;
+                });
+                content += '</ol>';
+            }
+            questionContent.innerHTML = content;
+
+            // Update solution
+            solutionText.innerHTML = question.solution;
+
+            // Update navigation
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = currentQuestionIndex === questions.length - 1;
+
+            // Update dots
+            dots.innerHTML = questions.map((_, index) => `
+                <span class="dot ${index === currentQuestionIndex ? 'active' : ''}"></span>
+            `).join('');
+
+            // Reset solution visibility
+            solutionContent.style.display = 'none';
+            solutionBtn.textContent = 'Show Solution';
+
+            // Reset timer
+            clearInterval(timerInterval);
+            timer.classList.remove('warning');
+            timeLeft = savedTimes[currentQuestionIndex] || question.timeAllowed;
+            timeDisplay.textContent = `Time Left: ${formatTime(timeLeft)}`;
+            timerInterval = setInterval(updateTimer, 1000);
         }
+
+        // Event listeners
+        solutionBtn.addEventListener('click', () => {
+            const isShowing = solutionContent.style.display === 'block';
+            solutionContent.style.display = isShowing ? 'none' : 'block';
+            solutionBtn.textContent = isShowing ? 'Show Solution' : 'Hide Solution';
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                savedTimes[currentQuestionIndex] = timeLeft;
+                currentQuestionIndex--;
+                updateQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                savedTimes[currentQuestionIndex] = timeLeft;
+                currentQuestionIndex++;
+                updateQuestion();
+            }
+        });
+
+        // Initialize the first question
+        updateQuestion();
     </script>
 </body>
 </html>
