@@ -3,55 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSLC 2025</title>
+    <title>SimplifiedMinds - SSLC 2025</title>
     <style>
+        :root {
+            --primary: #E67E22;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --brand-yellow: #FFD700;
+            --brand-red: #FF0000;
+            --youtube: #FF0000;
+            --blue: #4285F4;
+            --carbon: #DB4437;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: #f5f5f5;
-            padding: 20px;
+            background: var(--light);
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .brand-header {
+            background: white;
+            padding: 1rem;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .brand-container {
+            max-width: 100%;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .brand-simplified {
+            color: var(--brand-yellow);
+        }
+
+        .brand-minds {
+            color: var(--brand-red);
         }
 
         .container {
-            max-width: 1200px;
+            width: 100%;
+            padding: 1rem;
             margin: 0 auto;
         }
 
         .header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, #F39C12 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
         }
 
         .header h1 {
-            color: #1a1a1a;
-            font-size: 28px;
-        }
-
-        .content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .video-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .video-container {
@@ -59,211 +94,280 @@
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            background: #f8f8f8;
-            border-radius: 8px;
+            max-width: 100%;
+            margin: 1rem 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .video-placeholder {
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
+            border-radius: 12px;
         }
 
-        .play-icon {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 10px;
-            color: #666;
-        }
-
-        .marks-section {
+        .card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .marks-grid {
-            display: grid;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .marks-card {
-            border: 2px solid #e5e5e5;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s ease;
-        }
-
-        .marks-card:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-            transform: translateY(-2px);
-        }
-
-        .marks-info h3 {
-            font-size: 16px;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-        }
-
-        .marks-info p {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .card-arrow {
-            color: #666;
+            width: 100%;
         }
 
         .section-title {
-            font-size: 20px;
-            color: #1a1a1a;
-            margin-bottom: 15px;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            color: var(--dark);
         }
 
-        .resources-section {
-            margin-top: 20px;
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chapter-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none !important;
+            color: inherit;
         }
 
-        .resource-link {
+        .chapter-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .chapter-card.math {
+            border-left: 3px solid var(--primary);
+        }
+
+        .chapter-card.electricity,
+        .chapter-card.light {
+            border-left: 3px solid var(--blue);
+        }
+
+        .chapter-card.carbon {
+            border-left: 3px solid var(--carbon);
+        }
+
+        .chapter-name {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .chapter-card:hover .chapter-name {
+            color: var(--dark);
+        }
+
+        .question-count {
+            font-size: 0.9rem;
+            color: #666;
             display: flex;
             align-items: center;
+            gap: 0.3rem;
+        }
+
+        .question-count::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: var(--primary);
             text-decoration: none;
-            color: #3b82f6;
-            margin-bottom: 10px;
-            font-size: 14px;
+            color: white;
+            font-size: 0.9rem;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+            transition: all 0.3s;
         }
 
-        .resource-link:hover {
-            color: #2563eb;
+        .tab:hover {
+            background: #d35400;
+            transform: translateY(-2px);
         }
 
-        .resource-icon {
-            margin-right: 8px;
+        .resources {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+
+        .resource-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .resource-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .video-btn {
+            background: var(--youtube);
+            color: white;
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .chapter-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .resources {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px;
+                margin: 0 auto;
+            }
+            
+            .chapter-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>SSLC 2025</h1>
+    <header class="brand-header">
+        <div class="brand-container">
+            <h1 class="brand-name">
+                <span class="brand-simplified">Simplified</span><span class="brand-minds">Minds</span>
+            </h1>
+        </div>
+    </header>
+
+    <div class="header">
+        <h1>SSLC 2025</h1>
+        <p>Your path to success starts here</p>
+    </div>
+
+    <main class="container">
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/VScUhLRg0Gg" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
         </div>
 
-        <div class="content">
-            <div class="video-section">
-    <h2 class="section-title">50 days Strategy</h2>
-    <div class="video-container">
-        <iframe 
-            width="100%" 
-            height="100%" 
-            src="https://www.youtube.com/embed/VScUhLRg0Gg"
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-            style="position: absolute; top: 0; left: 0;"
-        ></iframe>
-    </div>
-</div>
-
-
-            <div class="right-section">
-                <div class="marks-section">
-                    <h2 class="section-title">Chapters</h2>
-                    <div class="marks-grid">
-                        <a href="arithmetic_progression_main.html" class="marks-card">
-                            <div class="marks-info">
-                                <h3>Arithmetic Progression</h3>
-                                <p>50 questions</p>
-                            </div>
-                            <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M9 18l6-6-6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-
-                        <a href="added_soon.html" class="marks-card">
-                            <div class="marks-info">
-                                <h3>Electricity</h3>
-                                <p>75 questions</p>
-                            </div>
-                            <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M9 18l6-6-6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-
-                        <a href="added_soon.html" class="marks-card">
-                            <div class="marks-info">
-                                <h3>Carbon & it's compounds</h3>
-                                <p>55 questions</p>
-                            </div>
-                            <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M9 18l6-6-6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-
-                        <a href="added_soon.html" class="marks-card">
-                            <div class="marks-info">
-                                <h3>Trigonometry</h3>
-                                <p>95 questions</p>
-                            </div>
-                            <svg class="card-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M9 18l6-6-6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="resources-section">
-                    <h2 class="section-title">Resources</h2>
-                    <a href="https://www.whatsapp.com/channel/0029Vb3QDu17YSd1brABFi1d" class="resource-link">
-                        <svg class="resource-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke-width="2"/>
-                            <path d="M14 2v6h6M16 13H8M16 17H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        For Study Notes
-                    </a>
-                    <a href="https://www.youtube.com/@simplifiedmindssslc" class="resource-link">
-                        <svg class="resource-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M23 7l-7 5 7 5V7z" stroke-width="2"/>
-                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2" stroke-width="2"/>
-                        </svg>
-                        Video Lectures
-                    </a>
-                </div>
+        <div class="card">
+            <h2 class="section-title">Mock Test Analysis</h2>
+            <div class="tabs">
+                <a href="mock_test_one_maths_analysis.html" class="tab">Mock Test 1</a>
+                <a href="mock_test_two_maths_analysis.html" class="tab">Mock Test 2</a>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Add any interactive functionality here
-        document.addEventListener('DOMContentLoaded', function() {
-            const marksCards = document.querySelectorAll('.marks-card');
-            
-            marksCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!this.href || this.href === '#') {
-                        e.preventDefault();
-                        alert('Content coming soon!');
-                    }
-                });
-            });
-        });
-    </script>
+        <h2 class="section-title">Mathematics</h2>
+        <div class="chapter-grid">
+            <a href="arithmetic_progression_main.html" class="chapter-card math">
+                <h3 class="chapter-name">Arithmetic Progression</h3>
+                <p class="question-count">50 questions</p>
+            </a>
+            <a href="added_soon.html" class="chapter-card math">
+                <h3 class="chapter-name">Coordinate Geometry</h3>
+                <p class="question-count">65 questions</p>
+            </a>
+            <a href="added_soon.html" class="chapter-card math">
+                <h3 class="chapter-name">Trigonometry</h3>
+                <p class="question-count">95 questions</p>
+            </a>
+            <a href="added_soon.html" class="chapter-card math">
+                <h3 class="chapter-name">Real Numbers</h3>
+                <p class="question-count">45 questions</p>
+            </a>
+            <a href="added_soon.html" class="chapter-card math">
+                <h3 class="chapter-name">Polynomials</h3>
+                <p class="question-count">60 questions</p>
+            </a>
+            <a href="added_soon.html" class="chapter-card math">
+                <h3 class="chapter-name">Quadratic Equations</h3>
+                <p class="question-count">70 questions</p>
+            </a>
+        </div>
+
+        <h2 class="section-title">Science</h2>
+        <div class="chapter-grid">
+            <a href="added_soon.html" class="chapter-card electricity">
+                <h3 class="chapter-name">Electricity</h3>
+                <p class="question-count">75 questions</p>
+            </a>
+            <a href="added_soon.html" class="chapter-card carbon">
+                <h3 class="chapter-name">Carbon & its compounds</h3>
+                <p class="question-count">55 questions</p>
+            </a>
+            <a href="added_soon.html" class="chapter-card light">
+                <h3 class="chapter-name">Light</h3>
+                <p class="question-count">65 questions</p>
+            </a>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Learning Resources</h2>
+            <div class="resources">
+                <a href="https://whatsapp.com/channel/0029Vb3QDu17YSd1brABFi1d" class="resource-btn whatsapp-btn">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    Join WhatsApp Channel
+                </a>
+                <a href="https://www.youtube.com/@simplifiedmindssslc" class="resource-btn video-btn">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                    </svg>
+                    Video Lectures
+                </a>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
