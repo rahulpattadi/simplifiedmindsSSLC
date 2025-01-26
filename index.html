@@ -273,6 +273,39 @@
                 font-size: 1.5rem;
             }
         }
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+
+.countdown-item span:first-child {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.label {
+    font-size: 0.8rem;
+    color: #666;
+}
+.countdown-container {
+   text-align: center;
+}
+
+.countdown-container .section-title {
+   margin-bottom: 1.2rem;
+   font-size: 1.4rem;
+}
     </style>
 </head>
 <body>
@@ -288,6 +321,28 @@
         <h1>SSLC 2025</h1>
         <p>Your path to success starts here</p>
     </div>
+
+<div class="countdown-container card">
+    <h2 class="section-title">Time Left Until SSLC Exam</h2>
+    <div class="countdown">
+        <div class="countdown-item">
+            <span id="days">0</span>
+            <span class="label">Days</span>
+        </div>
+        <div class="countdown-item">
+            <span id="hours">0</span>
+            <span class="label">Hours</span>
+        </div>
+        <div class="countdown-item">
+            <span id="minutes">0</span>
+            <span class="label">Minutes</span>
+        </div>
+        <div class="countdown-item">
+            <span id="seconds">0</span>
+            <span class="label">Seconds</span>
+        </div>
+    </div>
+</div>
 
     <main class="container">
         <div class="video-container">
@@ -369,5 +424,26 @@
             </div>
         </div>
     </main>
+
+<script>
+    function updateCountdown() {
+        const examDate = new Date('March 21, 2025 10:00:00 GMT+0530');
+        const now = new Date();
+        const diff = examDate - now;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = days;
+        document.getElementById('hours').textContent = hours;
+        document.getElementById('minutes').textContent = minutes;
+        document.getElementById('seconds').textContent = seconds;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+</script>
 </body>
 </html>
