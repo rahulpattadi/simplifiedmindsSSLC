@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Diagrams for Annual Exam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .heading {
+            background-color: #2f7532;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .subheading {
+            text-align: center;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background-color: #2f7532;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .diagram-link {
+            color: #2f7532;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .diagram-link:hover {
+            text-decoration: underline;
+            color: #1a4a1c;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .modal img {
+            width: 100%;
+            height: auto;
+            border: 2px solid white;
+            border-radius: 4px;
+        }
+
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 0;
+            color: #fff;
+            font-size: 35px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .container {
+                border-radius: 4px;
+            }
+            
+            .heading {
+                font-size: 1.2rem;
+                padding: 12px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">LIST OF DIAGRAMS FOR ANNUAL EXAM</div>
+        <div class="subheading">10th Standard Subject – Science</div>
+        <div class="table-wrapper">
+            <table id="diagramsTable">
+                <thead>
+                    <tr>
+                        <th>Sl. No.</th>
+                        <th>Chapter Number</th>
+                        <th>Chapter Name</th>
+                        <th>Figure No.</th>
+                        <th>Name of the diagram</th>
+                        <th>Page No.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for displaying images -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="Diagram">
+        </div>
+    </div>
+
+    <script>
+        const diagrams = [
+                        {
+                slNo: "01",
+                chapterNo: "1",
+                chapterName: "Chemical Reactions and Equation",
+                figureNo: "1.6",
+                diagramName: "Electrolysis of Water",
+                pageNo: "9",
+                imageFile: "SimplifiedMinds_App_icon.jpg"
+            },
+            {
+                slNo: "02",
+                chapterNo: "2",
+                chapterName: "Acids, Bases and Salts",
+                figureNo: "2.1",
+                diagramName: "Reaction of zinc granules with dilute sulphuric acid and testing hydrogen gas by burning",
+                pageNo: "19",
+                imageFile: "/Diagrams/diagrams_1.jpg"
+            },
+            {
+                slNo: "03",
+                chapterNo: "2",
+                chapterName: "Acids, Bases and Salts",
+                figureNo: "2.3",
+                diagramName: "Acid solution in water conducts electricity",
+                pageNo: "22",
+                imageFile: "2_3_acid_conductivity.jpg"
+            },
+            {
+                slNo: "04",
+                chapterNo: "3",
+                chapterName: "Metals and Nonmetals",
+                figureNo: "3.3",
+                diagramName: "Action of steam on a metal",
+                pageNo: "43",
+                imageFile: "3_3_steam_metal.jpg"
+            },
+            {
+                slNo: "05",
+                chapterNo: "3",
+                chapterName: "Metals and Nonmetals",
+                figureNo: "3.8",
+                diagramName: "Testing the conductivity of a salt solution",
+                pageNo: "48",
+                imageFile: "3_8_salt_conductivity.jpg"
+            },
+            {
+                slNo: "06",
+                chapterNo: "3",
+                chapterName: "Metals and Nonmetals",
+                figureNo: "3.12",
+                diagramName: "Electrolytic refining of copper",
+                pageNo: "53",
+                imageFile: "3_12_copper_refining.jpg"
+            },
+            {
+                slNo: "07",
+                chapterNo: "6",
+                chapterName: "Life Processes",
+                figureNo: "6.3",
+                diagramName: "a) Open and b) Closed stomatal pore",
+                pageNo: "63",
+                imageFile: "6_3_stomatal_pore.jpg"
+            },
+            {
+                slNo: "08",
+                chapterNo: "6",
+                chapterName: "Life Processes",
+                figureNo: "6.6",
+                diagramName: "Human alimentary canal",
+                pageNo: "65",
+                imageFile: "6_6_alimentary_canal.jpg"
+            },
+            {
+                slNo: "09",
+                chapterNo: "6",
+                chapterName: "Life Processes",
+                figureNo: "6.10",
+                diagramName: "Schematic Sectional view of the human heart",
+                pageNo: "72",
+                imageFile: "6_10_human_heart.jpg"
+            },
+            {
+                slNo: "10",
+                chapterNo: "6",
+                chapterName: "Life Processes",
+                figureNo: "6.13",
+                diagramName: "Excretory system in human beings",
+                pageNo: "76",
+                imageFile: "6_13_excretory_system.jpg"
+            },
+            {
+                slNo: "11",
+                chapterNo: "6",
+                chapterName: "Life Processes",
+                figureNo: "6.14",
+                diagramName: "Structure of a nephron",
+                pageNo: "77",
+                imageFile: "6_14_nephron.jpg"
+            },
+            {
+                slNo: "12",
+                chapterNo: "7",
+                chapterName: "Control and Coordination",
+                figureNo: "7.1(a)",
+                diagramName: "Structure of neuron",
+                pageNo: "81",
+                imageFile: "7_1a_neuron.jpg"
+            },
+            {
+                slNo: "13",
+                chapterNo: "7",
+                chapterName: "Control and Coordination",
+                figureNo: "7.3",
+                diagramName: "Human brain",
+                pageNo: "84",
+                imageFile: "7_3_human_brain.jpg"
+            },
+            {
+                slNo: "14",
+                chapterNo: "12",
+                chapterName: "Electricity",
+                figureNo: "12.1",
+                diagramName: "A Schematic diagram of an electric circuit",
+                pageNo: "94",
+                imageFile: "12_1_electric_circuit.jpg"
+            },
+            {
+                slNo: "15",
+                chapterNo: "12",
+                chapterName: "Electricity",
+                figureNo: "--",
+                diagramName: "Table 12.1 Symbols of some commonly used components in circuit diagrams",
+                pageNo: "97",
+                imageFile: "12_1_circuit_symbols.jpg"
+            },
+            {
+                slNo: "16",
+                chapterNo: "12",
+                chapterName: "Electricity",
+                figureNo: "12.2",
+                diagramName: "Electric circuit for studying ohm's law",
+                pageNo: "98",
+                imageFile: "12_2_ohms_law.jpg"
+            },
+            {
+                slNo: "17",
+                chapterNo: "12",
+                chapterName: "Electricity",
+                figureNo: "12.6",
+                diagramName: "Resistors in series",
+                pageNo: "104",
+                imageFile: "12_6_series_resistors.jpg"
+            },
+            {
+                slNo: "18",
+                chapterNo: "12",
+                chapterName: "Electricity",
+                figureNo: "12.7",
+                diagramName: "Resistors in parallel",
+                pageNo: "104",
+                imageFile: "12_7_parallel_resistors.jpg"
+            },
+            {
+                slNo: "19",
+                chapterNo: "13",
+                chapterName: "Magnetic effects of Electric Current",
+                figureNo: "13.6(a)",
+                diagramName: "A pattern of Concentric circles indicating the field lines of a magnetic field around a straight conducting wire",
+                pageNo: "121",
+                imageFile: "13_6a_magnetic_field.jpg"
+            },
+            {
+                slNo: "20",
+                chapterNo: "13",
+                chapterName: "Magnetic effects of Electric Current",
+                figureNo: "13.15",
+                diagramName: "A simple electric motor ( 2 dimensional OR 3 dimensional)",
+                pageNo: "126",
+                imageFile: "13_15_electric_motor.jpg"
+            },
+            {
+                slNo: "21",
+                chapterNo: "13",
+                chapterName: "Magnetic effects of Electric Current",
+                figureNo: "13.19",
+                diagramName: "Illustration of the principle electric generator ( 2D or 3D)",
+                pageNo: "130",
+                imageFile: "13_19_generator.jpg"
+            },
+            {
+                slNo: "22",
+                chapterNo: "8",
+                chapterName: "How do organisms reproduce",
+                figureNo: "8.7",
+                diagramName: "Longitudinal section of flower",
+                pageNo: "44",
+                imageFile: "8_7_flower_section.jpg"
+            },
+            {
+                slNo: "23",
+                chapterNo: "8",
+                chapterName: "How do organisms reproduce",
+                figureNo: "8.8",
+                diagramName: "Germination of pollen on stigma",
+                pageNo: "45",
+                imageFile: "8_8_pollen_germination.jpg"
+            },
+            {
+                slNo: "24",
+                chapterNo: "10",
+                chapterName: "Light Reflection and Refraction",
+                figureNo: "10.7",
+                diagramName: "(a) (b) (c) (d) (e) (f), Ray diagrams for the image formation by a concave mirror",
+                pageNo: "76",
+                imageFile: "10_7_concave_mirror.jpg"
+            },
+            {
+                slNo: "25",
+                chapterNo: "10",
+                chapterName: "Light Reflection and Refraction",
+                figureNo: "10.16",
+                diagramName: "(a) (b) (c) (d) (e) (f) The position size and the nature of the image formed by a convex lens for various positions of the object",
+                pageNo: "90",
+                imageFile: "10_16_convex_lens.jpg"
+            },
+            {
+                slNo: "26",
+                chapterNo: "10",
+                chapterName: "Light Reflection and Refraction",
+                figureNo: "10.17",
+                diagramName: "(a) (b) Nature, position and relative size of the image formed by a concave lens",
+                pageNo: "91",
+                imageFile: "10_17_concave_lens.jpg"
+            },
+            {
+                slNo: "27",
+                chapterNo: "11",
+                chapterName: "The Human Eye and the colorful world",
+                figureNo: "11.2",
+                diagramName: "a) Far point of a myopic eye b) Myopic Eye c) Correction for myopia",
+                pageNo: "99",
+                imageFile: "11_2_myopic_eye.jpg"
+            },
+            {
+                slNo: "28",
+                chapterNo: "11",
+                chapterName: "The Human Eye and the colourful world",
+                figureNo: "11.3",
+                diagramName: "a) Near point of a Hypermetropic eye b) Hypermetropic eye c) Correction for Hypermetropic eye",
+                pageNo: "100",
+                imageFile: "11_3_hypermetropic_eye.jpg"
+            },
+            {
+                slNo: "29",
+                chapterNo: "11",
+                chapterName: "The Human Eye and the Colourful world",
+                figureNo: "11.6",
+                diagramName: "Recombination of the spectrum of white light",
+                pageNo: "103",
+                imageFile: "11_6_spectrum_recombination.jpg"
+            },
+            {
+                slNo: "30",
+                chapterNo: "14",
+                chapterName: "Sources of Energy",
+                figureNo: "14.4",
+                diagramName: "Schematic diagram of a bio gas plant",
+                pageNo: "114",
+                imageFile: "14_4_biogas_plant.jpg"
+            }
+        ];
+
+        // Complete the diagrams array with all 30 entries from the PDF
+
+        function populateTable() {
+            const tbody = document.querySelector('#diagramsTable tbody');
+            diagrams.forEach(diagram => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${diagram.slNo}</td>
+                    <td>${diagram.chapterNo}</td>
+                    <td>${diagram.chapterName}</td>
+                    <td>${diagram.figureNo}</td>
+                    <td>
+                        <a class="diagram-link" data-image="diagrams/${diagram.imageFile}">
+                            ${diagram.diagramName}
+                        </a>
+                    </td>
+                    <td>${diagram.pageNo}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Modal functionality
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const closeBtn = document.getElementsByClassName("close")[0];
+
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('diagram-link')) {
+                modal.style.display = "block";
+                modalImg.src = e.target.dataset.image;
+            }
+        });
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(e) {
+            if (e.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', populateTable);
+    </script>
+</body>
+</html>
