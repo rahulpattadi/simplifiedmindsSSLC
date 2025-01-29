@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Science Diagrams List</title>
+    <title>Science Diagrams - SimplifiedMinds</title>
     <style>
         * {
             margin: 0;
@@ -12,12 +12,85 @@
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
+            line-height: 1.6;
         }
 
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .logo:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo .simplified {
+            color: #ffd700;
+        }
+
+        .logo .minds {
+            color: #ff0000;
+        }
+
+        .home-icon {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 12px;
+            color: #4a5568;
+            transition: color 0.3s ease;
+        }
+        
+        .home-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .logo:hover .home-icon {
+            color: #2d3748;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .logo:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Container Styles */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -27,6 +100,7 @@
             overflow: hidden;
         }
 
+        /* Header Styles */
         h1 {
             background: #1a5f7a;
             color: white;
@@ -34,6 +108,14 @@
             margin: 0;
             font-size: 24px;
             text-align: center;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px;
+            border-radius: 5px;
+            border: 1px solid #eee;
         }
         
         table {
@@ -73,8 +155,8 @@
             background-color: #e3f2fd;
             color: #1a5f7a;
         }
-        
-        /* Modal styles */
+
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -136,75 +218,66 @@
             padding-right: 40px;
         }
 
-        .table-container {
-            overflow-x: auto;
+        /* Resource Buttons Styles */
+        .resources-section {
+            padding: 20px;
             margin: 20px;
+            background: white;
             border-radius: 5px;
             border: 1px solid #eee;
         }
-/* Resource buttons styles */
-.resources-section {
-    padding: 20px;
-    margin: 20px;
-    background: white;
-    border-radius: 5px;
-    border: 1px solid #eee;
-}
 
-.section-title {
-    color: #1a5f7a;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    text-align: center;
-}
+        .section-title {
+            color: #1a5f7a;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-.resources {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-}
+        .resources {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-.resource-btn {
-    width: 300px;
-    justify-content: center;
-    flex: none;
-}
+        .resource-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: opacity 0.2s ease;
+            width: 300px;
+            justify-content: center;
+            flex: none;
+        }
 
-.resource-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: white;
-    font-weight: 500;
-    transition: opacity 0.2s ease;
-}
+        .resource-btn:hover {
+            opacity: 0.9;
+        }
 
-.resource-btn:hover {
-    opacity: 0.9;
-}
+        .whatsapp-btn {
+            background-color: #25D366;
+        }
 
-.whatsapp-btn {
-    background-color: #25D366;
-}
+        .video-btn {
+            background-color: #FF0000;
+        }
 
-.video-btn {
-    background-color: #FF0000;
-}
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
 
-.social-icon {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-}
-
-        /* Responsive design */
+        /* Responsive Design */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -233,10 +306,65 @@
             .modal-title {
                 font-size: 1.1em;
             }
+
+            .logo {
+                font-size: 2rem;
+                padding: 8px 16px;
+            }
+
+            .home-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .tooltip {
+                display: none;
+            }
+
+            .resources {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .resource-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .home-icon {
+                margin-right: 8px;
+            }
+
+            .home-icon svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .table-container {
+                margin: 10px;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
+<div class="logo-container">
+        <a href="./index.html" class="logo">
+            <span class="home-icon">🏠</span>
+            <span class="simplified">Simplified</span><span class="minds">Minds</span>
+            <span class="tooltip">Go to Homepage</span>
+        </a>
+    </div>
     <div class="container">
         <h1>List of Science Diagrams - 10th Standard</h1>
         <div class="table-container">
