@@ -3,519 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SimplifiedMinds - SSLC 2025</title>
+    <title>SimplifiedMinds - Learning Resources</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #E67E22;
-            --light: #f3f4f6;
-            --dark: #1f2937;
-            --brand-yellow: #FFD700;
-            --brand-red: #FF0000;
-            --youtube: #FF0000;
-            --blue: #4285F4;
-            --carbon: #DB4437;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
+            --primary: #6C63FF;
+            --secondary: #FF6B6B;
+            --light: #F8F9FA;
+            --dark: #2C3E50;
+            --gradient-bg: linear-gradient(135deg, #6C63FF, #FF6B6B);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background: var(--light);
-            width: 100%;
-            overflow-x: hidden;
-        }
-
-        .brand-header {
-            background: white;
-            padding: 1rem;
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .brand-container {
-            max-width: 100%;
-            padding: 0 1rem;
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient-bg);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-        }
-
-        .brand-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .brand-simplified {
-            color: var(--brand-yellow);
-        }
-
-        .brand-minds {
-            color: var(--brand-red);
-        }
-
-        .container {
-            width: 100%;
-            padding: 1rem;
-            margin: 0 auto;
+            flex-direction: column;
         }
 
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, #F39C12 100%);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            max-width: 100%;
-            margin: 1rem 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
+            background: var(--card-bg);
             padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 100%;
+            box-shadow: var(--shadow);
+            text-align: center;
         }
 
-        .section-title {
-            margin-bottom: 0.8rem;
-            font-size: 1.2rem;
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
             color: var(--dark);
+            text-decoration: none;
         }
 
-        .chapter-grid {
+        .logo span {
+            color: var(--primary);
+        }
+
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            width: 90%;
+        }
+
+        .chapters-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
 
         .chapter-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none !important;
-            color: inherit;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .chapter-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .chapter-card.math {
-            border-left: 3px solid var(--primary);
-        }
-
-        .chapter-card.electricity,
-        .chapter-card.light {
-            border-left: 3px solid var(--blue);
-        }
-
-        .chapter-card.carbon {
-            border-left: 3px solid var(--carbon);
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
         .chapter-name {
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.5rem;
+            font-weight: 600;
             color: var(--dark);
-            text-decoration: none;
+            margin-bottom: 0.5rem;
         }
 
-        .chapter-card:hover .chapter-name {
-            color: var(--dark);
-        }
-
-        .question-count {
-            font-size: 0.9rem;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .question-count::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
+        .chapter-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
             margin-bottom: 1rem;
+        }
+
+        .physics {
+            border-bottom: 4px solid #4285F4;
+        }
+
+        .chemistry {
+            border-bottom: 4px solid #DB4437;
+        }
+
+        .math {
+            border-bottom: 4px solid #6C63FF;
+        }
+
+        .learning-resources {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .learning-resources h2 {
+            font-size: 2rem;
+            color: var(--light);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .resource-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
             flex-wrap: wrap;
         }
 
-        .tab {
-            padding: 0.8rem;
-            border-radius: 8px;
-            background: var(--primary);
-            text-decoration: none;
-            color: white;
-            font-size: 0.9rem;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
-            transition: all 0.3s;
-        }
-
-.tabpyq {
-            padding: 0.8rem;
-            border-radius: 8px;
-            background: var(--blue);
-            text-decoration: none;
-            color: white;
-            font-size: 0.9rem;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
-            transition: all 0.3s;
-        }
-
-.tabdiagrams {
-            padding: 0.8rem;
-            border-radius: 8px;
-            background: var(--carbon);
-            text-decoration: none;
-            color: white;
-            font-size: 0.9rem;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
-            transition: all 0.3s;
-        }
-
-.tabformulas {
-            padding: 0.8rem;
-            border-radius: 8px;
-            background: var(--dark);
-            text-decoration: none;
-            color: white;
-            font-size: 0.9rem;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
-            transition: all 0.3s;
-        }
-
-
-        .tab:hover {
-            background: #d35400;
-            transform: translateY(-2px);
-        }
-
-        .resources {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.8rem;
-        }
-
-        .resource-btn {
-            display: flex;
+        .resource-button {
+            display: inline-flex;
             align-items: center;
-            gap: 0.8rem;
-            padding: 1rem;
-            border-radius: 8px;
-            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
             font-size: 1rem;
             font-weight: 500;
-            transition: transform 0.2s;
+            text-decoration: none;
+            color: white;
+            gap: 0.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: var(--card-bg);
+            color: var(--dark);
+            border: 2px solid var(--primary);
         }
 
-        .resource-btn:hover {
+        .resource-button:hover {
             transform: translateY(-2px);
-        }
-
-        .whatsapp-btn {
-            background: #25D366;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: var(--primary);
             color: white;
         }
 
-        .video-btn {
-            background: var(--youtube);
-            color: white;
+        .resource-button i {
+            font-size: 1.2rem;
         }
 
-        .social-icon {
-            width: 24px;
-            height: 24px;
-        }
-
-        @media (min-width: 640px) {
-            .chapter-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .resources {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .container {
-                max-width: 1024px;
-                margin: 0 auto;
-            }
-            
-            .chapter-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .section-title {
+        @media (max-width: 768px) {
+            .logo {
                 font-size: 1.5rem;
             }
+
+            .chapters-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .resource-buttons {
+                flex-direction: column;
+                padding: 0 1rem;
+            }
+
+            .resource-button {
+                width: 100%;
+                justify-content: center;
+            }
         }
-
-.countdown {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 1rem 0;
-}
-
-.countdown-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 60px;
-}
-
-.countdown-item span:first-child {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--primary);
-}
-
-.label {
-    font-size: 0.8rem;
-    color: #666;
-}
-.countdown-container {
-   text-align: center;
-}
-
-.countdown-container .section-title {
-   margin-bottom: 1.2rem;
-   font-size: 1.4rem;
-}
     </style>
 </head>
 <body>
-    <header class="brand-header">
-        <div class="brand-container">
-            <h1 class="brand-name">
-                <span class="brand-simplified">Simplified</span><span class="brand-minds">Minds</span>
-            </h1>
-        </div>
+    <header class="header">
+        <a href="/" class="logo">
+            <span>Simplified</span>Minds
+        </a>
     </header>
 
-    <div class="header">
-        <h1>SSLC 2025</h1>
-        <p>Your path to success starts here</p>
-    </div>
-
-<div class="countdown-container card">
-    <h2 class="section-title">Time Left Until SSLC Exam</h2>
-    <div class="countdown">
-        <div class="countdown-item">
-            <span id="days">0</span>
-            <span class="label">Days</span>
-        </div>
-        <div class="countdown-item">
-            <span id="hours">0</span>
-            <span class="label">Hours</span>
-        </div>
-        <div class="countdown-item">
-            <span id="minutes">0</span>
-            <span class="label">Minutes</span>
-        </div>
-        <div class="countdown-item">
-            <span id="seconds">0</span>
-            <span class="label">Seconds</span>
-        </div>
-    </div>
-</div>
-
-    <main class="container">
-        <div class="video-container">
-            <iframe 
-                src="https://www.youtube.com/embed/VScUhLRg0Gg" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-            </iframe>
-        </div>
-
-        <div class="card">
-            <h2 class="section-title">Mock Test Analysis</h2>
-            <div class="tabs">
-                <a href="mock_test_one_maths_analysis.html" class="tab">Maths Mock Test 1</a>
-                <a href="mock_test_two_maths_analysis.html" class="tab">Maths Mock Test 2</a>
-            </div>
-<div class="tabs">
-                <a href="mock_test_one_science_analysis.html" class="tab">Science Mock Test 1</a>
-                <a href="mock_test_two_science_analysis.html" class="tab">Science Mock Test 2</a>
-            </div>
-        </div>
-
-<div class="card">
-            <h2 class="section-title">Previous year Answers</h2>
-            <div class="tabs">
-                <a href="2019_Physics_Main_Solutions.html" class="tabpyq">2019 Physics Main</a>
-                <a href="2019_Physics_Suplementary_Solutions.html" class="tabpyq">2019 Physics Supplementary</a>
-            </div>
-<div class="tabs">
-                <a href="2020_Physics_Main_Solutions.html" class="tabpyq">2020 Physics Main</a>
-                <a href="2020_Physics_Suplementary_Solutions.html" class="tabpyq">2020 Physics Supplementary</a>
-            </div>
-        </div>
-
-<div class="tabs">
-                <a href="Important_science_diagrams.html" class="tabdiagrams">Important Diagrams list</a>
-                
-            </div>
-        </div>
-
-<div class="tabs">
-                <a href="./Interactive/main_calculator_formulas_equations.html" class="tabformulas">Formulas, Reactions & Calculator</a>
-                
-            </div>
-        </div>
-
-<h2 class="section-title">Science</h2>
-        <div class="chapter-grid">
-            <a href="./Physics/Electricity_PYQ.html" class="chapter-card electricity">
-                <h3 class="chapter-name">Electricity</h3>
-                <p class="question-count">75 questions</p>
+    <main class="main-content">
+        <div class="chapters-grid">
+            <a href="arithmetic_progression_calculator.html" class="chapter-card math">
+                <div class="chapter-icon"><i class="fas fa-calculator"></i></div>
+                <h2 class="chapter-name">Arithmetic Progression</h2>
             </a>
-<a href="./Physics/Light_PYQ.html" class="chapter-card light">
-                <h3 class="chapter-name">Light</h3>
-                <p class="question-count">65 questions</p>
-            </a>
-            <a href="added_soon.html" class="chapter-card carbon">
-                <h3 class="chapter-name">Carbon & its compounds</h3>
-                <p class="question-count">55 questions</p>
-            </a>
-            
-        </div>
 
+            <a href="carbon_calculator.html" class="chapter-card chemistry">
+                <div class="chapter-icon"><i class="fas fa-atom"></i></div>
+                <h2 class="chapter-name">Carbon Compounds</h2>
+            </a>
 
-        <h2 class="section-title">Mathematics</h2>
-        <div class="chapter-grid">
-            <a href="arithmetic_progression_main.html" class="chapter-card math">
-                <h3 class="chapter-name">Arithmetic Progression</h3>
-                <p class="question-count">50 questions</p>
+            <a href="electricity_calculator.html" class="chapter-card physics">
+                <div class="chapter-icon"><i class="fas fa-bolt"></i></div>
+                <h2 class="chapter-name">Electricity</h2>
             </a>
-            <a href="added_soon.html" class="chapter-card math">
-                <h3 class="chapter-name">Coordinate Geometry</h3>
-                <p class="question-count">65 questions</p>
-            </a>
-            <a href="added_soon.html" class="chapter-card math">
-                <h3 class="chapter-name">Trigonometry</h3>
-                <p class="question-count">95 questions</p>
-            </a>
-            <a href="added_soon.html" class="chapter-card math">
-                <h3 class="chapter-name">Real Numbers</h3>
-                <p class="question-count">45 questions</p>
-            </a>
-            <a href="added_soon.html" class="chapter-card math">
-                <h3 class="chapter-name">Polynomials</h3>
-                <p class="question-count">60 questions</p>
-            </a>
-            <a href="added_soon.html" class="chapter-card math">
-                <h3 class="chapter-name">Quadratic Equations</h3>
-                <p class="question-count">70 questions</p>
+
+            <a href="trigonometry_calculator.html" class="chapter-card math">
+                <div class="chapter-icon"><i class="fas fa-shapes"></i></div>
+                <h2 class="chapter-name">Trigonometry</h2>
             </a>
         </div>
 
-        
-
-        <div class="card">
-            <h2 class="section-title">Learning Resources</h2>
-            <div class="resources">
-                <a href="https://whatsapp.com/channel/0029Vb3QDu17YSd1brABFi1d" class="resource-btn whatsapp-btn">
-                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
+        <div class="learning-resources">
+            <h2>Learning Resources</h2>
+            <div class="resource-buttons">
+                <a href="https://www.whatsapp.com/channel/0029Vb3QDu17YSd1brABFi1d" class="resource-button">
+                    <i class="fab fa-whatsapp"></i>
                     Join WhatsApp Channel
                 </a>
-                <a href="https://www.youtube.com/@simplifiedmindssslc" class="resource-btn video-btn">
-                    <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                    </svg>
+                <a href="https://www.youtube.com/@simplifiedmindssslc" class="resource-button">
+                    <i class="fab fa-youtube"></i>
                     Video Lectures
                 </a>
             </div>
         </div>
     </main>
-
-<script>
-    function updateCountdown() {
-        const examDate = new Date('March 21, 2025 10:00:00 GMT+0530');
-        const now = new Date();
-        const diff = examDate - now;
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        document.getElementById('days').textContent = days;
-        document.getElementById('hours').textContent = hours;
-        document.getElementById('minutes').textContent = minutes;
-        document.getElementById('seconds').textContent = seconds;
-    }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-</script>
 </body>
 </html>
