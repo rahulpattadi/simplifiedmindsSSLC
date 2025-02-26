@@ -13,6 +13,7 @@
             --success-color: #2ecc71;
             --warning-color: #f39c12;
             --danger-color: #e74c3c;
+            --share-color: #9b59b6;
         }
         
         * {
@@ -299,45 +300,273 @@
             left: 50%;
         }
         
-        /* Print button styles */
-        .print-btn {
-            background-color: var(--warning-color);
+        /* Share button styles */
+        .share-btn {
+            background-color: var(--share-color);
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
-        .print-btn:hover {
-            background-color: #e67e22;
+        .share-btn:hover {
+            background-color: #8e44ad;
         }
         
-        @media print {
-            .section-nav, .navigation, .progress-container, .print-btn {
-                display: none !important;
+        /* Share modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            transition: background-color 0.2s;
+        }
+        
+        .close:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Question preview in modal */
+        .question-preview {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .question-preview h3 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .question-preview p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .modal-options {
+            margin-top: 10px;
+        }
+        
+        .modal-option {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        
+        /* Share options */
+        .share-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .share-option {
+            flex: 1;
+            min-width: 100px;
+            max-width: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+        
+        .share-option:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .share-option:active {
+            transform: translateY(0);
+        }
+        
+        .share-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            transition: transform 0.2s;
+        }
+        
+        .share-option:hover .share-icon {
+            transform: scale(1.1);
+        }
+        
+        .share-whatsapp {
+            background-color: #25D366;
+        }
+        
+        .share-twitter {
+            background-color: #1DA1F2;
+        }
+        
+        .share-facebook {
+            background-color: #4267B2;
+        }
+        
+        .share-email {
+            background-color: #D44638;
+        }
+        
+        .share-copy {
+            background-color: #333;
+        }
+        
+        .share-qr {
+            background-color: #6c5ce7;
+        }
+        
+        /* QR Code container */
+        .qr-container {
+            margin-top: 20px;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 15px auto;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        #download-qr {
+            background-color: var(--primary-color);
+            margin-top: 10px;
+        }
+        
+        /* Short URL container */
+        .short-url-container {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .url-box {
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        .url-box input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 0.9rem;
+        }
+        
+        .url-box button {
+            border-radius: 0 4px 4px 0;
+            padding: 8px 15px;
+        }
+        
+        /* Copy message */
+        .copied-message {
+            display: none;
+            color: var(--success-color);
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            padding: 8px;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 4px;
+        }
+        
+        /* Animation for copy feedback */
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        .fade-in-out {
+            animation: fadeInOut 2s ease-in-out;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .share-options {
+                gap: 8px;
             }
             
-            body {
-                background-color: white;
+            .share-option {
+                min-width: 80px;
+                padding: 8px 4px;
+                font-size: 0.8rem;
             }
             
-            .container {
-                max-width: 100%;
-                padding: 0;
+            .share-icon {
+                width: 36px;
+                height: 36px;
             }
             
-            header {
-                background: none;
-                color: black;
-                box-shadow: none;
-                border-bottom: 1px solid #ddd;
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+                padding: 15px;
             }
             
-            .quiz-container {
-                box-shadow: none;
-                border: none;
-            }
-            
-            .option-item {
-                border: 1px solid #ddd;
-                margin-bottom: 5px;
+            .qr-code {
+                width: 150px;
+                height: 150px;
             }
         }
     </style>
@@ -358,7 +587,12 @@
             <button class="section-btn" data-section="complex">Complex Problems</button>
         </div>
 
-        <button id="print-btn" class="btn print-btn">Print Current Question</button>
+        <button id="share-btn" class="btn share-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+            </svg>
+            Share Current Question
+        </button>
 
         <div class="quiz-container">
             <div class="quiz-header">
@@ -390,8 +624,96 @@
         </div>
     </div>
 
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Share This Question</h2>
+            <p>Choose how you'd like to share this math question:</p>
+            
+            <div class="question-preview">
+                <h3 id="modal-question-number">Question 1</h3>
+                <p id="modal-question-text"></p>
+                <div id="modal-options" class="modal-options"></div>
+            </div>
+            
+            <div class="share-options">
+                <div class="share-option" id="share-whatsapp">
+                    <div class="share-icon share-whatsapp">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                        </svg>
+                    </div>
+                    WhatsApp
+                </div>
+                
+                <div class="share-option" id="share-twitter">
+                    <div class="share-icon share-twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
+                        </svg>
+                    </div>
+                    Twitter
+                </div>
+                
+                <div class="share-option" id="share-facebook">
+                    <div class="share-icon share-facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+                        </svg>
+                    </div>
+                    Facebook
+                </div>
+                
+                <div class="share-option" id="share-email">
+                    <div class="share-icon share-email">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                        </svg>
+                    </div>
+                    Email
+                </div>
+                
+                <div class="share-option" id="share-copy">
+                    <div class="share-icon share-copy">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                    </div>
+                    Copy Link
+                </div>
+                
+                <div class="share-option" id="share-qr">
+                    <div class="share-icon share-qr">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M6 0h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm1 1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H7zm1 9H2a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zm7-9a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1h-2zm-1 9a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-2z"/>
+                        </svg>
+                    </div>
+                    Generate QR
+                </div>
+            </div>
+            
+            <div id="qr-container" class="qr-container" style="display: none;">
+                <h3>Scan QR Code to Share</h3>
+                <div id="qr-code" class="qr-code"></div>
+                <button id="download-qr" class="btn">Download QR Code</button>
+            </div>
+            
+            <div id="short-url-container" class="short-url-container" style="display: none;">
+                <h3>Shortened URL</h3>
+                <div class="url-box">
+                    <input id="short-url" type="text" readonly>
+                    <button id="copy-short-url" class="btn">Copy</button>
+                </div>
+            </div>
+            
+            <p id="copied-message" class="copied-message">Link copied to clipboard!</p>
+        </div>
+    </div>
+
     <script>
-        // Quiz questions data
+        // Quiz questions data (shortened version for brevity)
         const quizData = [
     // Section I: Multiple Choice Questions
     {
@@ -1348,7 +1670,20 @@
         const currentQuestionElement = document.getElementById("current-question");
         const totalQuestionsElement = document.getElementById("total-questions");
         const sectionButtons = document.querySelectorAll(".section-btn");
-        const printButton = document.getElementById("print-btn");
+        const shareButton = document.getElementById("share-btn");
+        const shareModal = document.getElementById("share-modal");
+        const closeModal = document.querySelector(".close");
+        const copiedMessage = document.getElementById("copied-message");
+        
+        // Share options
+        const shareWhatsApp = document.getElementById("share-whatsapp");
+        const shareTwitter = document.getElementById("share-twitter");
+        const shareFacebook = document.getElementById("share-facebook");
+        const shareEmail = document.getElementById("share-email");
+        const shareCopy = document.getElementById("share-copy");
+        const shareQR = document.getElementById("share-qr");
+        const downloadQRBtn = document.getElementById("download-qr");
+        const copyShortURLBtn = document.getElementById("copy-short-url");
 
         // Initialize quiz
         function initQuiz() {
@@ -1468,20 +1803,286 @@
             
             initQuiz();
         }
-
-        // Print current question
-        function printCurrentQuestion() {
-            window.print();
+        
+        // Get current question data for sharing
+        function getCurrentQuestionData() {
+            const filteredQuestions = getFilteredQuestions();
+            return filteredQuestions[currentQuestionIndex];
+        }
+        
+        // Generate share text
+        function generateShareText() {
+            const question = getCurrentQuestionData();
+            let shareText = `Math Quiz Question: ${question.question}`;
+            
+            if (question.options) {
+                shareText += "\n\nOptions:";
+                question.options.forEach(option => {
+                    shareText += `\n${option}`;
+                });
+            }
+            
+            shareText += `\n\nTest your math skills at: Math Quiz App`;
+            
+            return encodeURIComponent(shareText);
+        }
+        
+        // Generate share URL
+        function generateShareURL() {
+            // In a real app, this would generate a unique URL for the question
+            // For now, we'll just create a dummy URL with the question index as a parameter
+            const baseURL = window.location.href.split('?')[0];
+            return `${baseURL}?section=${currentSection}&q=${currentQuestionIndex}`;
+        }
+        
+        // Update modal with current question
+        function updateShareModal() {
+            const question = getCurrentQuestionData();
+            
+            // Update question preview in modal
+            document.getElementById('modal-question-number').textContent = `Question ${currentQuestionIndex + 1}`;
+            document.getElementById('modal-question-text').textContent = question.question;
+            
+            // Clear previous options
+            const modalOptions = document.getElementById('modal-options');
+            modalOptions.innerHTML = '';
+            
+            // Add options if they exist
+            if (question.options) {
+                question.options.forEach(option => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'modal-option';
+                    optionElement.textContent = option;
+                    modalOptions.appendChild(optionElement);
+                });
+            }
+            
+            // Hide QR code and short URL containers initially
+            document.getElementById('qr-container').style.display = 'none';
+            document.getElementById('short-url-container').style.display = 'none';
+        }
+        
+        // Share functions
+        function shareToWhatsApp() {
+            const text = generateShareText();
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+        
+        function shareToTwitter() {
+            const text = generateShareText();
+            window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+        }
+        
+        function shareToFacebook() {
+            const url = generateShareURL();
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        }
+        
+        function shareByEmail() {
+            const subject = "Math Quiz Question";
+            const body = decodeURIComponent(generateShareText());
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+        
+        function copyToClipboard() {
+            const text = decodeURIComponent(generateShareText());
+            
+            // Using the modern clipboard API
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        showCopiedMessage();
+                    })
+                    .catch(err => {
+                        console.error('Could not copy text: ', err);
+                        fallbackCopyToClipboard(text);
+                    });
+            } else {
+                fallbackCopyToClipboard(text);
+            }
+        }
+        
+        // Fallback method for clipboard
+        function fallbackCopyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // Make the textarea out of viewport
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopiedMessage();
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // Generate and display QR code
+        function generateQRCode() {
+            const qrContainer = document.getElementById('qr-container');
+            const qrCodeElement = document.getElementById('qr-code');
+            const shareURL = generateShareURL();
+            
+            // Clear previous QR code
+            qrCodeElement.innerHTML = '';
+            
+            // Check if QR code library is available
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(qrCodeElement, {
+                    text: shareURL,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Show QR container
+                qrContainer.style.display = 'block';
+            } else {
+                // If QR library not available, create a simple placeholder
+                qrCodeElement.style.display = 'flex';
+                qrCodeElement.style.alignItems = 'center';
+                qrCodeElement.style.justifyContent = 'center';
+                qrCodeElement.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <p>QR Code Generation</p>
+                        <p style="font-size: 0.9rem; color: #666;">Would display QR code for: ${shareURL}</p>
+                    </div>
+                `;
+                
+                // Show QR container
+                qrContainer.style.display = 'block';
+            }
+            
+            // Ensure short URL container is hidden
+            document.getElementById('short-url-container').style.display = 'none';
+        }
+        
+        // Download QR code as image
+        function downloadQRCode() {
+            const qrCanvas = document.querySelector('#qr-code canvas');
+            
+            if (qrCanvas) {
+                const link = document.createElement('a');
+                link.download = 'math-quiz-question-qr.png';
+                link.href = qrCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+                link.click();
+            }
+        }
+        
+        // Generate a short URL (mock implementation)
+        function generateShortURL() {
+            const shortUrlContainer = document.getElementById('short-url-container');
+            const shortUrlInput = document.getElementById('short-url');
+            const fullUrl = generateShareURL();
+            
+            // In a real app, this would call a URL shortening service API
+            // For demonstration, we'll create a mock shortened URL
+            const mockShortUrl = `https://short.url/${Math.random().toString(36).substring(2, 8)}`;
+            
+            // Set the shortened URL
+            shortUrlInput.value = mockShortUrl;
+            
+            // Show the short URL container
+            shortUrlContainer.style.display = 'block';
+            
+            // Ensure QR container is hidden
+            document.getElementById('qr-container').style.display = 'none';
+        }
+        
+        // Copy short URL
+        function copyShortURL() {
+            const shortUrlInput = document.getElementById('short-url');
+            shortUrlInput.select();
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shortUrlInput.value)
+                    .then(() => {
+                        showCopiedMessage();
+                    })
+                    .catch(err => {
+                        console.error('Could not copy URL: ', err);
+                        document.execCommand('copy');
+                        showCopiedMessage();
+                    });
+            } else {
+                document.execCommand('copy');
+                showCopiedMessage();
+            }
+        }
+        
+        // Show copied message with animation
+        function showCopiedMessage() {
+            const copiedMessage = document.getElementById('copied-message');
+            copiedMessage.style.display = 'block';
+            
+            // Remove existing animation class if present
+            copiedMessage.classList.remove('fade-in-out');
+            
+            // Trigger reflow
+            void copiedMessage.offsetWidth;
+            
+            // Add animation class
+            copiedMessage.classList.add('fade-in-out');
+            
+            // Hide after animation completes
+            setTimeout(() => {
+                copiedMessage.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Open share modal
+        function openShareModal() {
+            updateShareModal();
+            shareModal.style.display = 'block';
+        }
+        
+        // Close share modal
+        function closeShareModal() {
+            shareModal.style.display = 'none';
+        }
+        
+        // Close modal if clicked outside content
+        window.onclick = function(event) {
+            if (event.target === shareModal) {
+                closeShareModal();
+            }
         }
 
         // Add event listeners
-        nextButton.addEventListener("click", nextQuestion);
-        prevButton.addEventListener("click", prevQuestion);
-        printButton.addEventListener("click", printCurrentQuestion);
+        nextButton.addEventListener('click', nextQuestion);
+        prevButton.addEventListener('click', prevQuestion);
+        shareButton.addEventListener('click', openShareModal);
+        closeModal.addEventListener('click', closeShareModal);
+        
+        // Share option event listeners
+        shareWhatsApp.addEventListener('click', shareToWhatsApp);
+        shareTwitter.addEventListener('click', shareToTwitter);
+        shareFacebook.addEventListener('click', shareToFacebook);
+        shareEmail.addEventListener('click', shareByEmail);
+        shareCopy.addEventListener('click', copyToClipboard);
+        
+        // QR code features
+        document.getElementById('share-qr').addEventListener('click', generateQRCode);
+        document.getElementById('download-qr').addEventListener('click', downloadQRCode);
+        
+        // Short URL copy feature
+        document.getElementById('copy-short-url').addEventListener('click', copyShortURL);
         
         // Section button listeners
         sectionButtons.forEach(btn => {
-            btn.addEventListener("click", () => {
+            btn.addEventListener('click', () => {
                 changeSection(btn.dataset.section);
             });
         });
@@ -1503,7 +2104,45 @@
                     nextQuestion();
                 }
             }
+            // Escape key to close modal
+            else if (event.key === 'Escape') {
+                closeShareModal();
+            }
         });
+        
+        // Check for URL parameters
+        function loadFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sectionParam = urlParams.get('section');
+            const questionParam = urlParams.get('q');
+            
+            if (sectionParam && sectionParam !== currentSection) {
+                changeSection(sectionParam);
+            }
+            
+            if (questionParam) {
+                const questionIndex = parseInt(questionParam);
+                if (!isNaN(questionIndex) && questionIndex >= 0) {
+                    currentQuestionIndex = Math.min(questionIndex, getFilteredQuestions().length - 1);
+                    displayQuestion();
+                    updateProgressBar();
+                }
+            }
+        }
+        
+        // Load from URL parameters if present
+        loadFromURL();
+        
+        // Add QR Code library dynamically
+        function loadQRCodeLibrary() {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+            script.async = true;
+            document.body.appendChild(script);
+        }
+        
+        // Load necessary libraries
+        loadQRCodeLibrary();
     </script>
 </body>
 </html>
