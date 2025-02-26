@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics Questions Bank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .question-card {
+            transition: all 0.3s ease;
+        }
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .solution {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .solution.show {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .question-card {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        .dark-mode .filter-btn {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        .dark-mode .solution {
+            border-color: white;
+        }
+        .dark-mode .question-card .solution p {
+            color: white !important;
+        }
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .logo:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo .simplified {
+            color: #ffd700;
+        }
+
+        .logo .minds {
+            color: #ff0000;
+        }
+
+        .home-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: #718096;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover .home-icon {
+            color: #2d3748;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .logo:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Learning Resources Styles */
+        .learning-resources {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .resources-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .resources-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .resource-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #22c55e;
+        }
+
+        .video-button {
+            background-color: #FF0000;
+        }
+
+        .video-button:hover {
+            background-color: #ef4444;
+        }
+
+        .button-icon {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .button-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .resources-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .resource-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen dark:bg-gray-900">
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50" onclick="closeModal()">
+        <span class="absolute top-4 right-4 text-white text-3xl cursor-pointer">&times;</span>
+        <img id="modalImage" class="max-w-full max-h-full m-auto" alt="Modal Image">
+    </div>
+
+    <header class="bg-white shadow-sm dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Mathematics Questions Bank</h1>
+                    <p class="mt-2 text-gray-600 dark:text-gray-400">Previous Years' Questions Bank</p>
+                </div>
+                <button id="darkModeToggle" class="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-800 dark:bg-gray-200 rounded-full transition-all duration-300 shadow-lg text-white dark:text-gray-800">
+                    <span class="flex items-center gap-2">
+                        🌙 Switch to Dark
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="logo-container">
+        <a href="../index.html" class="logo">
+            <span class="home-icon">🏠</span>
+            <span class="simplified">Simplified</span><span class="minds">Minds</span>
+            <span class="tooltip">Go to Homepage</span>
+        </a>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <input type="text" id="searchInput" placeholder="Search questions..." 
+                   class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-8 space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="w-full md:w-auto">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Filter by Marks</h2>
+                    <div class="flex flex-wrap gap-2" id="marksFilter">
+                        <button class="filter-btn marks-filter active px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600">All</button>
+                        <button class="filter-btn marks-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-marks="1">1M</button>
+                        <button class="filter-btn marks-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-marks="2">2M</button>
+                        <button class="filter-btn marks-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-marks="3">3M</button>
+                        <button class="filter-btn marks-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-marks="4">4M</button>
+                        <button class="filter-btn marks-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-marks="5">5M</button>
+                    </div>
+                </div>
+                <div class="w-full md:w-auto">
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Filter by Chapter</h2>
+                    <div class="flex flex-wrap gap-2" id="chapterFilter">
+                        <button class="filter-btn chapter-filter active px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600">All</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Real Numbers">Real Numbers</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Polynomials">Polynomials</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Pair of Linear Equations">Linear Equations</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Quadratic Equations">Quadratic Equations</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Arithmetic Progressions">Arithmetic Progressions</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Triangles">Triangles</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Coordinate Geometry">Coordinate Geometry</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Trigonometry">Trigonometry</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Circles">Circles</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Areas Related to Circles">Areas Related to Circles</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Surface Areas and Volumes">Surface Areas and Volumes</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Statistics">Statistics</button>
+                        <button class="filter-btn chapter-filter px-4 py-2 rounded-full border text-sm font-medium dark:border-gray-600" data-chapter="Probability">Probability</button>
+                    </div>
+                </div>
+                <button onclick="resetViewedQuestions()" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                    Reset Progress
+                </button>
+            </div>
+        </div>
+
+        <!-- Questions Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="questionsContainer">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+
+        <!-- Learning Resources Section -->
+        <div class="learning-resources dark:bg-gray-800">
+            <h2 class="resources-title dark:text-white">Learning Resources</h2>
+            <div class="resources-buttons">
+                <a href="https://www.whatsapp.com/channel/0029Vb3QDu17YSd1brABFi1d" class="resource-button whatsapp-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                    </span>
+                    Join WhatsApp Channel
+                </a>
+                <a href="https://www.youtube.com/@simplifiedmindssslc" class="resource-button video-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/>
+                        </svg>
+                    </span>
+                    Video Lectures
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // You'll need to define your questions array here
+        const questions = [
+    // Section I - Multiple Choice Questions (1 mark each)
+    {
+        id: 1,
+        question: "The HCF of 5² × 2 and 2⁵ × 5 is",
+        options: ["(A) 2 × 5", "(B) 2⁵ × 5", "(C) 5² × 2⁶", "(D) 2⁵ × 5²"],
+        marks: 1,
+        chapter: "Real Numbers",
+        type: "MCQ",
+        section: "Section I"
+    },
+    {
+        id: 2,
+        question: "The sum of first 'n' natural numbers is",
+        options: ["(A) n(n + 1)", "(B) n(n + 2)/2", "(C) n(n + 1)/2", "(D) n(n - 1)"],
+        marks: 1,
+        chapter: "Arithmetic Progressions",
+        type: "MCQ",
+        section: "Section I"
+    },
+    {
+        id: 3,
+        question: "In a pair of linear equations a₁x + b₁y + c₁ = 0 and a₂x + b₂y + c₂ = 0, which of the following situations cannot arise?",
+        options: ["(A) a₁/a₂ ≠ b₁/b₂", "(B) a₁/a₂ = b₁/b₂ ≠ c₁/c₂", "(C) a₁/a₂ = b₁/b₂ = c₁/c₂", "(D) a₁ = a₂, b₁ = b₂, c₁ = c₂"],
+        marks: 1,
+        chapter: "Pair of Linear Equations",
+        type: "MCQ",
+        section: "Section I"
+    },
+    {
+        id: 4,
+        question: "The number of zeroes of the polynomial y = P(x) in the given graph is",
+        options: ["(A) 2", "(B) 3", "(C) 4", "(D) 5"],
+        marks: 1,
+        chapter: "Polynomials",
+        type: "MCQ",
+        section: "Section I",
+        questionImage: "images/4.jpg"  // Replace with actual image path
+    },
+    {
+        id: 5,
+        question: "x(x + 2) = 6 is a",
+        options: ["(A) linear equation", "(B) quadratic equation", "(C) cubic polynomial", "(D) quadratic polynomial"],
+        marks: 1,
+        chapter: "Quadratic Equations",
+        type: "MCQ",
+        section: "Section I"
+    },
+    {
+        id: 6,
+        question: "In the figure, ∆PQR ~ ∆ABC. The pair of corresponding sides in the following is",
+        options: ["(A) PQ and AB", "(B) PR and AB", "(C) QR and AC", "(D) PR and BC"],
+        marks: 1,
+        chapter: "Triangles",
+        type: "MCQ",
+        section: "Section I",
+        questionImage: "images/6.jpg"  // Replace with actual image path
+    },
+    {
+        id: 7,
+        question: "sin²A - cos²A is equal to",
+        options: ["(A) 1", "(B) 1 - 2cos²A", "(C) 1 + 2cos²A", "(D) -1"],
+        marks: 1,
+        chapter: "Trigonometry",
+        type: "MCQ",
+        section: "Section I"
+    },
+    {
+        id: 8,
+        question: "The sum of the probability of all elementary events of a random experiment is",
+        options: ["(A) 0", "(B) 1/2", "(C) 1", "(D) -1"],
+        marks: 1,
+        chapter: "Probability",
+        type: "MCQ",
+        section: "Section I"
+    },
+
+    // Section II - Short Answer Questions (1 mark each)
+    {
+        id: 9,
+        question: "Find the value of 'b' if the pair of linear equations 2x + by = 8 and 2(2x + 3y) = 16 has infinite solutions.",
+        marks: 1,
+        chapter: "Pair of Linear Equations",
+        type: "Short Answer",
+        section: "Section II"
+    },
+    {
+        id: 10,
+        question: "Write the degree of the polynomial P(x) = 5x³ - 3x² + 12x - 8.",
+        marks: 1,
+        chapter: "Polynomials",
+        type: "Short Answer",
+        section: "Section II"
+    },
+    {
+        id: 11,
+        question: "If sin A = √3/2 and cos A = 1/2, then find the value of tan A.",
+        marks: 1,
+        chapter: "Trigonometry",
+        type: "Short Answer",
+        section: "Section II"
+    },
+    {
+        id: 12,
+        question: "Write the empirical relation between the three measures of central tendency Mean, Median and Mode.",
+        marks: 1,
+        chapter: "Statistics",
+        type: "Short Answer",
+        section: "Section II"
+    },
+    {
+        id: 13,
+        question: "Express the quadratic equation (x+1)/2 = 3/x in the standard form.",
+        marks: 1,
+        chapter: "Quadratic Equations",
+        type: "Short Answer",
+        section: "Section II"
+    },
+    {
+        id: 14,
+        question: "Find the distance of the point (6, 8) from the origin.",
+        marks: 1,
+        chapter: "Coordinate Geometry",
+        type: "Short Answer",
+        section: "Section II"
+    },
+    {
+        id: 15,
+        question: "In the figure, ∆POQ ~ ∆ROS and PQ || SR. If PQ : SR = 1 : 2, then find OS : OQ.",
+        marks: 1,
+        chapter: "Triangles",
+        type: "Short Answer",
+        section: "Section II",
+        questionImage: "images/15.jpg"  // Replace with actual image path
+    },
+    {
+        id: 16,
+        question: "The circumference of the circular base of a cylinder is 44 cm and its height is 10 cm. Find the curved surface area of the cylinder.",
+        marks: 1,
+        chapter: "Surface Areas and Volumes",
+        type: "Short Answer",
+        section: "Section II"
+    },
+
+    // Section III - 2 Marks Questions
+    {
+        id: 17,
+        question: "Prove that 3 + √5 is an irrational number.",
+        marks: 2,
+        chapter: "Real Numbers",
+        type: "Proof",
+        section: "Section III"
+    },
+    {
+        id: 18,
+        question: "What is a composite number? Which is the composite number among 23 and 24?",
+        marks: 2,
+        chapter: "Real Numbers",
+        type: "Short Answer",
+        section: "Section III",
+        hasAlternate: true
+    },
+    {
+        id: 19,
+        question: "State the fundamental theorem of arithmetic. Write the composite number which has 7 and 3 as its only prime factors.",
+        marks: 2,
+        chapter: "Real Numbers",
+        type: "Short Answer",
+        section: "Section III",
+        isAlternate: true
+    },
+    {
+        id: 20,
+        question: "Find the 21st term of the arithmetic progression 5, 9, 13, ..... using formula.",
+        marks: 2,
+        chapter: "Arithmetic Progressions",
+        type: "Problem Solving",
+        section: "Section III"
+    },
+    {
+        id: 21,
+        question: "Solve the pair of linear equations by elimination method:<br>x + y = 4<br>2x + y = 6",
+        marks: 2,
+        chapter: "Pair of Linear Equations",
+        type: "Problem Solving",
+        section: "Section III"
+    },
+    {
+        id: 22,
+        question: "If the quadratic equation x² + bx + 9 = 0 has two equal real roots, then find the equation (b < 1).",
+        marks: 2,
+        chapter: "Quadratic Equations",
+        type: "Problem Solving",
+        section: "Section III"
+    },
+    {
+        id: 23,
+        question: "Find the coordinates of the point which divides the line segment joining the points A(1, -3) and B(8, 5) in the ratio 3 : 1 internally.",
+        marks: 2,
+        chapter: "Coordinate Geometry",
+        type: "Problem Solving",
+        section: "Section III"
+    },
+    {
+        id: 24,
+        question: "In the figure, XY is a tangent at the point P to a circle with centre O. Q is a point on XY. Show that OQ > OP.",
+        marks: 2,
+        chapter: "Circles",
+        type: "Proof",
+        section: "Section III",
+        questionImage: "images/23.jpg"  // Replace with actual image path
+    },
+    {
+        id: 25,
+        question: "A toy is in the form of a cone of radius 3.5 cm mounted on a hemisphere of same radius. The total height of the toy is 15.5 cm. Find the total surface area of the toy.",
+        marks: 2,
+        chapter: "Surface Areas and Volumes",
+        type: "Problem Solving",
+        section: "Section III",
+        hasAlternate: true
+    },
+    {
+        id: 26,
+        question: "The volume of a sphere is 539/3 cm³. Find its surface area.",
+        marks: 2,
+        chapter: "Surface Areas and Volumes",
+        type: "Problem Solving",
+        section: "Section III",
+        isAlternate: true
+    },
+
+    // Section IV - 3 Marks Questions
+    {
+        id: 27,
+        question: "One of the zeroes of a polynomial P(x) = x² - 5x + k is 1 more than the other zero. Find the value of k.",
+        marks: 3,
+        chapter: "Polynomials",
+        type: "Problem Solving",
+        section: "Section IV"
+    },
+    {
+        id: 28,
+        question: "Find the two numbers whose sum is 27 and the product is 182.",
+        marks: 3,
+        chapter: "Quadratic Equations",
+        type: "Problem Solving",
+        section: "Section IV",
+        hasAlternate: true
+    },
+    {
+        id: 29,
+        question: "The altitude of a right angled triangle is 7 cm less than its base. If the hypotenuse is 13 cm, then find the other two sides.",
+        marks: 3,
+        chapter: "Triangles",
+        type: "Problem Solving",
+        section: "Section IV",
+        isAlternate: true
+    },
+    {
+        id: 30,
+        question: "Prove that (sin A + cosec A)² + (cos A + sec A)² = 7 + tan²A + cot²A.",
+        marks: 3,
+        chapter: "Trigonometry",
+        type: "Proof",
+        section: "Section IV"
+    },
+    {
+        id: 31,
+        question: "Find a relation between x and y such that the point P(x, y) is equidistant from the points A(7, 1) and B(3, 5). Also find the coordinates of the point P, if A, P and B are collinear.",
+        marks: 3,
+        chapter: "Coordinate Geometry",
+        type: "Problem Solving",
+        section: "Section IV",
+        hasAlternate: true
+    },
+    {
+        id: 32,
+        question: "If the points A(4, 5), B(7, y), C(4, 3) and D(x, 2) are the vertices of a parallelogram, then find the values of x and y.",
+        marks: 3,
+        chapter: "Coordinate Geometry",
+        type: "Problem Solving",
+        section: "Section IV",
+        isAlternate: true
+    },
+    {
+        id: 33,
+        question: "Find the mean for the following frequency distribution table:<br>[Table with class intervals 10-20, 20-30, 30-40, 40-50, 50-60 and frequencies 2, 3, 5, 7, 3]",
+        marks: 3,
+        chapter: "Statistics",
+        type: "Problem Solving",
+        section: "Section IV",
+        hasAlternate: true,
+questionImage: "images/29a.jpg"
+    },
+    {
+        id: 34,
+        question: "Find the median for the following frequency distribution table:<br>[Table with class intervals 15-20, 20-25, 25-30, 30-35, 35-40 and frequencies 2, 3, 6, 4, 5]",
+        marks: 3,
+        chapter: "Statistics",
+        type: "Problem Solving",
+        section: "Section IV",
+        isAlternate: true,
+questionImage: "images/29b.jpg"
+    },
+    {
+        id: 35,
+        question: "A boy and a girl are born in the month of September. Find the probability that both will have<br>i) different birthdays<br>ii) the same birthday.",
+        marks: 3,
+        chapter: "Probability",
+        type: "Problem Solving",
+        section: "Section IV"
+    },
+    {
+        id: 36,
+        question: "In a scalene triangle ABC, draw a line parallel to BC. Let this line intersect AB at D and AC at E. If DE : BC = 2 : 5, AD = 2 cm, AE = 3 cm and DE = 4 cm, then find the perimeter of the triangle ABC.",
+        marks: 3,
+        chapter: "Triangles",
+        type: "Problem Solving",
+        section: "Section IV"
+    },
+    {
+        id: 37,
+        question: "Prove that the lengths of tangents drawn from an external point to a circle are equal.",
+        marks: 3,
+        chapter: "Circles",
+        type: "Proof",
+        section: "Section IV"
+    },
+    {
+        id: 38,
+        question: "The area of the sector OAYB shown in the figure is 462 cm². Find the length of the arc AYB if ∠AOB = 120°.",
+        marks: 3,
+        chapter: "Areas Related to Circles",
+        type: "Problem Solving",
+        section: "Section IV",
+        questionImage: "images/33.jpg",  // Replace with actual image path
+        hasAlternate: true
+    },
+    {
+        id: 39,
+        question: "The area of the sector of a circle is numerically equal to the length of the arc of the same sector. If the length of the arc is 44/21 cm, then find the radius of the circle and also the angle subtended by the arc at the centre.",
+        marks: 3,
+        chapter: "Areas Related to Circles",
+        type: "Problem Solving",
+        section: "Section IV",
+        isAlternate: true
+    },
+
+    // Section V - 4 Marks Questions
+    {
+        id: 40,
+        question: "Find the solution of the given pair of linear equations by graphical method:<br>x + y = 6<br>2x + y = 10",
+        marks: 4,
+        chapter: "Pair of Linear Equations",
+        type: "Problem Solving",
+        section: "Section V"
+    },
+    {
+        id: 41,
+        question: "The ratio of 11th and 8th terms of an arithmetic progression is 3 : 2. Find the ratio of the sum of the first 5 terms to the sum of the first 21 terms of it.",
+        marks: 4,
+        chapter: "Arithmetic Progressions",
+        type: "Problem Solving",
+        section: "Section V"
+    },
+    {
+        id: 42,
+        question: "Prove that \"If in two triangles, corresponding angles are equal, then their corresponding sides are in the same ratio (or in proportion) and hence the two triangles are similar\".",
+        marks: 4,
+        chapter: "Triangles",
+        type: "Proof",
+        section: "Section V"
+    },
+    {
+        id: 43,
+        question: "A wooden article was made by scooping out a hemisphere from each end of a solid cylinder, as shown in the figure. If the height of the cylinder is 10 cm, and the radius of its base is 3.5 cm, then find the total surface area of the article.",
+        marks: 4,
+        chapter: "Surface Areas and Volumes",
+        type: "Problem Solving",
+        section: "Section V",
+        questionImage: "images/37a.jpg",  // Replace with actual image path
+        hasAlternate: true
+    },
+    {
+        id: 44,
+        question: "A juice seller was serving his customers using glass as shown in the figure. The inner diameter of the cylindrical glass was 5 cm, but the bottom of the glass had a hemispherical raised portion which reduced the capacity of the glass. If the height of the glass was 10 cm, then find the apparent capacity of the glass and its actual capacity. (Take π = 3.14)",
+        marks: 4,
+        chapter: "Surface Areas and Volumes",
+        type: "Problem Solving",
+        section: "Section V",
+        questionImage: "images/37b.jpg",  // Replace with actual image path
+        isAlternate: true
+    },
+
+    // Section VI - 5 Marks Questions
+    {
+        id: 45,
+        question: "AB and RQ are two vertical towers standing on a level ground. The angle of elevation of the top of the tower from a point P on the same ground and from the foot of the tower QR are 30° as shown in the figure. If PQ = 24 m and AR = 13 m, then find the heights of the towers AB and RQ. Also find the length of AP. (Take √3 = 1.7)",
+        marks: 5,
+        chapter: "Trigonometry",
+        type: "Problem Solving",
+        section: "Section VI",
+        questionImage: "images/38.jpg"  // Replace with actual image path
+    }
+];
+
+        let viewedQuestions = new Set(JSON.parse(localStorage.getItem('viewedQuestions') || '[]'));
+        let bookmarkedQuestions = new Set(JSON.parse(localStorage.getItem('bookmarkedQuestions') || '[]'));
+
+        function createQuestionCard(question) {
+            const hasQuestionImage = question.questionImage ? true : false;
+            const hasSolutionImage = question.solutionImage ? true : false;
+            const isBookmarked = bookmarkedQuestions.has(question.id);
+            const options = question.options ? question.options.map(opt => `<p class="mb-1">${opt}</p>`).join('') : '';
+
+            return `
+                <div class="question-card bg-white rounded-lg shadow p-6 question dark:bg-gray-800 dark:text-white" 
+                     data-marks="${question.marks}" 
+                     data-chapter="${question.chapter}"
+                     data-keywords="${question.question.toLowerCase()}">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-200">
+                            ${question.marks}M
+                        </span>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                            ${question.chapter}
+                        </span>
+                        <button onclick="toggleBookmark(${question.id})" 
+                                class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                            ${isBookmarked ? '🔖' : '📌'}
+                        </button>
+                    </div>
+                    <h3 class="text-lg font-medium mb-4">${question.question}</h3>
+                    ${options ? `<div class="mb-4">${options}</div>` : ''}
+                    ${hasQuestionImage ? `
+                        <div class="mb-4">
+                            <img src="${question.questionImage}" 
+                                 alt="Question Image" 
+                                 class="question-image rounded-lg cursor-pointer"
+                                 onclick="openModal(this.src)">
+                        </div>
+                    ` : ''}
+                                        <div id="solution-${question.id}" class="solution mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <p class="text-gray-600 dark:text-gray-400">${question.answer || "Solution will be provided here."}</p>
+                        ${hasSolutionImage ? `
+                            <div class="mt-4">
+                                <img src="${question.solutionImage}" 
+                                     alt="Solution Image" 
+                                     class="solution-image rounded-lg cursor-pointer"
+                                     onclick="openModal(this.src)">
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function isQuestionViewed(id) {
+            return viewedQuestions.has(id);
+        }
+
+        function markQuestionAsViewed(id) {
+            viewedQuestions.add(id);
+            localStorage.setItem('viewedQuestions', JSON.stringify([...viewedQuestions]));
+        }
+
+        function toggleSolution(id) {
+            const solution = document.getElementById(`solution-${id}`);
+            const button = document.getElementById(`solution-btn-${id}`);
+            const isShowing = solution.classList.toggle('show');
+            
+            if (isShowing) {
+                button.classList.add('viewed');
+                markQuestionAsViewed(id);
+                button.textContent = 'Hide Solution (Viewed)';
+            } else {
+                button.textContent = 'Show Solution (Viewed)';
+            }
+        }
+
+        function toggleBookmark(id) {
+            if (bookmarkedQuestions.has(id)) {
+                bookmarkedQuestions.delete(id);
+            } else {
+                bookmarkedQuestions.add(id);
+            }
+            localStorage.setItem('bookmarkedQuestions', JSON.stringify([...bookmarkedQuestions]));
+            initializeQuestions();
+        }
+
+        function resetViewedQuestions() {
+            viewedQuestions.clear();
+            localStorage.removeItem('viewedQuestions');
+            document.querySelectorAll('.solution-btn').forEach(btn => {
+                btn.classList.remove('viewed');
+                btn.textContent = 'Show Solution';
+            });
+        }
+
+        function openModal(imgSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = "block";
+            modalImg.src = imgSrc;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = "none";
+        }
+
+        function initializeQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            questions.forEach(question => {
+                container.innerHTML += createQuestionCard(question);
+            });
+        }
+
+        function filterQuestions() {
+            const activeMarksFilter = document.querySelector('.marks-filter.active').dataset.marks || 'All';
+            const activeChapterFilter = document.querySelector('.chapter-filter.active').dataset.chapter || 'All';
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            
+            document.querySelectorAll('.question').forEach(question => {
+                const matchesMarks = activeMarksFilter === 'All' || question.dataset.marks === activeMarksFilter;
+                const matchesChapter = activeChapterFilter === 'All' || question.dataset.chapter === activeChapterFilter;
+                const matchesSearch = question.dataset.keywords.includes(searchQuery);
+                
+                question.classList.toggle('hidden', !(matchesMarks && matchesChapter && matchesSearch));
+            });
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.marks-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.marks-filter').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterQuestions();
+            });
+        });
+
+        document.querySelectorAll('.chapter-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.chapter-filter').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterQuestions();
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', filterQuestions);
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            // Update the text based on dark mode state
+            if (document.body.classList.contains('dark-mode')) {
+                document.getElementById('darkModeToggle').innerHTML = `
+                    <span class="flex items-center gap-2">
+                        ☀️ Switch to Light
+                    </span>`;
+            } else {
+                document.getElementById('darkModeToggle').innerHTML = `
+                    <span class="flex items-center gap-2">
+                        🌙 Switch to Dark
+                    </span>`;
+            }
+        });
+
+        // Initialize
+        initializeQuestions();
+    </script>
+</body>
+</html>
