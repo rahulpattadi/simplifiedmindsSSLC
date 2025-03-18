@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomoFun - Interactive Homophones Quiz</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .logo:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo .simplified {
+            color: #ffd700; /* Golden yellow */
+        }
+
+        .logo .minds {
+            color: #ff0000; /* Red */
+        }
+
+        .home-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: #718096;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover .home-icon {
+            color: #2d3748;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .logo:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Learning Resources Styles */
+        .learning-resources {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .resources-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .resources-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .resource-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #22c55e;
+        }
+
+        .video-button {
+            background-color: #FF0000;
+        }
+
+        .video-button:hover {
+            background-color: #ef4444;
+        }
+
+        .button-icon {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .button-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Quiz specific styles */
+        .quiz-card {
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .option-btn:hover:not(.correct):not(.incorrect) {
+            background-color: #e2e8f0;
+        }
+        
+        .option-btn.correct {
+            background-color: #10B981;
+            color: white;
+        }
+        
+        .option-btn.incorrect {
+            background-color: #EF4444;
+            color: white;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: confetti 5s ease-in-out infinite;
+            z-index: 1000;
+        }
+        
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .progress-ring {
+            transition: stroke-dashoffset 0.3s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .quiz-card,
+        .dark-mode .instructions-card,
+        .dark-mode .score-card,
+        .dark-mode .study-card,
+        .dark-mode .learning-resources,
+        .dark-mode .qa-card {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        
+        .dark-mode .option-btn:not(.correct):not(.incorrect) {
+            background-color: #4a5568;
+            color: white;
+        }
+        
+        .dark-mode .option-btn:hover:not(.correct):not(.incorrect) {
+            background-color: #2d3748;
+        }
+
+        .dark-mode .resources-title {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .resources-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .resource-button {
+                width: 100%;
+            }
+        }
+        
+        .homophone-card {
+            transition: all 0.3s ease;
+        }
+        
+        .homophone-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 10px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* New styles for Q&A Mode */
+        .qa-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .qa-header {
+            background-color: #f3f4f6;
+            padding: 10px 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            align-items: center;
+        }
+
+        .dark-mode .qa-header {
+            background-color: #4a5568;
+        }
+
+        .qa-content {
+            padding: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .dark-mode .qa-content {
+            border-top: 1px solid #4a5568;
+        }
+
+        .qa-toggle {
+            transition: transform 0.3s ease;
+        }
+
+        .qa-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .qa-category-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .qa-category-btn {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .qa-category-btn.active {
+            background-color: #4F46E5;
+            color: white;
+        }
+
+        .dark-mode .qa-category-btn:not(.active) {
+            background-color: #4a5568;
+            color: white;
+        }
+
+        /* Q&A print styles */
+        @media print {
+            header, footer, .logo-container, .learning-resources {
+                display: none !important;
+            }
+
+            .qa-header {
+                background-color: white !important;
+                color: black !important;
+            }
+
+            .qa-content {
+                display: block !important;
+            }
+
+            .qa-toggle, .qa-print-btn, .qa-category-selector {
+                display: none !important;
+            }
+
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+
+            .qa-card {
+                page-break-inside: avoid;
+                border: 1px solid #ccc !important;
+                margin-bottom: 10px !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen dark:bg-gray-900">
+    <header class="bg-white shadow-sm dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">HomoFun</h1>
+                    <p class="mt-1 text-gray-600 dark:text-gray-400">Master Homophones Through Interactive Play</p>
+                </div>
+                <button id="darkModeToggle" class="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-800 dark:bg-gray-200 rounded-full transition-all duration-300 shadow-lg text-white dark:text-gray-800">
+                    <span class="flex items-center gap-2">
+                        🌙 Dark Mode
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="logo-container">
+        <a href="../index.html" class="logo">
+            <span class="home-icon">🏠</span>
+            <span class="simplified">Simplified</span><span class="minds">Minds</span>
+            <span class="tooltip">Go to Homepage</span>
+        </a>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Game Modes -->
+        <div id="gameModes" class="mb-12">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Choose Your Challenge</h2>
+                <p class="mt-2 text-gray-600 dark:text-gray-400">Test your knowledge of homophones in different ways</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6 quiz-card dark:bg-gray-800">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Match the Pair</h3>
+                    <p class="mt-2 text-gray-600 dark:text-gray-400">Given one homophone, select its matching pair from options</p>
+                    <button onclick="startQuiz('match')" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Start Quiz
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 quiz-card dark:bg-gray-800">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Complete the Pattern</h3>
+                    <p class="mt-2 text-gray-600 dark:text-gray-400">Fill in the missing homophone to complete the pattern</p>
+                    <button onclick="startQuiz('pattern')" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Start Quiz
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 quiz-card dark:bg-gray-800">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-pink-500 text-white mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Meaning Master</h3>
+                    <p class="mt-2 text-gray-600 dark:text-gray-400">Select the correct homophone based on the definition provided</p>
+                    <button onclick="startQuiz('meaning')" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                        Start Quiz
+                    </button>
+                </div>
+                
+                <!-- New Q&A Mode Card -->
+                <div class="bg-white rounded-lg shadow-md p-6 quiz-card dark:bg-gray-800">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Q&A Mode</h3>
+                    <p class="mt-2 text-gray-600 dark:text-gray-400">View all question and answer pairs for quick exam revision</p>
+                    <button onclick="startQAMode()" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        View Q&A
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quiz Instructions -->
+        <div id="quizInstructions" class="hidden mb-12">
+            <div class="bg-white rounded-lg shadow-md p-8 instructions-card dark:bg-gray-800">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Play</h2>
+                <div id="instructionsContent" class="mb-6 text-gray-600 dark:text-gray-400">
+                    <!-- Instructions will be inserted here based on quiz type -->
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="showGameModes()" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600">
+                        Back
+                    </button>
+                    <button onclick="startActualQuiz()" class="inline-flex items-center px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Start Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quiz Content -->
+        <div id="quizContent" class="hidden mb-12">
+            <!-- Quiz progress bar -->
+            <div class="mb-8 flex items-center justify-between">
+                <div class="flex items-center">
+                    <svg class="w-10 h-10">
+                        <circle class="progress-ring-background" cx="20" cy="20" r="15" stroke="#e2e8f0" stroke-width="5" fill="transparent"></circle>
+                        <circle id="progressRing" class="progress-ring" cx="20" cy="20" r="15" stroke="#3B82F6" stroke-width="5" fill="transparent"></circle>
+                    </svg>
+                    <span id="progressText" class="ml-2 text-gray-600 dark:text-gray-400">Question 1/10</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="mr-2 text-gray-600 dark:text-gray-400">Score:</span>
+                    <span id="scoreDisplay" class="font-bold text-indigo-600 dark:text-indigo-400">0</span>
+                </div>
+            </div>
+        
+            <div class="bg-white rounded-lg shadow-md p-8 quiz-card dark:bg-gray-800">
+                <h2 id="questionText" class="text-xl font-bold text-gray-900 dark:text-white mb-6">Question text will appear here</h2>
+                
+                <div id="optionsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- Options will be inserted here -->
+                </div>
+                
+                <div id="explanation" class="hidden mb-6 p-4 bg-blue-50 text-blue-700 rounded-md dark:bg-blue-900 dark:text-blue-200">
+                    <!-- Explanation will be shown here after answering -->
+                </div>
+                
+                <div class="flex justify-end">
+                    <button id="nextBtn" class="hidden inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Next Question
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quiz Results -->
+        <div id="quizResults" class="hidden mb-12">
+            <div class="bg-white rounded-lg shadow-md p-8 score-card dark:bg-gray-800">
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Quiz Completed!</h2>
+                    <div class="inline-block relative my-6">
+                        <svg class="w-40 h-40">
+                            <circle cx="80" cy="80" r="70" fill="transparent" stroke="#e2e8f0" stroke-width="12"></circle>
+                            <circle id="scoreCircle" cx="80" cy="80" r="70" fill="transparent" stroke="#3B82F6" stroke-width="12" transform="rotate(-90 80 80)"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="finalScore" class="text-5xl font-bold text-indigo-600 dark:text-indigo-400">0/10</span>
+                        </div>
+                    </div>
+                    <p id="resultMessage" class="text-xl text-gray-600 dark:text-gray-400 mb-8">Great effort!</p>
+                    
+                    <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button onclick="showGameModes()" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Try Another Quiz
+                        </button>
+                        <button onclick="startStudyMode()" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600">
+                            Study Mode
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Study Mode -->
+        <div id="studyMode" class="hidden mb-12">
+            <div class="bg-white rounded-lg shadow-md p-8 study-card dark:bg-gray-800">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Homophone Pairs Reference</h2>
+                
+                <div class="mb-4">
+                    <input type="text" id="searchInput" placeholder="Search homophones..." class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6" id="homophonePairsContainer">
+                    <!-- Homophone pairs will be listed here -->
+                </div>
+                
+                <div class="flex justify-end">
+                    <button onclick="showGameModes()" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Back to Quizzes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q&A Mode -->
+        <div id="qaMode" class="hidden mb-12">
+            <div class="bg-white rounded-lg shadow-md p-8 study-card dark:bg-gray-800">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Homophone Q&A Reference</h2>
+                    <button onclick="printQAContent()" class="qa-print-btn inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        Print
+                    </button>
+                </div>
+                
+                <div class="mb-4">
+                    <input type="text" id="qaSearchInput" placeholder="Search questions or answers..." class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+
+                <div class="qa-category-selector">
+                    <button class="qa-category-btn active bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200" data-category="match">Match the Pair</button>
+                    <button class="qa-category-btn bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200" data-category="pattern">Complete the Pattern</button>
+                    <button class="qa-category-btn bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200" data-category="meaning">Meaning Master</button>
+                    <button class="qa-category-btn bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200" data-category="all">All Questions</button>
+                </div>
+                
+                <div class="space-y-4 mb-6" id="qaContainer">
+                    <!-- Q&A pairs will be listed here -->
+                </div>
+                
+                <div class="flex justify-end">
+                    <button onclick="showGameModes()" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Back to Quizzes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Resources Section -->
+        <div class="learning-resources">
+            <h2 class="resources-title">Learning Resources</h2>
+            <div class="resources-buttons">
+                <a href="https://www.whatsapp.com/channel/0029Vb3QDu17YSd1brABFi1d" class="resource-button whatsapp-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                    </span>
+                    Join WhatsApp Channel
+                </a>
+                <a href="https://www.youtube.com/@simplifiedmindssslc" class="resource-button video-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/>
+                        </svg>
+                    </span>
+                    Video Lectures
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+// Homophone pairs data
+const homophonePairs = [
+    { word1: "Here", word2: "Hear", word1Def: "In this place", word2Def: "To perceive sound" },
+    { word1: "Sea", word2: "See", word1Def: "Large body of salt water", word2Def: "To perceive with the eyes" },
+    { word1: "Flower", word2: "Flour", word1Def: "Bloom of a plant", word2Def: "Powder made from grinding grain" },
+    { word1: "Pair", word2: "Pear", word1Def: "Set of two items", word2Def: "A type of fruit" },
+    { word1: "Sale", word2: "Sail", word1Def: "Act of selling", word2Def: "Sheet of material on a boat to catch wind" },
+    { word1: "Know", word2: "No", word1Def: "To be aware of", word2Def: "Negative response" },
+    { word1: "Peace", word2: "Piece", word1Def: "State of calm or tranquility", word2Def: "A portion or fragment" },
+    { word1: "Tail", word2: "Tale", word1Def: "Rear appendage of an animal", word2Def: "A story or narrative" },
+    { word1: "Son", word2: "Sun", word1Def: "Male child", word2Def: "Star at the center of our solar system" },
+    { word1: "Buy", word2: "By", word1Def: "To purchase", word2Def: "Near or next to" },
+    { word1: "Weak", word2: "Week", word1Def: "Lacking strength", word2Def: "Seven days" },
+    { word1: "Right", word2: "Write", word1Def: "Correct; opposite of left", word2Def: "To form letters or words" },
+    { word1: "Plain", word2: "Plane", word1Def: "Simple or unadorned", word2Def: "Aircraft or flat surface" },
+    { word1: "Hole", word2: "Whole", word1Def: "An opening", word2Def: "Complete or entire" },
+    { word1: "Meet", word2: "Meat", word1Def: "To come together", word2Def: "Animal flesh used as food" },
+    { word1: "Some", word2: "Sum", word1Def: "An unspecified amount", word2Def: "The total of added numbers" },
+    { word1: "Bare", word2: "Bear", word1Def: "Uncovered", word2Def: "Large mammal or to carry" },
+    { word1: "Allowed", word2: "Aloud", word1Def: "Permitted", word2Def: "Out loud; audibly" },
+    { word1: "Ceiling", word2: "Sealing", word1Def: "Upper interior surface of a room", word2Def: "Closing securely" },
+    { word1: "Compliment", word2: "Complement", word1Def: "Expression of praise", word2Def: "Something that completes" },
+    { word1: "Stationary", word2: "Stationery", word1Def: "Not moving", word2Def: "Writing materials" },
+    { word1: "Raise", word2: "Raze", word1Def: "To lift up", word2Def: "To destroy completely" },
+    { word1: "Principal", word2: "Principle", word1Def: "Head of a school or main", word2Def: "Fundamental truth or rule" },
+    { word1: "Weather", word2: "Whether", word1Def: "Atmospheric conditions", word2Def: "Expressing a choice" },
+    { word1: "Scene", word2: "Seen", word1Def: "Place where something happens", word2Def: "Past participle of see" },
+    { word1: "Coarse", word2: "Course", word1Def: "Rough or crude", word2Def: "Direction or path" },
+    { word1: "Ant", word2: "Aunt", word1Def: "Small insect", word2Def: "Sister of one's parent" },
+    { word1: "Carat", word2: "Carrot", word1Def: "Unit of weight for gems", word2Def: "Orange vegetable" },
+    { word1: "Sight", word2: "Site", word1Def: "Ability to see", word2Def: "Location or place" },
+    { word1: "Serial", word2: "Cereal", word1Def: "In sequence", word2Def: "Breakfast food" },
+    { word1: "Flea", word2: "Flee", word1Def: "Small jumping insect", word2Def: "To run away" },
+    { word1: "Gait", word2: "Gate", word1Def: "Manner of walking", word2Def: "Entrance or doorway" },
+    { word1: "Blue", word2: "Blew", word1Def: "Color", word2Def: "Past tense of blow" },
+    { word1: "Grown", word2: "Groan", word1Def: "Having reached full size", word2Def: "Deep sound of pain" },
+    { word1: "Heard", word2: "Herd", word1Def: "Past tense of hear", word2Def: "Group of animals" },
+    { word1: "Need", word2: "Knead", word1Def: "Requirement", word2Def: "To work dough with hands" },
+    { word1: "Bye", word2: "Buy", word1Def: "Farewell", word2Def: "To purchase" },
+    { word1: "Board", word2: "Bored", word1Def: "Flat piece of wood", word2Def: "Feeling uninterested" },
+    { word1: "Idol", word2: "Idle", word1Def: "Object of worship", word2Def: "Not busy or active" },
+    { word1: "Band", word2: "Banned", word1Def: "Group of musicians", word2Def: "Prohibited" },
+    { word1: "Male", word2: "Mail", word1Def: "Man or boy", word2Def: "Letters and packages sent" },
+    { word1: "Leak", word2: "Leek", word1Def: "To allow liquid to escape", word2Def: "Type of vegetable" },
+    { word1: "Minor", word2: "Miner", word1Def: "Underage person", word2Def: "Person who works in mines" },
+    { word1: "Read", word2: "Red", word1Def: "To look at and comprehend words", word2Def: "Color" },
+    { word1: "Medal", word2: "Metal", word1Def: "Award", word2Def: "Material like gold or iron" },
+    { word1: "Sweet", word2: "Suite", word1Def: "Sugary taste", word2Def: "Set of rooms or software" },
+    { word1: "One", word2: "Won", word1Def: "Single unit", word2Def: "Past tense of win" },
+    { word1: "Feat", word2: "Feet", word1Def: "Notable achievement", word2Def: "Plural of foot" },
+    { word1: "Affect", word2: "Effect", word1Def: "To influence", word2Def: "Result or outcome" },
+    { word1: "Bough", word2: "Bow", word1Def: "Tree branch", word2Def: "To bend at the waist" },
+    { word1: "Hair", word2: "Hare", word1Def: "Strands growing from skin", word2Def: "Rabbit-like animal" },
+    { word1: "Waist", word2: "Waste", word1Def: "Middle part of body", word2Def: "To use carelessly" },
+    { word1: "Key", word2: "Quay", word1Def: "Tool for locks", word2Def: "Dock or wharf" },
+    { word1: "Fur", word2: "Fir", word1Def: "Animal coat", word2Def: "Type of evergreen tree" },
+    { word1: "Dew", word2: "Due", word1Def: "Water droplets in morning", word2Def: "Owed or expected" },
+    { word1: "Muscle", word2: "Mussel", word1Def: "Body tissue", word2Def: "Type of shellfish" },
+    { word1: "Pane", word2: "Pain", word1Def: "Section of glass", word2Def: "Physical suffering" },
+    { word1: "Close", word2: "Clothes", word1Def: "To shut", word2Def: "Items worn on the body" }
+];
+
+// Variables for quiz state
+let currentQuizType = '';
+let quizQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let selectedAnswer = null;
+let questionAnswered = false;
+const TOTAL_QUESTIONS = 10;
+
+// Set up circle progress bar
+const progressRing = document.getElementById('progressRing');
+const circumference = 2 * Math.PI * 15; // Circle radius is 15
+progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+progressRing.style.strokeDashoffset = circumference;
+
+// Dark mode toggle
+document.getElementById('darkModeToggle').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    // Update button text
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (document.body.classList.contains('dark-mode')) {
+        darkModeToggle.innerHTML = '<span class="flex items-center gap-2">☀️ Light Mode</span>';
+    } else {
+        darkModeToggle.innerHTML = '<span class="flex items-center gap-2">🌙 Dark Mode</span>';
+    }
+});
+
+// Function to show game modes screen
+function showGameModes() {
+    document.getElementById('gameModes').classList.remove('hidden');
+    document.getElementById('quizInstructions').classList.add('hidden');
+    document.getElementById('quizContent').classList.add('hidden');
+    document.getElementById('quizResults').classList.add('hidden');
+    document.getElementById('studyMode').classList.add('hidden');
+    document.getElementById('qaMode').classList.add('hidden');
+}
+
+// Function to start quiz and show instructions
+function startQuiz(quizType) {
+    currentQuizType = quizType;
+    document.getElementById('gameModes').classList.add('hidden');
+    document.getElementById('quizInstructions').classList.remove('hidden');
+    
+    // Set instructions based on quiz type
+    let instructionsHTML = '';
+    if (quizType === 'match') {
+        instructionsHTML = `
+            <p class="mb-2">In this quiz, you'll be given one word and asked to select its homophone partner from four options.</p>
+            <p class="mb-2">Homophones are words that sound the same but have different meanings and spellings.</p>
+            <p>For example, if shown "sea", you would need to identify "see" as its homophone.</p>
+        `;
+    } else if (quizType === 'pattern') {
+        instructionsHTML = `
+            <p class="mb-2">In this quiz, you'll be shown a pattern like "Here : Hear :: _____ : See".</p>
+            <p class="mb-2">Your task is to complete the pattern by selecting the correct missing word.</p>
+            <p>The pattern follows the format "Word1 : Homophone1 :: Word2 : Homophone2".</p>
+        `;
+    } else if (quizType === 'meaning') {
+        instructionsHTML = `
+            <p class="mb-2">In this quiz, you'll be given a definition and asked to select the correct homophone that matches it.</p>
+            <p class="mb-2">You'll need to distinguish between similar-sounding words based on their meanings.</p>
+            <p>For example, if the definition is "A large body of salt water", you would select "sea" (not "see").</p>
+        `;
+    }
+    
+    document.getElementById('instructionsContent').innerHTML = instructionsHTML;
+}
+
+// Function to create quiz questions
+function createQuizQuestions() {
+    // Shuffle homophone pairs to get random selection
+    const shuffledPairs = [...homophonePairs].sort(() => Math.random() - 0.5);
+    quizQuestions = [];
+    
+    // Take first 10 pairs for our quiz
+    const selectedPairs = shuffledPairs.slice(0, TOTAL_QUESTIONS);
+    
+    if (currentQuizType === 'match') {
+        selectedPairs.forEach(pair => {
+            // Randomly decide which word to use as the question
+            const useFirstWord = Math.random() > 0.5;
+            const questionWord = useFirstWord ? pair.word1 : pair.word2;
+            const correctAnswer = useFirstWord ? pair.word2 : pair.word1;
+            
+            // Get 3 random incorrect options from other pairs
+            const otherWords = homophonePairs
+                .filter(p => p !== pair)
+                .map(p => Math.random() > 0.5 ? p.word1 : p.word2)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            
+            // Combine and shuffle all options
+            const options = [correctAnswer, ...otherWords].sort(() => Math.random() - 0.5);
+            
+            quizQuestions.push({
+                question: `What is the homophone partner of "${questionWord}"?`,
+                options: options,
+                correctAnswer: correctAnswer,
+                explanation: `"${questionWord}" and "${correctAnswer}" are homophones. They sound the same but have different meanings and spellings.`,
+                questionWord: questionWord,
+                category: 'match'
+            });
+        });
+    } else if (currentQuizType === 'pattern') {
+        // For each pair, create a pattern with another random pair
+        selectedPairs.forEach(pair1 => {
+            // Get another random pair that's different from the first
+            const pair2 = shuffledPairs.find(p => 
+                p !== pair1 && p.word1 !== pair1.word1 && p.word1 !== pair1.word2 && 
+                p.word2 !== pair1.word1 && p.word2 !== pair1.word2
+            );
+            
+            if (!pair2) return; // Skip if no suitable second pair
+            
+            // Randomly decide which word to leave blank
+            const leaveBlankFirst = Math.random() > 0.5;
+            let question, correctAnswer;
+            
+            if (leaveBlankFirst) {
+                question = `_____ : ${pair1.word2} :: ${pair2.word1} : ${pair2.word2}`;
+                correctAnswer = pair1.word1;
+            } else {
+                question = `${pair1.word1} : ${pair1.word2} :: _____ : ${pair2.word2}`;
+                correctAnswer = pair2.word1;
+            }
+            
+            // Get 3 random incorrect options
+            const otherWords = homophonePairs
+                .filter(p => p !== pair1 && p !== pair2)
+                .map(p => Math.random() > 0.5 ? p.word1 : p.word2)
+                .filter(word => 
+                    word !== pair1.word1 && word !== pair1.word2 && 
+                    word !== pair2.word1 && word !== pair2.word2
+                )
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            
+            // Combine and shuffle all options
+            const options = [correctAnswer, ...otherWords].sort(() => Math.random() - 0.5);
+            
+            quizQuestions.push({
+                question: `Complete the pattern: ${question}`,
+                options: options,
+                correctAnswer: correctAnswer,
+                explanation: leaveBlankFirst 
+                    ? `"${pair1.word1}" and "${pair1.word2}" are homophones, just like "${pair2.word1}" and "${pair2.word2}".`
+                    : `"${pair1.word1}" and "${pair1.word2}" are homophones, just like "${pair2.word1}" and "${pair2.word2}".`,
+                category: 'pattern',
+                pattern: leaveBlankFirst 
+                    ? `${pair1.word1} : ${pair1.word2} :: ${pair2.word1} : ${pair2.word2}`
+                    : `${pair1.word1} : ${pair1.word2} :: ${pair2.word1} : ${pair2.word2}`
+            });
+        });
+    } else if (currentQuizType === 'meaning') {
+        selectedPairs.forEach(pair => {
+            // Randomly choose which word of the pair to ask about
+            const askAboutFirst = Math.random() > 0.5;
+            const definition = askAboutFirst ? pair.word1Def : pair.word2Def;
+            const correctAnswer = askAboutFirst ? pair.word1 : pair.word2;
+            const homophonePartner = askAboutFirst ? pair.word2 : pair.word1;
+            
+            // Always include the homophone partner as one of the options
+            // Get 2 more random options
+            const otherWords = homophonePairs
+                .filter(p => p !== pair)
+                .map(p => Math.random() > 0.5 ? p.word1 : p.word2)
+                .filter(word => word !== correctAnswer && word !== homophonePartner)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 2);
+            
+            // Combine and shuffle all options
+            const options = [correctAnswer, homophonePartner, ...otherWords].sort(() => Math.random() - 0.5);
+            
+            quizQuestions.push({
+                question: `Which word means: "${definition}"?`,
+                options: options,
+                correctAnswer: correctAnswer,
+                explanation: `"${correctAnswer}" means "${definition}". Its homophone "${homophonePartner}" sounds the same but has a different meaning.`,
+                definition: definition,
+                category: 'meaning'
+            });
+        });
+    }
+    
+    // Ensure we have exactly TOTAL_QUESTIONS questions
+    quizQuestions = quizQuestions.slice(0, TOTAL_QUESTIONS);
+}
+
+// Function to update progress bar
+function updateProgress(current, total) {
+    const progress = current / total;
+    const offset = circumference - (progress * circumference);
+    progressRing.style.strokeDashoffset = offset;
+    document.getElementById('progressText').textContent = `Question ${current}/${total}`;
+}
+
+// Function to start actual quiz
+function startActualQuiz() {
+    createQuizQuestions();
+    currentQuestionIndex = 0;
+    score = 0;
+    
+    document.getElementById('quizInstructions').classList.add('hidden');
+    document.getElementById('quizContent').classList.remove('hidden');
+    document.getElementById('scoreDisplay').textContent = score;
+    
+    displayQuestion();
+}
+
+// Function to display current question
+function displayQuestion() {
+    if (currentQuestionIndex >= quizQuestions.length) {
+        showResults();
+        return;
+    }
+    
+    const question = quizQuestions[currentQuestionIndex];
+    document.getElementById('questionText').textContent = question.question;
+    
+    const optionsContainer = document.getElementById('optionsContainer');
+    optionsContainer.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'option-btn w-full py-3 px-4 text-left border rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600';
+        button.textContent = option;
+        button.onclick = () => selectAnswer(index);
+        optionsContainer.appendChild(button);
+    });
+    
+    // Hide explanation and next button initially
+    document.getElementById('explanation').classList.add('hidden');
+    document.getElementById('nextBtn').classList.add('hidden');
+    
+    // Reset state for new question
+    questionAnswered = false;
+    selectedAnswer = null;
+    
+    // Update progress
+    updateProgress(currentQuestionIndex + 1, TOTAL_QUESTIONS);
+}
+
+// Function to handle answer selection
+function selectAnswer(index) {
+    if (questionAnswered) return; // Prevent selecting after question is answered
+    
+    const question = quizQuestions[currentQuestionIndex];
+    const optionButtons = document.querySelectorAll('.option-btn');
+    const selectedOption = question.options[index];
+    
+    // Record which answer was selected
+    selectedAnswer = selectedOption;
+    questionAnswered = true;
+    
+    // Style the buttons based on correctness
+    optionButtons.forEach((button, i) => {
+        if (question.options[i] === question.correctAnswer) {
+            button.classList.add('correct');
+        } else if (i === index && selectedOption !== question.correctAnswer) {
+            button.classList.add('incorrect');
+        }
+    });
+    
+    // Show explanation
+    const explanation = document.getElementById('explanation');
+    explanation.textContent = question.explanation;
+    explanation.classList.remove('hidden');
+    
+    // Update score if correct
+    if (selectedOption === question.correctAnswer) {
+        score++;
+        document.getElementById('scoreDisplay').textContent = score;
+        createConfetti(20); // Celebrate with confetti
+    }
+    
+    // Show next button
+    document.getElementById('nextBtn').classList.remove('hidden');
+    document.getElementById('nextBtn').onclick = nextQuestion;
+}
+
+// Function to go to next question
+function nextQuestion() {
+    currentQuestionIndex++;
+    displayQuestion();
+}
+
+// Function to show quiz results
+function showResults() {
+    document.getElementById('quizContent').classList.add('hidden');
+    document.getElementById('quizResults').classList.remove('hidden');
+    
+    document.getElementById('finalScore').textContent = `${score}/${TOTAL_QUESTIONS}`;
+    
+    // Set score circle
+    const scoreCircle = document.getElementById('scoreCircle');
+    const circleCircumference = 2 * Math.PI * 70; // radius is 70
+    scoreCircle.style.strokeDasharray = `${circleCircumference} ${circleCircumference}`;
+    const scoreOffset = circleCircumference - (score / TOTAL_QUESTIONS * circleCircumference);
+    scoreCircle.style.strokeDashoffset = scoreOffset;
+    
+    // Set result message based on score
+    const resultMessage = document.getElementById('resultMessage');
+    if (score === TOTAL_QUESTIONS) {
+        resultMessage.textContent = "Perfect score! You're a homophone master!";
+        createConfetti(100); // Big celebration
+    } else if (score >= TOTAL_QUESTIONS * 0.8) {
+        resultMessage.textContent = "Excellent job! You have a great understanding of homophones!";
+        createConfetti(50);
+    } else if (score >= TOTAL_QUESTIONS * 0.6) {
+        resultMessage.textContent = "Good work! Keep practicing to improve your homophone skills.";
+    } else if (score >= TOTAL_QUESTIONS * 0.4) {
+        resultMessage.textContent = "Nice try! Study the homophones some more and try again.";
+    } else {
+        resultMessage.textContent = "Keep practicing! Homophones can be tricky.";
+    }
+}
+
+// Function to create confetti celebration
+function createConfetti(amount) {
+    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+    
+    for (let i = 0; i < amount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = (Math.random() * 10 + 5) + 'px';
+        
+        document.body.appendChild(confetti);
+        
+        // Remove after animation
+        setTimeout(() => {
+            confetti.remove();
+        }, 5000);
+    }
+}
+
+// Function to start study mode
+function startStudyMode() {
+    document.getElementById('quizResults').classList.add('hidden');
+    document.getElementById('studyMode').classList.remove('hidden');
+    
+    const container = document.getElementById('homophonePairsContainer');
+    container.innerHTML = '';
+    
+    // Create a card for each homophone pair
+    homophonePairs.forEach(pair => {
+        const card = document.createElement('div');
+        card.className = 'homophone-card bg-white p-4 rounded-lg shadow-sm dark:bg-gray-700';
+        card.dataset.keywords = `${pair.word1} ${pair.word2}`.toLowerCase();
+        
+        card.innerHTML = `
+            <div class="flex justify-between text-lg font-medium mb-2 text-indigo-600 dark:text-indigo-300">
+                <span>${pair.word1}</span>
+                <span>:</span>
+                <span>${pair.word2}</span>
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+                <p><span class="font-medium">${pair.word1}:</span> ${pair.word1Def}</p>
+                <p><span class="font-medium">${pair.word2}:</span> ${pair.word2Def}</p>
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+    
+    // Set up search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const searchQuery = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.homophone-card');
+        
+        cards.forEach(card => {
+            const matchesSearch = card.dataset.keywords.includes(searchQuery);
+            card.style.display = matchesSearch ? 'block' : 'none';
+        });
+    });
+}
+
+// Function to start Q&A mode
+function startQAMode() {
+    document.getElementById('gameModes').classList.add('hidden');
+    document.getElementById('qaMode').classList.remove('hidden');
+    
+    // Generate all possible questions for each category
+    generateQAContent('match');
+    
+    // Set up category selector buttons
+    document.querySelectorAll('.qa-category-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Update active state
+            document.querySelectorAll('.qa-category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-gray-100', 'text-gray-800');
+                btn.classList.remove('bg-indigo-100', 'text-indigo-800');
+            });
+            
+            this.classList.add('active', 'bg-indigo-100', 'text-indigo-800');
+            this.classList.remove('bg-gray-100', 'text-gray-800');
+            
+            // Generate content for selected category
+            const category = this.dataset.category;
+            generateQAContent(category);
+        });
+    });
+    
+    // Set up search functionality
+    document.getElementById('qaSearchInput').addEventListener('input', function() {
+        const searchQuery = this.value.toLowerCase();
+        const qaCards = document.querySelectorAll('.qa-card');
+        
+        qaCards.forEach(card => {
+            const qaText = card.textContent.toLowerCase();
+            const matchesSearch = qaText.includes(searchQuery);
+            card.style.display = matchesSearch ? 'block' : 'none';
+        });
+    });
+}
+
+// Function to generate Q&A content
+function generateQAContent(category) {
+    const container = document.getElementById('qaContainer');
+    container.innerHTML = '';
+    
+    // Create questions for selected category
+    let questions = [];
+    
+    if (category === 'match' || category === 'all') {
+        homophonePairs.forEach(pair => {
+            // Create 'match' type questions for both words in pair
+            questions.push({
+                question: `What is the homophone partner of "${pair.word1}"?`,
+                answer: `"${pair.word2}" is the homophone partner of "${pair.word1}".`,
+                explanation: `"${pair.word1}" (${pair.word1Def}) and "${pair.word2}" (${pair.word2Def}) are homophones. They sound the same but have different meanings and spellings.`,
+                category: 'match'
+            });
+            
+            questions.push({
+                question: `What is the homophone partner of "${pair.word2}"?`,
+                answer: `"${pair.word1}" is the homophone partner of "${pair.word2}".`,
+                explanation: `"${pair.word2}" (${pair.word2Def}) and "${pair.word1}" (${pair.word1Def}) are homophones. They sound the same but have different meanings and spellings.`,
+                category: 'match'
+            });
+        });
+    }
+    
+    if (category === 'pattern' || category === 'all') {
+        // Create some pattern questions
+        for (let i = 0; i < homophonePairs.length; i++) {
+            const pair1 = homophonePairs[i];
+            const pair2 = homophonePairs[(i + 1) % homophonePairs.length]; // Get next pair, wrapping around
+            
+            questions.push({
+                question: `Complete the pattern: _____ : ${pair1.word2} :: ${pair2.word1} : ${pair2.word2}`,
+                answer: `${pair1.word1}`,
+                explanation: `"${pair1.word1}" and "${pair1.word2}" are homophones, just like "${pair2.word1}" and "${pair2.word2}".`,
+                pattern: `${pair1.word1} : ${pair1.word2} :: ${pair2.word1} : ${pair2.word2}`,
+                category: 'pattern'
+            });
+            
+            questions.push({
+                question: `Complete the pattern: ${pair1.word1} : ${pair1.word2} :: _____ : ${pair2.word2}`,
+                answer: `${pair2.word1}`,
+                explanation: `"${pair1.word1}" and "${pair1.word2}" are homophones, just like "${pair2.word1}" and "${pair2.word2}".`,
+                pattern: `${pair1.word1} : ${pair1.word2} :: ${pair2.word1} : ${pair2.word2}`,
+                category: 'pattern'
+            });
+        }
+    }
+    
+    if (category === 'meaning' || category === 'all') {
+        homophonePairs.forEach(pair => {
+            // Create 'meaning' type questions for both words in pair
+            questions.push({
+                question: `Which word means: "${pair.word1Def}"?`,
+                answer: `"${pair.word1}" means "${pair.word1Def}".`,
+                explanation: `"${pair.word1}" means "${pair.word1Def}". Its homophone "${pair.word2}" (${pair.word2Def}) sounds the same but has a different meaning.`,
+                category: 'meaning'
+            });
+            
+            questions.push({
+                question: `Which word means: "${pair.word2Def}"?`,
+                answer: `"${pair.word2}" means "${pair.word2Def}".`,
+                explanation: `"${pair.word2}" means "${pair.word2Def}". Its homophone "${pair.word1}" (${pair.word1Def}) sounds the same but has a different meaning.`,
+                category: 'meaning'
+            });
+        });
+    }
+    
+    // Filter by category if not 'all'
+    if (category !== 'all') {
+        questions = questions.filter(q => q.category === category);
+    }
+    
+    // Shuffle questions for variety
+    questions = questions.sort(() => Math.random() - 0.5);
+    
+    // Take a reasonable number of questions for display
+    const displayQuestions = questions.slice(0, 30);
+    
+    // Add Q&A cards to container
+    displayQuestions.forEach((qa, index) => {
+        const card = document.createElement('div');
+        card.className = 'qa-card';
+        
+        card.innerHTML = `
+            <div class="qa-header dark:text-white" onclick="toggleQA(${index})">
+                <span>${qa.question}</span>
+                <svg class="qa-toggle w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="qa-content hidden">
+                <p class="font-medium mb-2">${qa.answer}</p>
+                <p class="text-gray-600 dark:text-gray-400">${qa.explanation}</p>
+                ${qa.pattern ? `<p class="mt-2 italic">Complete pattern: ${qa.pattern}</p>` : ''}
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+}
+
+// Function to toggle Q&A visibility
+function toggleQA(index) {
+    const qaCards = document.querySelectorAll('.qa-card');
+    const qaContent = qaCards[index].querySelector('.qa-content');
+    const qaToggle = qaCards[index].querySelector('.qa-toggle');
+    
+    qaContent.classList.toggle('hidden');
+    qaToggle.classList.toggle('open');
+}
+
+// Function to print Q&A content
+function printQAContent() {
+    window.print();
+}
+
+// Initialize to game modes screen
+showGameModes();
+    </script>
+</body>
+</html>
