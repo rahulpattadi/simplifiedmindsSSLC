@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collective Nouns - SimplifiedMinds</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .logo:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo .simplified {
+            color: #ffd700; /* Golden yellow */
+        }
+
+        .logo .minds {
+            color: #ff0000; /* Red */
+        }
+
+        .home-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: #718096;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover .home-icon {
+            color: #2d3748;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .logo:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Learning Resources Styles */
+        .learning-resources {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .resources-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .resources-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .resource-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #22c55e;
+        }
+
+        .video-button {
+            background-color: #FF0000;
+        }
+
+        .video-button:hover {
+            background-color: #ef4444;
+        }
+
+        .button-icon {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .button-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Word pair styles */
+        .noun-pair {
+            transition: all 0.3s ease;
+        }
+        .noun-pair:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .noun-pair {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        .dark-mode .filter-btn {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        .dark-mode .learning-resources {
+            background-color: #2d3748;
+        }
+        .dark-mode .resources-title {
+            color: white;
+        }
+        .dark-mode .navbar {
+            background-color: #2d3748;
+        }
+        
+        @media (max-width: 768px) {
+            .resources-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .resource-button {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .relationship-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="navbar bg-white shadow-sm p-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">Collective Nouns</h1>
+                <div class="flex items-center">
+                    <button id="darkModeToggle" class="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-800 rounded-full transition-all duration-300 shadow-lg text-white">
+                        <span class="flex items-center gap-2">
+                            🌙 Dark Mode
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SimplifiedMinds Logo -->
+    <div class="logo-container">
+        <a href="index.html" class="logo">
+            <span class="home-icon">🏠</span>
+            <span class="simplified">Simplified</span><span class="minds">Minds</span>
+            <span class="tooltip">Go to Homepage</span>
+        </a>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Collective Nouns Relationships</h1>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Explore common collective noun relationships that show how different groups of items, animals, 
+                or people are named in English.
+            </p>
+        </div>
+
+        <!-- Search & Filter Section -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row gap-4 justify-between">
+                <input type="text" id="searchInput" placeholder="Search collective nouns..." 
+                    class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-1/2">
+                
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn category-filter active px-4 py-2 rounded-full border text-sm font-medium" data-category="all">All</button>
+                    <button class="filter-btn category-filter px-4 py-2 rounded-full border text-sm font-medium" data-category="animals">Animals</button>
+                    <button class="filter-btn category-filter px-4 py-2 rounded-full border text-sm font-medium" data-category="people">People</button>
+                    <button class="filter-btn category-filter px-4 py-2 rounded-full border text-sm font-medium" data-category="objects">Objects</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Noun Pairs Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relationship-grid" id="nounPairsContainer">
+            <!-- Noun pairs will be dynamically inserted here -->
+        </div>
+
+        <!-- Learning Resources Section -->
+        <div class="learning-resources">
+            <h2 class="resources-title">Learning Resources</h2>
+            <div class="resources-buttons">
+                <a href="#" class="resource-button whatsapp-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                    </span>
+                    Join WhatsApp Channel
+                </a>
+                <a href="#" class="resource-button video-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/>
+                        </svg>
+                    </span>
+                    Video Lectures
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Noun pair data
+        const nounPairs = [
+            { first: "Fish", firstGroup: "School", second: "Sheep", secondGroup: "Flock", category: "animals" },
+            { first: "Cows", firstGroup: "Herd", second: "Lions", secondGroup: "Pride", category: "animals" },
+            { first: "Birds", firstGroup: "Flock", second: "Ants", secondGroup: "Colony", category: "animals" },
+            { first: "Bees", firstGroup: "Swarm", second: "Wolves", secondGroup: "Pack", category: "animals" },
+            { first: "Soldiers", firstGroup: "Regiment", second: "Judges", secondGroup: "Panel", category: "people" },
+            { first: "Sailors", firstGroup: "Crew", second: "Singers", secondGroup: "Chorus", category: "people" },
+            { first: "Grapes", firstGroup: "Bunch", second: "Flowers", secondGroup: "Bouquet", category: "objects" },
+            { first: "Keys", firstGroup: "Bunch", second: "Books", secondGroup: "Library", category: "objects" },
+            { first: "Players", firstGroup: "Team", second: "Crows", secondGroup: "Murder", category: "mixed" },
+            { first: "Stairs", firstGroup: "Flight", second: "Shoes", secondGroup: "Pair", category: "objects" },
+            { first: "Trees", firstGroup: "Forest", second: "Mountains", secondGroup: "Range", category: "objects" },
+            { first: "Students", firstGroup: "Class", second: "People", secondGroup: "Crowd", category: "people" },
+            { first: "Friends", firstGroup: "Circle", second: "Thieves", secondGroup: "Gang", category: "people" },
+            { first: "Elephants", firstGroup: "Herd", second: "Geese", secondGroup: "Gaggle", category: "animals" },
+            { first: "Monkeys", firstGroup: "Troop", second: "Cattle", secondGroup: "Herd", category: "animals" },
+            { first: "Bananas", firstGroup: "Bunch", second: "Puppies", secondGroup: "Litter", category: "mixed" },
+            { first: "Workers", firstGroup: "Crew", second: "Sheep", secondGroup: "Flock", category: "mixed" },
+            { first: "Hens", firstGroup: "Brood", second: "Fish", secondGroup: "Shoal", category: "animals" },
+            { first: "Kangaroos", firstGroup: "Mob", second: "Tigers", secondGroup: "Streak", category: "animals" },
+            { first: "Players", firstGroup: "Team", second: "Cards", secondGroup: "Deck", category: "mixed" },
+            { first: "Clothes", firstGroup: "Wardrobe", second: "Stars", secondGroup: "Constellation", category: "objects" },
+            { first: "Judges", firstGroup: "Panel", second: "Papers", secondGroup: "Stack", category: "mixed" },
+            { first: "Chairs", firstGroup: "Set", second: "Pictures", secondGroup: "Gallery", category: "objects" },
+            { first: "Soldiers", firstGroup: "Army", second: "Sailors", secondGroup: "Navy", category: "people" },
+            { first: "Performers", firstGroup: "Troupe", second: "Books", secondGroup: "Library", category: "mixed" },
+            { first: "Buses", firstGroup: "Fleet", second: "Apples", secondGroup: "Bushel", category: "mixed" },
+            { first: "Deer", firstGroup: "Herd", second: "Wolves", secondGroup: "Pack", category: "animals" },
+            { first: "Flowers", firstGroup: "Bouquet", second: "Ships", secondGroup: "Fleet", category: "mixed" }
+        ];
+
+        function getRandomColor() {
+            const hue = Math.floor(Math.random() * 360);
+            return `hsl(${hue}, 70%, 80%)`;
+        }
+
+        function createNounPairCard(pair, index) {
+            const bgColor = getRandomColor();
+            
+            return `
+                <div class="noun-pair bg-white rounded-lg shadow p-6 relative overflow-hidden dark:bg-gray-800" 
+                     data-category="${pair.category}" 
+                     data-keywords="${pair.first.toLowerCase()} ${pair.second.toLowerCase()} ${pair.firstGroup.toLowerCase()} ${pair.secondGroup.toLowerCase()}">
+                    <div class="absolute inset-0 opacity-20" style="background-color: ${bgColor};"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-900">
+                                ${pair.category.charAt(0).toUpperCase() + pair.category.slice(1)}
+                            </span>
+                            <span class="text-gray-500 dark:text-gray-400">#${index + 1}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold mb-1">${pair.first}</h3>
+                                <span class="text-lg text-blue-600 dark:text-blue-400 font-medium">${pair.firstGroup}</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold mb-1">${pair.second}</h3>
+                                <span class="text-lg text-blue-600 dark:text-blue-400 font-medium">${pair.secondGroup}</span>
+                            </div>
+                        </div>
+                        <div class="text-center text-gray-600 dark:text-gray-400">
+                            ${pair.first} : ${pair.firstGroup} :: ${pair.second} : ${pair.secondGroup}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeNounPairs() {
+            const container = document.getElementById('nounPairsContainer');
+            container.innerHTML = '';
+            nounPairs.forEach((pair, index) => {
+                container.innerHTML += createNounPairCard(pair, index);
+            });
+        }
+
+        function filterNounPairs() {
+            const activeCategoryFilter = document.querySelector('.category-filter.active').dataset.category || 'all';
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            
+            document.querySelectorAll('.noun-pair').forEach(card => {
+                const matchesCategory = activeCategoryFilter === 'all' || card.dataset.category === activeCategoryFilter;
+                const matchesSearch = card.dataset.keywords.includes(searchQuery);
+                
+                card.classList.toggle('hidden', !(matchesCategory && matchesSearch));
+            });
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.category-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterNounPairs();
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', filterNounPairs);
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            // Update the text based on dark mode state
+            if (document.body.classList.contains('dark-mode')) {
+                document.getElementById('darkModeToggle').innerHTML = `
+                    <span class="flex items-center gap-2">
+                        ☀️ Light Mode
+                    </span>`;
+            } else {
+                document.getElementById('darkModeToggle').innerHTML = `
+                    <span class="flex items-center gap-2">
+                        🌙 Dark Mode
+                    </span>`;
+            }
+        });
+
+        // Initialize
+        initializeNounPairs();
+    </script>
+</body>
+</html>
