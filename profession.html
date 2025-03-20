@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noun - Verb Relationships - SimplifiedMinds</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .logo:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo .simplified {
+            color: #ffd700; /* Golden yellow */
+        }
+
+        .logo .minds {
+            color: #ff0000; /* Red */
+        }
+
+        .home-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: #718096;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover .home-icon {
+            color: #2d3748;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .logo:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Learning Resources Styles */
+        .learning-resources {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .resources-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .resources-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .resource-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #22c55e;
+        }
+
+        .video-button {
+            background-color: #FF0000;
+        }
+
+        .video-button:hover {
+            background-color: #ef4444;
+        }
+
+        .quiz-button {
+            background-color: #3B82F6;
+        }
+
+        .quiz-button:hover {
+            background-color: #2563EB;
+        }
+
+        .button-icon {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .button-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Relationship card styles */
+        .relationship-card {
+            transition: all 0.3s ease;
+        }
+        .relationship-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .relationship-card {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        .dark-mode .filter-btn {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        .dark-mode .learning-resources {
+            background-color: #2d3748;
+        }
+        .dark-mode .resources-title {
+            color: white;
+        }
+        .dark-mode .navbar {
+            background-color: #2d3748;
+        }
+        
+        /* Relationship icons */
+        .relationship-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Arrow styling */
+        .arrow {
+            font-size: 1.2rem;
+            color: #4B5563;
+        }
+        .dark-mode .arrow {
+            color: #9CA3AF;
+        }
+        
+        @media (max-width: 768px) {
+            .resources-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .resource-button {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .relationship-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="navbar bg-white shadow-sm p-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">Noun - Verb Relationships</h1>
+                <div class="flex items-center">
+                    <button id="darkModeToggle" class="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-800 rounded-full transition-all duration-300 shadow-lg text-white">
+                        <span class="flex items-center gap-2">
+                            🌙 Dark Mode
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SimplifiedMinds Logo -->
+    <div class="logo-container">
+        <a href="index.html" class="logo">
+            <span class="home-icon">🏠</span>
+            <span class="simplified">Simplified</span><span class="minds">Minds</span>
+            <span class="tooltip">Go to Homepage</span>
+        </a>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Noun - Verb Relationships</h1>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Explore the relationship between subjects and their corresponding actions.
+                Each card shows analogous relationships in the form "Subject : Action :: Subject : Action".
+            </p>
+        </div>
+
+        <!-- Search & Filter Section -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row gap-4 justify-between">
+                <input type="text" id="searchInput" placeholder="Search for subjects or actions..." 
+                    class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-1/2">
+                
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn category-filter active px-4 py-2 rounded-full border text-sm font-medium" data-category="all">All</button>
+                    <button class="filter-btn category-filter px-4 py-2 rounded-full border text-sm font-medium" data-category="creative">Creative</button>
+                    <button class="filter-btn category-filter px-4 py-2 rounded-full border text-sm font-medium" data-category="professional">Professional</button>
+                    <button class="filter-btn category-filter px-4 py-2 rounded-full border text-sm font-medium" data-category="everyday">Everyday</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relationship Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relationship-grid" id="relationshipsContainer">
+            <!-- Relationship cards will be dynamically inserted here -->
+        </div>
+
+        <!-- Learning Resources Section -->
+        <div class="learning-resources">
+            <h2 class="resources-title">Learning Resources</h2>
+            <div class="resources-buttons">
+                <a href="#" class="resource-button whatsapp-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                    </span>
+                    Study Group
+                </a>
+                <a href="#" class="resource-button video-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/>
+                        </svg>
+                    </span>
+                    Video Lessons
+                </a>
+                <a href="#" class="resource-button quiz-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H4V5h16v14zm-6-2h2v-2h-2v2zm-4 0h2v-2h-2v2zm-4 0h2v-2H6v2z"/>
+                        </svg>
+                    </span>
+                    Practice Quiz
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Subject-action relationships data
+        const relationships = [
+            { 
+                subject1: "Book", action1: "Read", 
+                subject2: "Food", action2: "Eat", 
+                icon: "📚", category: "everyday",
+                description: "Objects and their common usage actions."
+            },
+            { 
+                subject1: "Music", action1: "Listen", 
+                subject2: "Dance", action2: "Perform", 
+                icon: "🎵", category: "creative",
+                description: "Art forms and how we interact with them."
+            },
+            { 
+                subject1: "Teacher", action1: "Teach", 
+                subject2: "Student", action2: "Learn", 
+                icon: "👨‍🏫", category: "professional",
+                description: "Educational roles and their primary actions."
+            },
+            { 
+                subject1: "Doctor", action1: "Heal", 
+                subject2: "Hunter", action2: "Hunt", 
+                icon: "👨‍⚕️", category: "professional",
+                description: "Professional roles and their main activities."
+            },
+            { 
+                subject1: "Artist", action1: "Paint", 
+                subject2: "Sculptor", action2: "Sculpt", 
+                icon: "🎨", category: "creative",
+                description: "Creative professions and their craft."
+            },
+            { 
+                subject1: "Farmer", action1: "Cultivate", 
+                subject2: "Pilot", action2: "Fly", 
+                icon: "👨‍🌾", category: "professional",
+                description: "Professional roles and their specialized skills."
+            },
+            { 
+                subject1: "Photographer", action1: "Capture", 
+                subject2: "Fisherman", action2: "Fish", 
+                icon: "📷", category: "professional",
+                description: "Professions that gather or collect."
+            },
+            { 
+                subject1: "Baker", action1: "Bake", 
+                subject2: "Tailor", action2: "Sew", 
+                icon: "🍞", category: "professional",
+                description: "Craftspeople and their specialized activities."
+            },
+            { 
+                subject1: "Author", action1: "Write", 
+                subject2: "Editor", action2: "Publish", 
+                icon: "✍️", category: "creative",
+                description: "Sequential roles in content creation."
+            },
+            { 
+                subject1: "Actor", action1: "Act", 
+                subject2: "Director", action2: "Direct", 
+                icon: "🎭", category: "creative",
+                description: "Roles in theatrical and film production."
+            },
+            { 
+                subject1: "Singer", action1: "Sing", 
+                subject2: "Musician", action2: "Compose", 
+                icon: "🎤", category: "creative",
+                description: "Musical performers and their activities."
+            },
+            { 
+                subject1: "Dancer", action1: "Dance", 
+                subject2: "Runner", action2: "Run", 
+                icon: "💃", category: "everyday",
+                description: "Physical activities and their practitioners."
+            },
+            { 
+                subject1: "Scientist", action1: "Experiment", 
+                subject2: "Researcher", action2: "Research", 
+                icon: "🔬", category: "professional",
+                description: "Academic roles and their methodologies."
+            },
+            { 
+                subject1: "Mechanic", action1: "Repair", 
+                subject2: "Plumber", action2: "Install", 
+                icon: "🔧", category: "professional",
+                description: "Technical professionals and their specialties."
+            },
+            { 
+                subject1: "Manager", action1: "Manage", 
+                subject2: "Supervisor", action2: "Supervise", 
+                icon: "👨‍💼", category: "professional",
+                description: "Leadership roles and their functions."
+            },
+            { 
+                subject1: "Counselor", action1: "Counsel", 
+                subject2: "Therapist", action2: "Treat", 
+                icon: "🧠", category: "professional",
+                description: "Mental health professionals and their approaches."
+            },
+            { 
+                subject1: "Chef", action1: "Cook", 
+                subject2: "Baker", action2: "Bake", 
+                icon: "👨‍🍳", category: "professional",
+                description: "Culinary professionals and their methods."
+            },
+            { 
+                subject1: "Writer", action1: "Write", 
+                subject2: "Reader", action2: "Read", 
+                icon: "📝", category: "creative",
+                description: "Complementary roles in the literary process."
+            },
+            { 
+                subject1: "Programmer", action1: "Code", 
+                subject2: "Leader", action2: "Lead", 
+                icon: "💻", category: "professional",
+                description: "Technical and leadership roles."
+            },
+            { 
+                subject1: "Speaker", action1: "Speak", 
+                subject2: "Listener", action2: "Listen", 
+                icon: "🗣️", category: "everyday",
+                description: "Communication roles in conversation."
+            },
+            { 
+                subject1: "Consultant", action1: "Advise", 
+                subject2: "Trainer", action2: "Train", 
+                icon: "💼", category: "professional",
+                description: "Professional guidance and development roles."
+            },
+            { 
+                subject1: "Gardener", action1: "Garden", 
+                subject2: "Sailor", action2: "Sail", 
+                icon: "🌱", category: "professional",
+                description: "Specialized activities and their practitioners."
+            },
+            { 
+                subject1: "Driver", action1: "Drive", 
+                subject2: "Rider", action2: "Ride", 
+                icon: "🚗", category: "everyday",
+                description: "Transportation roles and actions."
+            },
+            { 
+                subject1: "Pilot", action1: "Fly", 
+                subject2: "Navigator", action2: "Navigate", 
+                icon: "✈️", category: "professional",
+                description: "Aviation and directional roles."
+            }
+        ];
+
+        function getRandomColor() {
+            const hues = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+            const hue = hues[Math.floor(Math.random() * hues.length)];
+            return `hsl(${hue}, 70%, 85%)`;
+        }
+
+        function createRelationshipCard(relationshipData, index) {
+            const bgColor = getRandomColor();
+            
+            return `
+                <div class="relationship-card bg-white rounded-lg shadow p-6 relative overflow-hidden dark:bg-gray-800" 
+                     data-category="${relationshipData.category}" 
+                     data-keywords="${relationshipData.subject1.toLowerCase()} ${relationshipData.action1.toLowerCase()} ${relationshipData.subject2.toLowerCase()} ${relationshipData.action2.toLowerCase()}">
+                    <div class="absolute inset-0 opacity-20" style="background-color: ${bgColor};"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-900">
+                                ${relationshipData.category.charAt(0).toUpperCase() + relationshipData.category.slice(1)}
+                            </span>
+                            <span class="relationship-icon">${relationshipData.icon}</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <div class="text-center border-r border-gray-200 dark:border-gray-700 pr-2">
+                                <div class="text-lg font-bold">${relationshipData.subject1}</div>
+                                <div class="text-sm text-blue-600 dark:text-blue-400">${relationshipData.action1}</div>
+                            </div>
+                            <div class="text-center pl-2">
+                                <div class="text-lg font-bold">${relationshipData.subject2}</div>
+                                <div class="text-sm text-blue-600 dark:text-blue-400">${relationshipData.action2}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center text-gray-600 dark:text-gray-400 text-sm mt-2">
+                            ${relationshipData.subject1} : ${relationshipData.action1} :: ${relationshipData.subject2} : ${relationshipData.action2}
+                        </div>
+                        
+                        <div class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic">
+                            ${relationshipData.description}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeRelationships() {
+            const container = document.getElementById('relationshipsContainer');
+            container.innerHTML = '';
+            relationships.forEach((relationship, index) => {
+                container.innerHTML += createRelationshipCard(relationship, index);
+            });
+        }
+
+        function filterRelationships() {
+            const activeCategoryFilter = document.querySelector('.category-filter.active').dataset.category || 'all';
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            
+            document.querySelectorAll('.relationship-card').forEach(card => {
+                const matchesCategory = activeCategoryFilter === 'all' || card.dataset.category === activeCategoryFilter;
+                const matchesSearch = card.dataset.keywords.includes(searchQuery);
+                
+                card.classList.toggle('hidden', !(matchesCategory && matchesSearch));
+            });
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.category-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterRelationships();
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', filterRelationships);
+
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            // Update the text based on dark mode state
+            if (document.body.classList.contains('dark-mode')) {
+                document.getElementById('darkModeToggle').innerHTML = `
+                    <span class="flex items-center gap-2">
+                        ☀️ Light Mode
+                    </span>`;
+            } else {
+                document.getElementById('darkModeToggle').innerHTML = `
+                    <span class="flex items-center gap-2">
+                        🌙 Dark Mode
+                    </span>`;
+            }
+        });
+
+        // Initialize
+        initializeRelationships();
+    </script>
+</body>
+</html>
