@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f9ff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #3498db;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: #a6d5fa;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #2c3e50;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #c9e3fc;
+        }
+        .result-box {
+            background-color: #d1e7f7;
+            border: 2px solid #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .result-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .formula {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .formula-step {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .formula-final {
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Marks Analysis</h1>
+        
+        <h2>Frequency Distribution Table</h2>
+        <table id="frequencyTable">
+            <thead>
+                <tr>
+                    <th>Marks</th>
+                    <th>Number of students</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Will be filled by JavaScript -->
+            </tbody>
+        </table>
+        
+        <h2>Cumulative Frequency Table (Less Than)</h2>
+        <table id="lessThanTable">
+            <thead>
+                <tr>
+                    <th>Marks obtained</th>
+                    <th>Number of students (Cumulative frequency)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Will be filled by JavaScript -->
+            </tbody>
+        </table>
+        
+        <h2>More Than Table</h2>
+        <table id="moreThanTable">
+            <thead>
+                <tr>
+                    <th>Marks obtained</th>
+                    <th>Number of students</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Will be filled by JavaScript -->
+            </tbody>
+        </table>
+        
+        <h2>Combined Table (Marks, Frequency and Cumulative Frequency)</h2>
+        <table id="combinedTable">
+            <thead>
+                <tr>
+                    <th>Marks</th>
+                    <th>Number of students (f)</th>
+                    <th>Cumulative frequency (cf)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>0 - 10</td><td>5</td><td>5</td></tr>
+                <tr><td>10 - 20</td><td>3</td><td>8</td></tr>
+                <tr><td>20 - 30</td><td>4</td><td>12</td></tr>
+                <tr><td>30 - 40</td><td>3</td><td>15</td></tr>
+                <tr><td>40 - 50</td><td>3</td><td>18</td></tr>
+                <tr><td>50 - 60</td><td>4</td><td>22</td></tr>
+                <tr><td>60 - 70</td><td>7</td><td>29</td></tr>
+                <tr><td>70 - 80</td><td>9</td><td>38</td></tr>
+                <tr><td>80 - 90</td><td>7</td><td>45</td></tr>
+                <tr><td>90 - 100</td><td>8</td><td>53</td></tr>
+            </tbody>
+        </table>
+        
+        <button id="calculateMedian">Calculate Median</button>
+        
+        <div class="result-box" id="medianResult" style="display: none;">
+            <div class="result-title">Median Calculation</div>
+            <div id="medianFormula">
+                <p>Using the formula:</p>
+                <div class="formula">
+                    Median = l + [(n/2 - cf)/f] × h
+                </div>
+                <p>Where:</p>
+                <ul style="text-align: left; display: inline-block;">
+                    <li>l = lower limit of median class</li>
+                    <li>n = number of observations</li>
+                    <li>cf = cumulative frequency of class preceding the median class</li>
+                    <li>f = frequency of median class</li>
+                    <li>h = class size (assuming class size to be equal)</li>
+                </ul>
+            </div>
+            <div id="medianCalculation" class="formula">
+                <!-- Will be filled by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for student marks
+        const marksData = [
+            { interval: "0 - 10", frequency: 5 },
+            { interval: "10 - 20", frequency: 3 },
+            { interval: "20 - 30", frequency: 4 },
+            { interval: "30 - 40", frequency: 3 },
+            { interval: "40 - 50", frequency: 3 },
+            { interval: "50 - 60", frequency: 4 },
+            { interval: "60 - 70", frequency: 7 },
+            { interval: "70 - 80", frequency: 9 },
+            { interval: "80 - 90", frequency: 7 },
+            { interval: "90 - 100", frequency: 8 }
+        ];
+
+        // Function to populate the original frequency table
+        function populateFrequencyTable() {
+            const tableBody = document.querySelector("#frequencyTable tbody");
+            tableBody.innerHTML = "";
+            
+            marksData.forEach(row => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${row.interval}</td>
+                    <td>${row.frequency}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Function to populate the Less Than (Cumulative Frequency) table
+        function populateLessThanTable() {
+            const tableBody = document.querySelector("#lessThanTable tbody");
+            tableBody.innerHTML = "";
+            
+            let cumulativeFreq = 0;
+            let previousCumulative = 0;
+            
+            marksData.forEach((row, index) => {
+                cumulativeFreq += row.frequency;
+                const upperLimit = (index + 1) * 10;
+                
+                let displayText = index === 0 ? 
+                    `${cumulativeFreq}` : 
+                    `${previousCumulative} + ${row.frequency} = ${cumulativeFreq}`;
+                
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>Less than ${upperLimit}</td>
+                    <td>${displayText}</td>
+                `;
+                tableBody.appendChild(tr);
+                
+                previousCumulative = cumulativeFreq;
+            });
+        }
+
+        // Function to populate the More Than table
+        function populateMoreThanTable() {
+            const tableBody = document.querySelector("#moreThanTable tbody");
+            tableBody.innerHTML = "";
+            
+            // Calculate total frequency
+            const totalFrequency = marksData.reduce((sum, row) => sum + row.frequency, 0);
+            
+            let remainingFreq = totalFrequency;
+            let previousRemaining = totalFrequency;
+            
+            marksData.forEach((row, index) => {
+                const lowerLimit = index * 10;
+                
+                let displayText = index === 0 ? 
+                    `${remainingFreq}` : 
+                    `${previousRemaining} - ${marksData[index-1].frequency} = ${remainingFreq}`;
+                
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>More than or equal to ${lowerLimit}</td>
+                    <td>${displayText}</td>
+                `;
+                tableBody.appendChild(tr);
+                
+                previousRemaining = remainingFreq;
+                remainingFreq -= row.frequency;
+            });
+        }
+
+        // Function to calculate the median using the specified formula
+        function calculateMedian() {
+            // Calculate total frequency
+            const totalFrequency = marksData.reduce((sum, row) => sum + row.frequency, 0);
+            
+            // Calculate n/2
+            const nHalf = totalFrequency / 2;
+            
+            // Find median class
+            let cumulativeFreq = 0;
+            let medianClass = null;
+            let previousCumulativeFreq = 0;
+            
+            for (let i = 0; i < marksData.length; i++) {
+                previousCumulativeFreq = cumulativeFreq;
+                cumulativeFreq += marksData[i].frequency;
+                
+                if (cumulativeFreq >= nHalf) {
+                    // Found the median class
+                    medianClass = {
+                        index: i,
+                        lowerLimit: i * 10,
+                        frequency: marksData[i].frequency,
+                        previousCumulativeFreq: previousCumulativeFreq
+                    };
+                    break;
+                }
+            }
+            
+            // Apply the formula: Median = l + [(n/2 - cf)/f] × h
+            const l = medianClass.lowerLimit;
+            const cf = medianClass.previousCumulativeFreq;
+            const f = medianClass.frequency;
+            const h = 10; // Class size is 10 for all classes
+            
+            const medianValue = l + ((nHalf - cf) / f) * h;
+            
+            // Display the calculation
+            const medianResult = document.getElementById("medianResult");
+            const medianCalculation = document.getElementById("medianCalculation");
+            
+            medianCalculation.innerHTML = `
+                <div class="formula-step">Substituting the values: n/2 = ${nHalf.toFixed(1)}, l = ${l}, cf = ${cf}, f = ${f}, h = ${h}</div>
+                <div class="formula-step">Median = ${l} + [(${nHalf.toFixed(1)} - ${cf})/${f}] × ${h}</div>
+                <div class="formula-step">= ${l} + [(${(nHalf - cf).toFixed(1)})/${f}] × ${h}</div>
+                <div class="formula-step">= ${l} + ${((nHalf - cf) / f).toFixed(4)} × ${h}</div>
+                <div class="formula-step">= ${l} + ${(((nHalf - cf) / f) * h).toFixed(2)}</div>
+                <div class="formula-final">= ${medianValue.toFixed(1)}</div>
+            `;
+            
+            medianResult.style.display = "block";
+        }
+
+        // Initial population of tables
+        document.addEventListener("DOMContentLoaded", function() {
+            populateFrequencyTable();
+            populateLessThanTable();
+            populateMoreThanTable();
+            
+            // Add event listener for the calculate button
+            document.getElementById("calculateMedian").addEventListener("click", calculateMedian);
+        });
+    </script>
+</body>
+</html>
