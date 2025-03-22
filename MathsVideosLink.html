@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSLC Math Last-Minute Preparation</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --light-bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --border-radius: 10px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(to right, #4285f4, #34a853, #fbbc05, #ea4335);
+        }
+
+        h1 {
+            margin: 10px 0;
+            color: var(--primary-color);
+            font-size: 32px;
+        }
+
+        .countdown {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: var(--accent-color);
+            background-color: rgba(234, 67, 53, 0.1);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+
+        .search-box {
+            position: relative;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(66, 133, 244, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .video-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            overflow: hidden;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background-color: #f0f0f0;
+        }
+
+        .video-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-card:hover .video-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-button i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .video-card:hover .play-button {
+            background-color: rgba(255, 0, 0, 1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            /* For long titles */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+            height: 45px;
+        }
+
+        .topic-tag {
+            display: inline-block;
+            background-color: rgba(66, 133, 244, 0.1);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        .shortcuts {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .shortcut-title {
+            font-size: 18px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .shortcut-title i {
+            margin-right: 10px;
+        }
+
+        .topic-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .topic-btn {
+            background-color: #f0f4f8;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+
+        .topic-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .topic-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            padding: 20px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .countdown {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 15px;
+            }
+        }
+
+        /* Highlight effect for important videos */
+        .video-card.highlight {
+            border: 2px solid var(--accent-color);
+        }
+
+        .highlight-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SSLC Math Last-Minute Preparation</h1>
+            <p>Essential video resources to help you ace your upcoming Math exam</p>
+            <div class="countdown" id="countdown">Exam Countdown: Loading...</div>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by topic (e.g., Trigonometry, Probability)">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <div class="shortcuts">
+            <div class="shortcut-title">
+                <i class="fas fa-tags"></i> Quick Topic Filters
+            </div>
+            <div class="topic-buttons">
+                <button class="topic-btn active" data-topic="all">All Videos</button>
+                <button class="topic-btn" data-topic="last-minute">Last Minute</button>
+                <button class="topic-btn" data-topic="trigonometry">Trigonometry</button>
+                <button class="topic-btn" data-topic="probability">Probability</button>
+                <button class="topic-btn" data-topic="geometry">Geometry</button>
+                <button class="topic-btn" data-topic="ap">Arithmetic Progression</button>
+                <button class="topic-btn" data-topic="quadratic">Quadratic Equations</button>
+                <button class="topic-btn" data-topic="model">Model Papers</button>
+            </div>
+        </div>
+
+        <div class="video-grid" id="videoGrid">
+            <!-- Videos will be dynamically inserted here -->
+        </div>
+
+        <footer>
+            <p>For more resources, visit <a href="https://www.youtube.com/@simplifiedmindssslc" target="_blank">SimplifiedMinds SSLC YouTube Channel</a></p>
+            <p>© 2025 SimplifiedMinds - Good luck on your exam!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Video data from provided links
+        const videos = [
+            {
+                title: "LAST-MINUTE SSLC MATH Preparatory exam SECRETS Solve",
+                url: "https://youtu.be/0gkEyurA9QA",
+                id: "0gkEyurA9QA",
+                topics: ["last-minute", "secrets", "preparatory"],
+                highlight: true
+            },
+            {
+                title: "Last minute Strategy",
+                url: "https://youtu.be/uSsm0OEql1Y",
+                id: "uSsm0OEql1Y", 
+                topics: ["last-minute", "strategy"],
+                highlight: true
+            },
+            {
+                title: "Maths 100/100 Answer Sheet",
+                url: "https://youtu.be/wTFjm9f2f_E",
+                id: "wTFjm9f2f_E",
+                topics: ["answer-sheet", "scoring"]
+            },
+            {
+                title: "MCQ",
+                url: "https://youtu.be/NuESo_uda74",
+                id: "NuESo_uda74",
+                topics: ["probability"]
+            },
+            {
+                title: "Probability",
+                url: "https://youtu.be/QWUlLXI4J-E",
+                id: "QWUlLXI4J-E",
+                topics: ["probability"]
+            },
+            {
+                title: "Trigonometric identities🔥| Application based",
+                url: "https://youtu.be/4zakAPinvKE",
+                id: "4zakAPinvKE",
+                topics: ["trigonometry", "application"]
+            },
+            {
+                title: "Previous Year Questions with solution",
+                url: "https://youtu.be/CHKyK-T8Gyo",
+                id: "CHKyK-T8Gyo",
+                topics: ["previous-year", "solutions"]
+            },
+            {
+                title: "Areas Related to Circles",
+                url: "https://youtu.be/_ZtXW71Qfco",
+                id: "_ZtXW71Qfco",
+                topics: ["geometry", "circles"]
+            },
+            {
+                title: "Coordinate Geometry | Application based",
+                url: "https://youtu.be/Gc-r3BY7NEM",
+                id: "Gc-r3BY7NEM",
+                topics: ["geometry", "coordinate", "application"]
+            },
+            {
+                title: "Maths Preparatory Exam Complete Solution",
+                url: "https://youtu.be/kVwILHqRViY",
+                id: "kVwILHqRViY",
+                topics: ["preparatory", "solutions"]
+            },
+            {
+                title: "Surface Areas & Volumes 2 Made Easy",
+                url: "https://youtu.be/XDm6RU1BMiA",
+                id: "XDm6RU1BMiA",
+                topics: ["geometry", "surface-area", "volume"]
+            },
+            {
+                title: "Quadratic Equation | Application based",
+                url: "https://youtu.be/RKT_l3bIIjs",
+                id: "RKT_l3bIIjs",
+                topics: ["quadratic", "application"]
+            },
+            {
+                title: "Applications of Trigonometry",
+                url: "https://youtu.be/6Nv8CvEQyvA",
+                id: "6Nv8CvEQyvA",
+                topics: ["trigonometry", "application"]
+            },
+            {
+                title: "Arithmetic Progression | Application Based with Short tricks",
+                url: "https://youtu.be/lbDrnBfA3vI",
+                id: "lbDrnBfA3vI",
+                topics: ["ap", "application", "tricks"]
+            },
+            {
+                title: "Maths Model Question Paper 3",
+                url: "https://youtu.be/rvqztTJH4-w",
+                id: "rvqztTJH4-w",
+                topics: ["model", "question-paper"]
+            },
+            {
+                title: "Maths Model Question Paper 4 Answers",
+                url: "https://youtu.be/5hnKsdueZFA",
+                id: "5hnKsdueZFA",
+                topics: ["model", "question-paper", "answers"]
+            },
+            {
+                title: "Surface Areas & Volumes",
+                url: "https://youtu.be/uIFzUsZ9spo",
+                id: "uIFzUsZ9spo",
+                topics: ["geometry", "surface-area", "volume"]
+            },
+            {
+                title: "Quadratic Equation | Tricky Questions PYQ + Short Cuts Tricks",
+                url: "https://youtu.be/bFoBq8pbxtA",
+                id: "bFoBq8pbxtA",
+                topics: ["quadratic", "tricks", "previous-year"]
+            },
+            {
+                title: "Trigonometric identities🔥",
+                url: "https://youtu.be/wH36NJnPorA",
+                id: "wH36NJnPorA",
+                topics: ["trigonometry", "identities"]
+            },
+            {
+                title: "Trigonometry One Shot 🔥 | Concept + PYQ + Short Cuts",
+                url: "https://youtu.be/oaAe995BFY4",
+                id: "oaAe995BFY4",
+                topics: ["trigonometry", "one-shot", "shortcuts"]
+            },
+            {
+                title: "Arithmetic Progression | Long Answers Made Easy",
+                url: "https://youtu.be/PP6-g7t3o2E",
+                id: "PP6-g7t3o2E",
+                topics: ["ap", "long-answers"]
+            },
+            {
+                title: "Arithmetic Progression ಫುಲ್ ರಿವಿಷನ್",
+                url: "https://youtu.be/qYBL3Cq8OHk",
+                id: "qYBL3Cq8OHk",
+                topics: ["ap", "revision"]
+            }
+        ];
+
+        // Function to get the main topic for a video
+        function getMainTopic(videoTopics) {
+            const topicMapping = {
+                'trigonometry': ['trigonometry', 'identities'],
+                'probability': ['probability'],
+                'geometry': ['geometry', 'circles', 'coordinate', 'surface-area', 'volume'],
+                'ap': ['ap', 'arithmetic'],
+                'quadratic': ['quadratic'],
+                'last-minute': ['last-minute', 'strategy', 'secrets'],
+                'model': ['model', 'question-paper']
+            };
+            
+            for (const [mainTopic, subTopics] of Object.entries(topicMapping)) {
+                if (videoTopics.some(topic => subTopics.includes(topic))) {
+                    return mainTopic;
+                }
+            }
+            
+            return 'other';
+        }
+
+        // Function to render videos
+        function renderVideos(videosToRender) {
+            const videoGrid = document.getElementById('videoGrid');
+            videoGrid.innerHTML = '';
+            
+            if (videosToRender.length === 0) {
+                videoGrid.innerHTML = '<div class="no-results">No videos match your search. Try different keywords.</div>';
+                return;
+            }
+            
+            videosToRender.forEach(video => {
+                const mainTopic = getMainTopic(video.topics);
+                
+                const videoCard = document.createElement('div');
+                videoCard.className = `video-card ${video.highlight ? 'highlight' : ''}`;
+                videoCard.setAttribute('data-topics', video.topics.join(','));
+                
+                videoCard.innerHTML = `
+                    <div class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        ${video.highlight ? '<span class="highlight-tag">Important!</span>' : ''}
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                        <span class="topic-tag">${mainTopic.charAt(0).toUpperCase() + mainTopic.slice(1)}</span>
+                    </div>
+                `;
+                
+                videoCard.addEventListener('click', () => {
+                    window.open(video.url, '_blank');
+                });
+                
+                videoGrid.appendChild(videoCard);
+            });
+        }
+
+        // Initial render
+        renderVideos(videos);
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const filteredVideos = videos.filter(video => {
+                const titleMatch = video.title.toLowerCase().includes(searchTerm);
+                const topicMatch = video.topics.some(topic => topic.toLowerCase().includes(searchTerm));
+                return titleMatch || topicMatch;
+            });
+            
+            renderVideos(filteredVideos);
+        });
+
+        // Topic filter functionality
+        const topicButtons = document.querySelectorAll('.topic-btn');
+        topicButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                topicButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const selectedTopic = button.getAttribute('data-topic');
+                
+                if (selectedTopic === 'all') {
+                    renderVideos(videos);
+                    return;
+                }
+                
+                const filteredVideos = videos.filter(video => {
+                    return video.topics.includes(selectedTopic) || 
+                           getMainTopic(video.topics) === selectedTopic;
+                });
+                
+                renderVideos(filteredVideos);
+            });
+        });
+
+        // Countdown to Monday's exam
+        function updateCountdown() {
+            const now = new Date();
+            
+            // Set the exam date to next Monday at 10 AM
+            const examDate = new Date();
+            examDate.setDate(now.getDate() + ((1 + 7 - now.getDay()) % 7));
+            examDate.setHours(10, 0, 0, 0);
+            
+            // If today is Monday and it's past 10 AM, set to next Monday
+            if (now.getDay() === 1 && now.getHours() >= 10) {
+                examDate.setDate(examDate.getDate() + 7);
+            }
+            
+            const timeRemaining = examDate - now;
+            
+            // Convert to days, hours, minutes, seconds
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            
+            // Update countdown display
+            document.getElementById('countdown').innerHTML = 
+                `Exam in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                
+            // Add pulsing effect if less than 24 hours
+            if (days === 0 && hours < 24) {
+                document.getElementById('countdown').style.animation = 'pulse 1.5s infinite';
+            }
+        }
+        
+        // Initialize countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
