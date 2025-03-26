@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Timeline</title>
+    <style>
+        :root {
+            --primary-color: #4a5568;
+            --accent-color: #4299e1;
+            --light-bg: #f7fafc;
+            --dark-bg: #2d3748;
+            --light-text: #e2e8f0;
+            --dark-text: #1a202c;
+            --highlight: #f6ad55;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        body.dark-mode h1 {
+            color: var(--light-text);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logo .simplified {
+            color: #ffd700; /* Golden yellow */
+        }
+
+        .logo .minds {
+            color: #ff0000; /* Red */
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        #searchInput {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 200px;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode #searchInput {
+            background-color: #4a5568;
+            color: var(--light-text);
+            border-color: #718096;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.3);
+        }
+
+        .view-toggles {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            padding: 8px 15px;
+            background-color: #edf2f7;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .toggle-btn {
+            background-color: #4a5568;
+            color: var(--light-text);
+        }
+
+        .toggle-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background-color: #e2e8f0;
+        }
+
+        body.dark-mode .toggle-btn:hover:not(.active) {
+            background-color: #718096;
+        }
+
+        .century-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .century-btn {
+            padding: 8px 15px;
+            background-color: #edf2f7;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .century-btn {
+            background-color: #4a5568;
+            color: var(--light-text);
+        }
+
+        .century-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .century-btn:hover:not(.active) {
+            background-color: #e2e8f0;
+        }
+
+        body.dark-mode .century-btn:hover:not(.active) {
+            background-color: #718096;
+        }
+
+        /* Timeline View Styles */
+        .timeline-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background-color: var(--accent-color);
+            transform: translateX(-50%);
+        }
+
+        .timeline-items {
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 30px;
+            position: relative;
+            margin-bottom: 40px;
+            width: 50%;
+            transition: all 0.5s;
+        }
+
+        .timeline-item:nth-child(odd) {
+            align-self: flex-end;
+            justify-content: flex-start;
+            padding-left: 30px;
+            padding-right: 0;
+            left: 50%;
+        }
+
+        .timeline-item-content {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            width: 400px;
+            max-width: 100%;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .timeline-item-content {
+            background-color: #4a5568;
+        }
+
+        .timeline-item-content::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: calc(50% - 15px);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 15px solid white;
+        }
+
+        body.dark-mode .timeline-item-content::after {
+            border-left-color: #4a5568;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-item-content::after {
+            left: -15px;
+            right: auto;
+            border-right: 15px solid white;
+            border-left: none;
+        }
+
+        body.dark-mode .timeline-item:nth-child(odd) .timeline-item-content::after {
+            border-right-color: #4a5568;
+        }
+
+        .timeline-item-date {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .timeline-item-dot {
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--highlight);
+            z-index: 2;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-item-dot {
+            right: -10px;
+            left: auto;
+        }
+
+        .timeline-item-description {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .timeline-item.filtered {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* List View Styles */
+        .list-container {
+            display: none;
+        }
+
+        .list-container.active {
+            display: block;
+        }
+
+        .timeline-container.active {
+            display: block;
+        }
+
+        .timeline-container {
+            display: none;
+        }
+
+        .list-item {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .list-item {
+            background-color: #4a5568;
+        }
+
+        .list-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .list-item-date {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+        }
+
+        .list-item-description {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.5;
+            padding-left: 20px;
+            border-left: 2px solid #e2e8f0;
+        }
+
+        body.dark-mode .list-item-description {
+            border-left-color: #718096;
+        }
+
+        .list-item.filtered {
+            display: none;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+            display: none;
+        }
+
+        .empty-state.active {
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: #718096;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .timeline-item {
+                width: 100%;
+                padding-right: 0;
+                padding-left: 80px;
+                justify-content: flex-start;
+                left: 0;
+            }
+
+            .timeline-item:nth-child(odd) {
+                left: 0;
+                padding-left: 80px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-line {
+                left: 40px;
+            }
+
+            .timeline-item-dot {
+                left: 30px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-item-dot {
+                left: 30px;
+                right: auto;
+            }
+
+            .timeline-item-content {
+                width: 100%;
+            }
+
+            .timeline-item-content::after {
+                left: -15px;
+                right: auto;
+                border-right: 15px solid white;
+                border-left: none;
+            }
+
+            body.dark-mode .timeline-item-content::after {
+                border-right-color: #4a5568;
+                border-left: none;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-item-content::after {
+                left: -15px;
+                border-right: 15px solid white;
+                border-left: none;
+            }
+
+            body.dark-mode .timeline-item:nth-child(odd) .timeline-item-content::after {
+                border-right-color: #4a5568;
+            }
+
+            .list-item {
+                flex-direction: column;
+            }
+
+            .list-item-date {
+                margin-bottom: 10px;
+                border-bottom: 2px solid #e2e8f0;
+                padding-bottom: 10px;
+            }
+
+            body.dark-mode .list-item-date {
+                border-bottom-color: #718096;
+            }
+
+            .list-item-description {
+                padding-left: 0;
+                border-left: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .view-toggles {
+                justify-content: center;
+            }
+
+            .century-filters {
+                justify-content: center;
+            }
+        }
+
+        /* Learning Resources Styles */
+        .learning-resources {
+            margin-top: 50px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .learning-resources {
+            background-color: #4a5568;
+        }
+
+        .resources-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        body.dark-mode .resources-title {
+            color: var(--light-text);
+        }
+
+        .resources-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .resource-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #22c55e;
+        }
+
+        .video-button {
+            background-color: #FF0000;
+        }
+
+        .video-button:hover {
+            background-color: #ef4444;
+        }
+
+        .button-icon {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .button-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .resources-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .resource-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SimplifiedMinds Logo -->
+        <div class="logo-container">
+            <div class="logo">
+                <span class="simplified">Simplified</span><span class="minds">Minds</span>
+            </div>
+        </div>
+
+        <h1>Historical Timeline</h1>
+
+        <div class="controls">
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search events...">
+            </div>
+            <div class="view-toggles">
+                <button class="toggle-btn active" data-view="timeline">Timeline View</button>
+                <button class="toggle-btn" data-view="list">List View</button>
+            </div>
+        </div>
+
+        <div class="century-filters">
+            <button class="century-btn active" data-century="all">All Centuries</button>
+            <button class="century-btn" data-century="15">15th Century</button>
+            <button class="century-btn" data-century="18">18th Century</button>
+            <button class="century-btn" data-century="19">19th Century</button>
+            <button class="century-btn" data-century="20">20th Century</button>
+            <button class="century-btn" data-century="21">21st Century</button>
+        </div>
+
+        <!-- Timeline View -->
+        <div class="timeline-container active">
+            <div class="timeline-line"></div>
+            <div class="timeline-items">
+                <!-- Items will be added dynamically with JavaScript -->
+            </div>
+        </div>
+
+        <!-- List View -->
+        <div class="list-container">
+            <!-- Items will be added dynamically with JavaScript -->
+        </div>
+
+        <!-- Empty state -->
+        <div class="empty-state">
+            <h3>No events found</h3>
+            <p>Try adjusting your search or filters</p>
+        </div>
+
+        <!-- Learning Resources Section -->
+        <div class="learning-resources">
+            <h2 class="resources-title">Learning Resources</h2>
+            <div class="resources-buttons">
+                <a href="#" class="resource-button whatsapp-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                    </span>
+                    Join WhatsApp Channel
+                </a>
+                <a href="#" class="resource-button video-button">
+                    <span class="button-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/>
+                        </svg>
+                    </span>
+                    Video Lectures
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" id="themeToggle">
+        🌙
+    </div>
+
+    <script>
+        // Historical events data
+        const historicalEvents = [
+            { year: 1453, description: "Ottoman Turks capture Constantinople" },
+            { year: 1498, description: "Vasco-da-Gama establishes a sea route to India" },
+            { year: 1757, description: "Battle of Plassey takes place (June 23rd)" },
+            { year: 1764, description: "Battle of Buxar occurs" },
+            { year: 1765, description: "Robert Clive implements 'Dual-government in Bengal'" },
+            { year: 1773, description: "The Regulating Act is enacted" },
+            { year: 1857, description: "The First War of Indian Independence occurs" },
+            { year: 1914, yearEnd: 1918, description: "World War I" },
+            { year: 1922, description: "Chauri-Chaura Incident takes place in Uttar Pradesh" },
+            { year: 1931, description: "The Gandhi-Irwin Pact is signed" },
+            { year: 1939, yearEnd: 1945, description: "World War II" },
+            { year: 1942, description: "The Quit India Movement starts on 8th August" },
+            { year: 1945, description: "United Nations Organization comes into existence (Oct 24)" },
+            { year: 1948, description: "Universal Declaration of Human Rights is adopted (Dec 10)" },
+            { year: 1950, description: "The Indian Constitution is adopted (26th Jan)" },
+            { year: 1961, description: "Goa achieves liberation" },
+            { year: 1961, description: "The Prohibition of Dowry Act is implemented" },
+            { year: 1978, description: "District Industrial Centre is established" },
+            { year: 1986, description: "The Child Labour Prohibition and Control Act is implemented" },
+            { year: 1986, description: "The Consumer Protection Act is enacted" },
+            { year: 1993, description: "Uniform Panchayat Raj is established in India" },
+            { year: 1999, description: "The Indo-Pak Kargil War takes place" },
+            { year: 1999, description: "The Golden Quadrilateral and Corridor Project commences" },
+            { year: 2006, description: "The Child Marriage Prohibition Act is established" }
+        ];
+
+        // Sort events chronologically
+        historicalEvents.sort((a, b) => a.year - b.year);
+
+        // DOM Elements
+        const timelineContainer = document.querySelector('.timeline-container');
+        const timelineItems = document.querySelector('.timeline-items');
+        const listContainer = document.querySelector('.list-container');
+        const searchInput = document.getElementById('searchInput');
+        const viewToggleBtns = document.querySelectorAll('.toggle-btn');
+        const centuryBtns = document.querySelectorAll('.century-btn');
+        const emptyState = document.querySelector('.empty-state');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Initialize timeline and list views
+        function initViews() {
+            // Clear existing items
+            timelineItems.innerHTML = '';
+            listContainer.innerHTML = '';
+
+            // Create timeline items
+            historicalEvents.forEach((event, index) => {
+                // Timeline item
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'timeline-item';
+                timelineItem.setAttribute('data-year', event.year);
+                timelineItem.setAttribute('data-century', Math.floor(event.year / 100) + 1);
+                
+                let dateText = event.year;
+                if (event.yearEnd) {
+                    dateText = `${event.year}-${event.yearEnd}`;
+                }
+
+                timelineItem.innerHTML = `
+                    <div class="timeline-item-content">
+                        <div class="timeline-item-date">${dateText}</div>
+                        <div class="timeline-item-description">${event.description}</div>
+                    </div>
+                    <div class="timeline-item-dot"></div>
+                `;
+                timelineItems.appendChild(timelineItem);
+
+                // List item
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                listItem.setAttribute('data-year', event.year);
+                listItem.setAttribute('data-century', Math.floor(event.year / 100) + 1);
+                
+                listItem.innerHTML = `
+                    <div class="list-item-date">${dateText}</div>
+                    <div class="list-item-description">${event.description}</div>
+                `;
+                listContainer.appendChild(listItem);
+            });
+        }
+
+        // Filter events based on search and century
+        function filterEvents() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCentury = document.querySelector('.century-btn.active').getAttribute('data-century');
+            
+            let visibleCount = 0;
+            
+            // Get all items from both views
+            const allTimelineItems = document.querySelectorAll('.timeline-item');
+            const allListItems = document.querySelectorAll('.list-item');
+            
+            // Filter timeline items
+            allTimelineItems.forEach(item => {
+                const year = parseInt(item.getAttribute('data-year'));
+                const century = parseInt(item.getAttribute('data-century'));
+                const description = item.querySelector('.timeline-item-description').textContent.toLowerCase();
+                
+                const matchesSearch = description.includes(searchTerm) || year.toString().includes(searchTerm);
+                const matchesCentury = activeCentury === 'all' || century.toString() === activeCentury;
+                
+                if (matchesSearch && matchesCentury) {
+                    item.classList.remove('filtered');
+                    visibleCount++;
+                } else {
+                    item.classList.add('filtered');
+                }
+            });
+            
+            // Filter list items
+            allListItems.forEach(item => {
+                const year = parseInt(item.getAttribute('data-year'));
+                const century = parseInt(item.getAttribute('data-century'));
+                const description = item.querySelector('.list-item-description').textContent.toLowerCase();
+                
+                const matchesSearch = description.includes(searchTerm) || year.toString().includes(searchTerm);
+                const matchesCentury = activeCentury === 'all' || century.toString() === activeCentury;
+                
+                if (matchesSearch && matchesCentury) {
+                    item.classList.remove('filtered');
+                } else {
+                    item.classList.add('filtered');
+                }
+            });
+            
+            // Show/hide empty state
+            if (visibleCount === 0) {
+                emptyState.classList.add('active');
+            } else {
+                emptyState.classList.remove('active');
+            }
+        }
+
+        // Toggle between timeline and list views
+        function toggleView(viewType) {
+            if (viewType === 'timeline') {
+                timelineContainer.classList.add('active');
+                listContainer.classList.remove('active');
+            } else {
+                timelineContainer.classList.remove('active');
+                listContainer.classList.add('active');
+            }
+        }
+
+        // Toggle dark/light theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        }
+
+        // Event Listeners
+        viewToggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                viewToggleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                toggleView(btn.getAttribute('data-view'));
+            });
+        });
+
+        centuryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                centuryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterEvents();
+            });
+        });
+
+        searchInput.addEventListener('input', filterEvents);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Initialize the page
+        initViews();
+        filterEvents();
+    </script>
+</body>
+</html>

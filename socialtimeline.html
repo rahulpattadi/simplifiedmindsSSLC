@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Historical Timeline</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --info-color: #1abc9c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background-color: var(--light-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 2px solid var(--light-color);
+            border-radius: 5px 0 0 5px;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .timeline-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .era-btn {
+            background-color: var(--light-color);
+            border: none;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .era-btn:hover {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .era-btn.active {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 10px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            transition: all 0.4s ease;
+            margin-bottom: 15px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: white;
+            border: 4px solid var(--primary-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .right::after {
+            left: -10px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .right .timeline-content {
+            border-left: none;
+            border-right: 5px solid var(--primary-color);
+        }
+
+        .timeline-year {
+            color: #fff;
+            background-color: var(--primary-color);
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: white;
+        }
+
+        .political {
+            background-color: var(--accent-color);
+        }
+
+        .economic {
+            background-color: var(--success-color);
+        }
+
+        .war {
+            background-color: var(--warning-color);
+        }
+
+        .social {
+            background-color: var(--info-color);
+        }
+
+        .cultural {
+            background-color: #9b59b6;
+        }
+
+        .administrative {
+            background-color: #34495e;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .pagination-btn {
+            background-color: var(--light-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .pagination-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .timeline-item::after {
+                left: 21px;
+            }
+
+            .left::after, .right::after {
+                left: 21px;
+            }
+
+            .right {
+                left: 0%;
+            }
+
+            .right .timeline-content {
+                border-left: 5px solid var(--primary-color);
+                border-right: none;
+            }
+        }
+
+        /* Loading animation */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid var(--primary-color);
+            width: 40px;
+            height: 40px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            margin: 50px auto;
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .logo:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .logo .simplified {
+            color: #ffd700; /* Golden yellow */
+        }
+
+        .logo .minds {
+            color: #ff0000; /* Red */
+        }
+
+        .home-icon {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: #718096;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover .home-icon {
+            color: #2d3748;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .logo:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .timeline-content {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        .dark-mode .filter-btn {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        .dark-mode .era-btn {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+        .dark-mode .navbar {
+            background-color: #2d3748;
+        }
+        .dark-mode .timeline-title {
+            color: #e2e8f0;
+        }
+        .dark-mode .timeline-item::after {
+            background-color: #4a5568;
+        }
+        .dark-mode .no-results {
+            background-color: #2d3748;
+        }
+        .dark-mode .search-input {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <!-- SimplifiedMinds Logo -->
+    <div class="logo-container">
+        <a href="index.html" class="logo">
+            <span class="home-icon">🏠</span>
+            <span class="simplified">Simplified</span><span class="minds">Minds</span>
+            <span class="tooltip">Go to Homepage</span>
+        </a>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Historical Timeline</h1>
+            <p>Navigate through significant events in world and Indian history</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Search events...">
+            <button id="search-btn" class="search-btn">Search</button>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="political">Political</button>
+            <button class="filter-btn" data-filter="war">Wars & Conflicts</button>
+            <button class="filter-btn" data-filter="social">Social</button>
+            <button class="filter-btn" data-filter="economic">Economic</button>
+            <button class="filter-btn" data-filter="cultural">Cultural</button>
+            <button class="filter-btn" data-filter="administrative">Administrative</button>
+        </div>
+
+        <div class="timeline-navigation">
+            <button class="era-btn active" data-era="all">All Eras</button>
+            <button class="era-btn" data-era="1450-1600">1450-1600</button>
+            <button class="era-btn" data-era="1600-1700">1600-1700</button>
+            <button class="era-btn" data-era="1700-1800">1700-1800</button>
+            <button class="era-btn" data-era="1800-1850">1800-1850</button>
+            <button class="era-btn" data-era="1850-1900">1850-1900</button>
+            <button class="era-btn" data-era="1900-1947">1900-1947</button>
+            <button class="era-btn" data-era="1947-2000">1947-2000</button>
+            <button class="era-btn" data-era="2000-present">2000-Present</button>
+        </div>
+
+        <div id="timeline" class="timeline">
+            <!-- Timeline items will be generated here -->
+            <div class="loader" id="loader"></div>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Pagination will be generated dynamically -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set page title
+            document.title = "Interactive Historical Timeline";
+            
+            // Historical events data
+            const timelineData = [
+    {
+        year: 1453,
+        title: "Ottoman Turks capture Constantinople",
+        description: "End of the Byzantine Empire and a major turning point in world history.",
+        category: "war"
+    },
+    {
+        year: 1498,
+        title: "Vasco da Gama establishes sea route to India",
+        description: "Portuguese explorer establishes the first direct sea route between Europe and India.",
+        category: "cultural"
+    },
+    {
+        year: 1600,
+        title: "Establishment of the British East India Company",
+        description: "The British East India Company was established, which would later lead to British colonization of India.",
+        category: "economic"
+    },
+    {
+        year: 1602,
+        title: "Dutch East India Company established",
+        description: "The first multinational corporation in the world and the first company to issue stock.",
+        category: "economic"
+    },
+    {
+        year: 1613,
+        title: "Formal commencement of trade by British East India Company",
+        description: "The company started formal trade with the Mughal Empire.",
+        category: "economic"
+    },
+    {
+        year: 1617,
+        title: "Sir Thomas Roe appointed as royal ambassador",
+        description: "Sir Thomas Roe served as the royal ambassador in Jahangir's court.",
+        category: "political"
+    },
+    {
+        year: 1639,
+        title: "British acquire Madras",
+        description: "The British East India Company took Madras from the King of Chandragiri.",
+        category: "political"
+    },
+    {
+        year: 1664,
+        title: "French East India Company established",
+        description: "France establishes its own East India Company to compete with the British and Dutch.",
+        category: "economic"
+    },
+    {
+        year: 1668,
+        title: "Acquisition of Bombay by the British",
+        description: "The British East India Company acquired Bombay.",
+        category: "political"
+    },
+    {
+        year: 1690,
+        title: "Purchase of Sutanauti, Calcutta, and Govindapura",
+        description: "The British East India Company purchased these areas, which would later become Calcutta (now Kolkata).",
+        category: "political"
+    },
+    {
+        year: 1717,
+        title: "Dastaks (trade license) issued",
+        description: "The Mughal Emperor granted the British East India Company special trading privileges.",
+        category: "economic"
+    },
+    {
+        year: 1746,
+        title: "Arrival of Dupleix in Pondicherry & 1st Carnatic War begins",
+        description: "French Governor-General Joseph François Dupleix arrives in Pondicherry, and the First Carnatic War begins between the British and French.",
+        category: "war"
+    },
+    {
+        year: 1756,
+        title: "3rd Carnatic War begins",
+        description: "The Third Carnatic War begins between the British and French East India Companies.",
+        category: "war"
+    },
+    {
+        year: 1757,
+        title: "Battle of Plassey",
+        description: "On June 23, 1757, the British East India Company, led by Robert Clive, defeated the Nawab of Bengal, marking the beginning of British rule in India.",
+        category: "war"
+    },
+    {
+        year: 1764,
+        title: "Battle of Buxar",
+        description: "The British East India Company defeated the combined forces of the Nawab of Bengal, the Nawab of Awadh, and the Mughal Emperor Shah Alam II.",
+        category: "war"
+    },
+    {
+        year: 1765,
+        title: "Dual Government in Bengal by Robert Clive",
+        description: "Robert Clive established the Dual Government (Diwani Rights) in Bengal, where the Company collected revenue while the Nawab was responsible for administration.",
+        category: "administrative"
+    },
+    {
+        year: 1767,
+        title: "First Anglo-Mysore War begins",
+        description: "The First Anglo-Mysore War begins between the British East India Company and the Kingdom of Mysore, ending in 1769 with the Treaty of Madras.",
+        category: "war"
+    },
+    {
+        year: 1770,
+        title: "Severe Drought in Bengal",
+        description: "A severe drought leads to a law and order crisis in Bengal.",
+        category: "social"
+    },
+    {
+        year: 1772,
+        title: "Warren Hastings becomes Governor General of Bengal",
+        description: "Warren Hastings appointed as the first Governor-General of Bengal.",
+        category: "administrative"
+    },
+    {
+        year: 1773,
+        title: "Regulating Act",
+        description: "The British Parliament passed the Regulating Act to regulate the East India Company's activities and establish a Supreme Court at Calcutta.",
+        category: "administrative"
+    },
+    {
+        year: 1775,
+        title: "First Anglo-Maratha War begins",
+        description: "The first of three Anglo-Maratha Wars begins, lasting until 1782.",
+        category: "war"
+    },
+    {
+        year: 1776,
+        title: "American War of Independence begins",
+        description: "The American colonies declare independence from Great Britain.",
+        category: "political"
+    },
+    {
+        year: 1780,
+        title: "Second Anglo-Mysore War begins",
+        description: "The Second Anglo-Mysore War begins between the British East India Company and the Kingdom of Mysore, lasting until 1784 with the Treaty of Mangalore.",
+        category: "war"
+    },
+    {
+        year: 1781,
+        title: "British Magistrate system introduced",
+        description: "Introduction of the British Magistrate system in India.",
+        category: "administrative"
+    },
+    {
+        year: 1784,
+        title: "Pitt's India Act",
+        description: "The British Parliament passed Pitt's India Act, which established a Board of Control to oversee the East India Company.",
+        category: "administrative"
+    },
+    {
+        year: 1790,
+        title: "Third Anglo-Mysore War begins",
+        description: "The Third Anglo-Mysore War begins between the British East India Company and the Kingdom of Mysore, lasting until 1792 with the Treaty of Srirangapatna.",
+        category: "war"
+    },
+    {
+        year: 1792,
+        title: "Permanent Zamindari System established",
+        description: "Introduction of the Permanent Zamindari System for land revenue collection.",
+        category: "economic"
+    },
+    {
+        year: 1793,
+        title: "Ryotwari System & Police System established",
+        description: "Lord Cornwallis established the Ryotwari System for land revenue and the modern Police System in India.",
+        category: "administrative"
+    },
+    {
+        year: 1798,
+        title: "Fourth Anglo-Mysore War begins",
+        description: "The Fourth Anglo-Mysore War begins, resulting in the death of Tipu Sultan and the fall of Mysore in 1799 after the Siege of Srirangapatna.",
+        category: "war"
+    },
+    {
+        year: 1800,
+        title: "William College established in Calcutta",
+        description: "William College was established in Calcutta for Civil Services preparation.",
+        category: "educational"
+    },
+    {
+        year: 1801,
+        title: "Ryotwari System in Madras and Mysore",
+        description: "Extension of the Ryotwari System to the Madras and Mysore regions.",
+        category: "economic"
+    },
+    {
+        year: 1803,
+        title: "Second Anglo-Maratha War begins",
+        description: "The Second Anglo-Maratha War begins, lasting until 1805.",
+        category: "war"
+    },
+    {
+        year: 1813,
+        title: "Charter Act",
+        description: "The Charter Act renewed the East India Company's charter but ended its monopoly on trade with India.",
+        category: "administrative"
+    },
+    {
+        year: 1817,
+        title: "Third Anglo-Maratha War begins",
+        description: "The Third Anglo-Maratha War begins, resulting in the end of the Maratha Empire in 1818.",
+        category: "war"
+    },
+    {
+        year: 1818,
+        title: "Decline of Marathas",
+        description: "The Maratha Empire completely declines after the Third Anglo-Maratha War.",
+        category: "political"
+    },
+    {
+        year: 1827,
+        title: "Labor movement in Calcutta",
+        description: "The labor movement started in Calcutta.",
+        category: "social"
+    },
+    {
+        year: 1828,
+        title: "Abolition of Sati",
+        description: "William Bentinck and Raja Ram Mohan Roy worked together to abolish the practice of Sati.",
+        category: "social"
+    },
+    {
+        year: 1833,
+        title: "Charter Act",
+        description: "The Charter Act ended the East India Company's commercial functions, making it purely an administrative body.",
+        category: "administrative"
+    },
+    {
+        year: 1835,
+        title: "Report on English Education",
+        description: "Macaulay's Minute introduced English education in India.",
+        category: "educational"
+    },
+    {
+        year: 1846,
+        title: "Lahore Agreement",
+        description: "The Treaty of Lahore was signed after the First Anglo-Sikh War.",
+        category: "political"
+    },
+    {
+        year: 1853,
+        title: "Civil Service examinations introduced",
+        description: "Lord Cornwallis introduced appointments based on Civil Service examinations.",
+        category: "administrative"
+    },
+    {
+        year: 1854,
+        title: "Charles Wood's Commission",
+        description: "The Wood's Dispatch established universities in India.",
+        category: "educational"
+    },
+    {
+        year: 1856,
+        title: "Lord Dalhousie returns from India",
+        description: "Lord Dalhousie completed his term as Governor-General of India.",
+        category: "administrative"
+    },
+    {
+        year: 1857,
+        title: "First War of Indian Independence",
+        description: "Also known as the Sepoy Mutiny, this was the first major uprising against British rule in India.",
+        category: "war"
+    },
+    {
+        year: 1857,
+        title: "Peel Commission",
+        description: "The Peel Commission recommended redesigning the military system in India.",
+        category: "administrative"
+    },
+    {
+        year: 1858,
+        title: "Indian Government Act (Magna Carta)",
+        description: "Queen Victoria's Proclamation, often called India's Magna Carta, transferred power from the East India Company to the British Crown.",
+        category: "administrative"
+    },
+    {
+        year: 1861,
+        title: "Indian Councils Act & Indian Police Act",
+        description: "The Indian Councils Act introduced a policy of assertion, and the Indian Police Act established the modern police system.",
+        category: "administrative"
+    },
+    {
+        year: 1885,
+        title: "Formation of Indian National Congress",
+        description: "The Indian National Congress was formed, marking the beginning of organized political activity in India and the start of the Moderate Age (1885-1906).",
+        category: "political"
+    },
+    {
+        year: 1886,
+        title: "Discovery of Aluminium",
+        description: "Aluminium was discovered as a material for industrial use.",
+        category: "scientific"
+    },
+    {
+        year: 1892,
+        title: "Indian Councils Act",
+        description: "The Indian Councils Act expanded the legislative councils and introduced the principle of election.",
+        category: "administrative"
+    },
+    {
+        year: 1893,
+        title: "Chicago Conference of World Religions",
+        description: "Swami Vivekananda represented India at the Parliament of the World's Religions in Chicago.",
+        category: "cultural"
+    },
+    {
+        year: 1902,
+        title: "Police Commission",
+        description: "The Police Commission recommended the appointment of suitable Indians to police positions.",
+        category: "administrative"
+    },
+    {
+        year: 1905,
+        title: "Partition of Bengal",
+        description: "Lord Curzon partitioned Bengal, triggering the Swadeshi movement.",
+        category: "political"
+    },
+    {
+        year: 1906,
+        title: "Mohammad Ali Jinnah joins INC and Extremist Era begins",
+        description: "Mohammad Ali Jinnah joined the Indian National Congress. This year also marked the end of the Moderate era and the beginning of the Extremist era in the INC (1906-1920).",
+        category: "political"
+    },
+    {
+        year: 1909,
+        title: "Indian Councils Act (Minto-Morley Reforms)",
+        description: "The Minto-Morley Reforms introduced separate electorates for Muslims.",
+        category: "administrative"
+    },
+    {
+        year: 1911,
+        title: "Withdrawal of Bengal Partition",
+        description: "The British government withdrew the partition of Bengal.",
+        category: "political"
+    },
+    {
+        year: 1914,
+        title: "World War I begins",
+        description: "World War I began, lasting until 1918, with significant Indian participation.",
+        category: "war"
+    },
+    {
+        year: 1919,
+        title: "Rowlatt Act, Jallianwala Bagh Massacre, Khilafat Movement",
+        description: "The Rowlatt Act was passed, leading to the Jallianwala Bagh Massacre. The Khilafat Movement also began this year, along with the signing of the Treaty of Versailles.",
+        category: "political"
+    },
+    {
+        year: 1919,
+        title: "Government of India Act (Montague-Chelmsford Reforms)",
+        description: "The Government of India Act introduced dyarchy in the provinces.",
+        category: "administrative"
+    },
+    {
+        year: 1920,
+        title: "Non-Cooperation Movement and Gandhian Era begins",
+        description: "Mahatma Gandhi launched the Non-Cooperation Movement against British rule, marking the beginning of the Gandhian era (1920-1947) in the Indian National Congress.",
+        category: "political"
+    },
+    {
+        year: 1922,
+        title: "Chauri-Chaura Incident",
+        description: "Violent incident in Chauri-Chaura, Uttar Pradesh, leading to Gandhi's suspension of the Non-Cooperation Movement.",
+        category: "political"
+    },
+    {
+        year: 1926,
+        title: "Commonwealth of Nations established",
+        description: "The Commonwealth of Nations was established, of which India would later become a member.",
+        category: "political"
+    },
+    {
+        year: 1927,
+        title: "Simon Commission",
+        description: "The Simon Commission was appointed to suggest constitutional reforms for India.",
+        category: "administrative"
+    },
+    {
+        year: 1930,
+        title: "Round Table Conferences begin",
+        description: "The first of three Round Table Conferences was held to discuss constitutional reforms in India, continuing until 1932.",
+        category: "political"
+    },
+    {
+        year: 1931,
+        title: "Gandhi-Irwin Pact",
+        description: "The Gandhi-Irwin Pact was signed, leading to the end of the Civil Disobedience Movement and the participation of the Indian National Congress in the Second Round Table Conference.",
+        category: "political"
+    },
+    {
+        year: 1935,
+        title: "Government of India Act",
+        description: "The Government of India Act provided for the establishment of an All-India Federation and provincial autonomy, forming the basis for the Indian Constitution.",
+        category: "administrative"
+    },
+    {
+        year: 1939,
+        title: "World War II begins",
+        description: "World War II began, lasting until 1945, with India contributing significantly to the Allied war effort.",
+        category: "war"
+    },
+    {
+        year: 1942,
+        title: "Quit India Movement",
+        description: "Mahatma Gandhi launched the Quit India Movement on August 8, demanding an end to British rule in India.",
+        category: "political"
+    },
+    {
+        year: 1942,
+        title: "Cripps' Mission",
+        description: "The Cripps' Mission offered dominion status to India after the war.",
+        category: "political"
+    },
+    {
+        year: 1945,
+        title: "United Nations Organization established",
+        description: "The United Nations was established on October 24, 1945, with India as one of the founding members.",
+        category: "political"
+    },
+    {
+        year: 1946,
+        title: "UNESCO and UNICEF established",
+        description: "The United Nations Educational, Scientific and Cultural Organization (UNESCO) and the United Nations Children's Emergency Fund (UNICEF) were established.",
+        category: "social"
+    },
+    {
+        year: 1946,
+        title: "Direct Action Day and Lord Mountbatten as Viceroy",
+        description: "The Muslim League observed 'Direct Action Day' on August 16, leading to communal violence. Lord Mountbatten was appointed as the last Viceroy of India.",
+        category: "political"
+    },
+    {
+        year: 1948,
+        title: "Universal Declaration of Human Rights",
+        description: "The Universal Declaration of Human Rights was adopted by the United Nations on December 10, 1948.",
+        category: "social"
+    },
+    {
+        year: 1950,
+        title: "Indian Constitution adopted",
+        description: "The Constitution of India was adopted on January 26, 1950, marking the day India became a republic.",
+        category: "political"
+    },
+    {
+        year: 1956,
+        title: "State Reorganisation Act",
+        description: "The States Reorganisation Act reorganized the states of India on a linguistic basis, including the formation of Karnataka.",
+        category: "administrative"
+    },
+    {
+        year: 1961,
+        title: "Goa Liberation and Prohibition of Dowry Act",
+        description: "Goa was liberated from Portuguese rule, and the Prohibition of Dowry Act was implemented.",
+        category: "political"
+    },
+    {
+        year: 1962,
+        title: "World Consumers' Day and Indo-China War",
+        description: "World Consumers' Day was established on March 15, and the Indo-China War (Chinese Aggression) took place.",
+        category: "war"
+    },
+    {
+        year: 1964,
+        title: "Death of Jawaharlal Nehru",
+        description: "Jawaharlal Nehru, the first Prime Minister of India, passed away.",
+        category: "political"
+    },
+    {
+        year: 1965,
+        title: "UNICEF awarded Nobel Prize",
+        description: "UNICEF was awarded the Nobel Peace Prize for its efforts to enhance peace by assisting children and mothers in need.",
+        category: "social"
+    },
+    {
+        year: 1966,
+        title: "Tashkent Agreement",
+        description: "The Tashkent Agreement was signed between India and Pakistan after the 1965 Indo-Pakistan War.",
+        category: "political"
+    },
+    {
+        year: 1976,
+        title: "Equal Wages Act and Citizens Rights Protection Act",
+        description: "The Equal Wages Act was implemented to ensure equal pay for equal work, and the Citizens Rights Protection Act was established.",
+        category: "social"
+    },
+    {
+        year: 1978,
+        title: "District Industrial Centers established",
+        description: "District Industrial Centers were established to promote industrial development at the district level.",
+        category: "economic"
+    },
+    {
+        year: 1986,
+        title: "Child Labour Prohibition Act and Consumer Protection Act",
+        description: "The Child Labour Prohibition and Control Act and the Consumer Protection Act were implemented. The Prohibition of Dowry Act was also amended and made stricter.",
+        category: "social"
+    },
+    {
+        year: 1986,
+        title: "Karnataka Lokayukta Act",
+        description: "The Karnataka Lokayukta Act was passed to investigate and address corruption in the state government.",
+        category: "administrative"
+    },
+    {
+        year: 1993,
+        title: "Uniform Panchayat Raj established",
+        description: "A uniform Panchayat Raj system was established in India, strengthening local self-government.",
+        category: "administrative"
+    },
+    {
+        year: 1999,
+        title: "Golden Quadrilateral project and Kargil War",
+        description: "The Golden Quadrilateral and Corridor Project was launched to improve highway infrastructure. The Indo-Pak Kargil War also took place this year.",
+        category: "war"
+    },
+    {
+        year: 2006,
+        title: "Child Marriage Prohibition Act and Child Labour Eradication Act",
+        description: "The Child Marriage Prohibition Act and the Child Labour Eradication and Rehabilitation Act were implemented.",
+        category: "social"
+    },
+    {
+        year: 2015,
+        title: "NITI Aayog established",
+        description: "The National Institution for Transforming India (NITI Aayog) was established, replacing the Planning Commission.",
+        category: "administrative"
+    }
+];
+
+
+            // Function to render timeline
+            function renderTimeline(filteredData) {
+                const timelineContainer = document.getElementById('timeline');
+                timelineContainer.innerHTML = '';
+
+                if (filteredData.length === 0) {
+                    timelineContainer.innerHTML = '<div class="no-results"><h3>No events found matching your criteria</h3><p>Try adjusting your search or filters</p></div>';
+                    return;
+                }
+
+                filteredData.forEach((item, index) => {
+                    const timelineItem = document.createElement('div');
+                    timelineItem.className = `timeline-item ${index % 2 === 0 ? 'left' : 'right'}`;
+                    timelineItem.style.animationDelay = `${index * 0.1}s`;
+
+                    timelineItem.innerHTML = `
+                        <div class="timeline-content">
+                            <span class="timeline-year">${item.year}</span>
+                            <h3 class="timeline-title">${item.title}</h3>
+                            <p>${item.description}</p>
+                            <span class="category-tag ${item.category}">${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</span>
+                        </div>
+                    `;
+                    
+                    timelineContainer.appendChild(timelineItem);
+                });
+            }
+
+            // Function to filter timeline data
+            function filterTimelineData() {
+                const searchTerm = document.getElementById('search-input').value.toLowerCase();
+                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                const activeEra = document.querySelector('.era-btn.active').dataset.era;
+                
+                let filteredData = timelineData;
+                
+                // Filter by search term
+                if (searchTerm) {
+                    filteredData = filteredData.filter(item => 
+                        item.title.toLowerCase().includes(searchTerm) || 
+                        item.description.toLowerCase().includes(searchTerm) ||
+                        item.year.toString().includes(searchTerm)
+                    );
+                }
+                
+                // Filter by category
+                if (activeFilter !== 'all') {
+                    filteredData = filteredData.filter(item => item.category === activeFilter);
+                }
+                
+                // Filter by era
+                if (activeEra !== 'all') {
+                    const [startYear, endYear] = activeEra.split('-');
+                    const endYearValue = endYear === 'present' ? new Date().getFullYear() : parseInt(endYear);
+                    filteredData = filteredData.filter(item => 
+                        item.year >= parseInt(startYear) && item.year <= endYearValue
+                    );
+                }
+                
+                // Sort by year
+                filteredData = filteredData.sort((a, b) => a.year - b.year);
+                
+                renderTimeline(filteredData);
+            }
+
+            // Initialize timeline
+            const loader = document.getElementById('loader');
+            loader.style.display = 'none';
+            filterTimelineData();
+
+            // Set up event listeners for filters
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    filterTimelineData();
+                });
+            });
+
+            // Set up event listeners for era buttons
+            const eraButtons = document.querySelectorAll('.era-btn');
+            eraButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    eraButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    filterTimelineData();
+                });
+            });
+
+            // Set up search functionality
+            const searchButton = document.getElementById('search-btn');
+            const searchInput = document.getElementById('search-input');
+            
+            searchButton.addEventListener('click', filterTimelineData);
+            searchInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    filterTimelineData();
+                }
+            });
+
+            // Add smooth scrolling for better user experience
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add responsive design adjustments
+            function handleResponsiveChanges() {
+                if (window.innerWidth <= 768) {
+                    // Mobile optimizations
+                    document.querySelectorAll('.timeline-item').forEach(item => {
+                        item.classList.remove('left', 'right');
+                        item.classList.add('right');
+                    });
+                }
+            }
+
+            // Dark mode toggle functionality
+            document.getElementById('darkModeToggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                // Update the text based on dark mode state
+                if (document.body.classList.contains('dark-mode')) {
+                    document.getElementById('darkModeToggle').innerHTML = `
+                        <span class="flex items-center gap-2">
+                            ☀️ Light Mode
+                        </span>`;
+                } else {
+                    document.getElementById('darkModeToggle').innerHTML = `
+                        <span class="flex items-center gap-2">
+                            🌙 Dark Mode
+                        </span>`;
+                }
+            });
+
+            // Initial call
+            handleResponsiveChanges();
+            
+            // Listen for window resize
+            window.addEventListener('resize', handleResponsiveChanges);
+        });
+    </script>
+</body>
+</html>
