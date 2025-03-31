@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Exam Prep - 2 Days to Go!</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4fc3f7;
+            --light: #f5f9ff;
+            --dark: #333;
+            --success: #66bb6a;
+            --warning: #ffa726;
+            --danger: #ef5350;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f4f8;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .countdown {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .tab-container {
+            margin: 2rem 0;
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background-color: #e1e8f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background-color: #d0dbed;
+        }
+        
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .topic {
+            margin-bottom: 2rem;
+        }
+        
+        .topic-header {
+            background-color: var(--light);
+            padding: 0.75rem;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .topic-header:hover {
+            background-color: #e8f1ff;
+        }
+        
+        .topic-content {
+            padding: 0 1rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .topic.expanded .topic-content {
+            max-height: 2000px;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .topic.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .definition {
+            background-color: #f8f9fa;
+            border-left: 3px solid var(--accent);
+            padding: 0.75rem;
+            margin: 1rem 0;
+        }
+        
+        .formula {
+            background-color: #f0f7ff;
+            border-radius: 5px;
+            padding: 0.75rem;
+            margin: 1rem 0;
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            border-left: 3px solid var(--warning);
+            padding: 0.75rem;
+            margin: 1rem 0;
+        }
+        
+        .important {
+            background-color: #ffebee;
+            border-left: 3px solid var(--danger);
+            padding: 0.75rem;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .search-container {
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        #search {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--success);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .diagram {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Simple diagram placeholders */
+        .diagram-placeholder {
+            background-color: #f5f9ff;
+            border: 1px dashed var(--primary);
+            border-radius: 5px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        /* Study mode toggle */
+        .mode-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .toggle-label {
+            margin-right: 10px;
+            line-height: 34px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Physics Exam Prep</h1>
+        <p>Master the key concepts before your exam</p>
+        <div class="countdown" id="countdown">Exam in: 2d 00h 00m</div>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search" placeholder="Search for topics, definitions, formulas...">
+        </div>
+        
+        <div class="mode-toggle">
+            <span class="toggle-label">Study Mode</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="studyMode">
+                <span class="slider"></span>
+            </label>
+        </div>
+        
+        <div class="progress-container">
+            <h3>Your Progress</h3>
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 0%;"></div>
+            </div>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="electricity">Electricity</button>
+                <button class="tab" data-tab="magnetic">Magnetic Effects</button>
+                <button class="tab" data-tab="light">Light, Reflection & Refraction</button>
+                <button class="tab" data-tab="human-eye">Human Eye & Colorful World</button>
+            </div>
+            
+            <!-- Electricity Tab -->
+            <div class="tab-content active" id="electricity">
+                <h2>Electricity</h2>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Electric Circuit and Current</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Electric Circuit:</strong> A continuous closed path of an electric current.
+                        </div>
+                        <div class="definition">
+                            <strong>Electric Current:</strong> The rate of flow of electric charge through any cross-section of a conductor in unit time.
+                        </div>
+                        <p>Direction of current is taken as opposite to the direction of flow of electrons.</p>
+                        <div class="important">
+                            <strong>Ammeter:</strong> The instrument used to measure electric current. It is always connected in series in an electrical circuit.
+                        </div>
+                        <div class="formula">
+                            <strong>1 Ampere:</strong> If 1 coulomb of charge flows through any cross-section of a conductor in 1 second, then current is 1 ampere.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Electric Potential and Potential Difference</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Electric Potential:</strong> It is defined as the amount of work done to move a charge from one point to another point.
+                        </div>
+                        <div class="important">
+                            <strong>Voltmeter:</strong> The instrument used to measure potential difference. It is always connected in parallel across the resistor in an electrical circuit.
+                        </div>
+                        <div class="formula">
+                            <strong>1 Volt:</strong> If 1 joule of work is done in moving 1 coulomb of charge, then the potential difference between the points is 1 volt.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Resistance and Conductors</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Resistance (R):</strong> A constant for a given metallic wire at a given temperature. It is the property of a conductor to resist the flow of charges through it. Its SI unit is ohm, represented by the Greek letter Ω.
+                        </div>
+                        <div class="definition">
+                            <strong>Variable resistance:</strong> A component used to regulate current without changing the voltage source.
+                        </div>
+                        <div class="definition">
+                            <strong>Rheostat:</strong> A device used to change the resistance in a circuit.
+                        </div>
+                        <p>S.I unit of resistance is 'Ohm' (Ω).</p>
+                        <div class="formula">
+                            <strong>1 Ohm:</strong> If a potential difference of 1 volt across the ends of a conductor makes a current 1 ampere flow, then the resistance of the conductor is 1 ohm.
+                        </div>
+                        <p><strong>The resistance of a conductor depends on the following factors:</strong></p>
+                        <ul>
+                            <li>R is directly proportional to the length of the conductor (l).</li>
+                            <li>R is inversely proportional to the area of cross-section (A).</li>
+                            <li>Nature of the material.</li>
+                            <li>Temperature.</li>
+                        </ul>
+                        <div class="definition">
+                            <strong>Good conductor:</strong> A component of a given size that offers a low resistance.
+                        </div>
+                        <div class="definition">
+                            <strong>Resistor:</strong> A conductor having some appreciable resistance.
+                        </div>
+                        <div class="definition">
+                            <strong>Poor conductor:</strong> A component of identical size that offers a higher resistance.
+                        </div>
+                        <div class="definition">
+                            <strong>Insulator:</strong> Offers even higher resistance than poor conductors of the same size.
+                        </div>
+                        <div class="note">
+                            <strong>Resistivity of alloys:</strong> Generally higher than that of constituent metals.
+                        </div>
+                        <div class="important">
+                            <strong>Applications of materials:</strong> Alloys are used in electrical heating devices; tungsten for filaments of electric bulbs; copper and aluminum for electrical transmission lines.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Series and Parallel Connections</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="important">
+                            <strong>Series Connection:</strong> In series connection, potential difference across each resistance is different but the current through each resistance is the same.
+                        </div>
+                        <div class="important">
+                            <strong>Parallel Connection:</strong> In parallel connection the potential difference across each resistance is the same but the current through each resistance is different.
+                        </div>
+                        <div class="note">
+                            All electrical appliances in houses are connected in parallel, as different objects operate at different currents.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Electric Power</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Electric Power:</strong> It is defined as the amount of electric energy consumed in a circuit per unit time.
+                        </div>
+                        <div class="formula">
+                            <strong>Watt (W):</strong> The SI unit of electric power. It is the power consumed by a device that carries 1 A of current when operated at a potential difference of 1 V.
+                        </div>
+                        <div class="formula">
+                            <strong>1 Watt:</strong> Electric power is said to be 1 watt, if 1 ampere current flows through a circuit having 1 volt potential difference.
+                        </div>
+                        <p>S.I unit of heat developed is Joule (J).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Magnetic Effects Tab -->
+            <div class="tab-content" id="magnetic">
+                <h2>Magnetic Effects of Electric Current</h2>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Magnets and Poles</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>North Pole:</strong> The end pointing towards north is called north seeking or north pole.
+                        </div>
+                        <div class="definition">
+                            <strong>South Pole:</strong> The other end that points towards south is called south seeking or south pole.
+                        </div>
+                        <div class="important">
+                            Like poles repel, while unlike poles of magnets attract each other.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Magnetic Field</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Magnetic Field:</strong> Exists in the region surrounding a magnet, in which the force of the magnet can be detected.
+                        </div>
+                        <div class="definition">
+                            <strong>Field Lines:</strong> Used to represent a magnetic field. A field line is the path along which a hypothetical free north pole would tend to move.
+                        </div>
+                        <div class="important">
+                            A current-carrying conductor placed in a magnetic field experiences a force. When current and magnetic field are perpendicular, the force is maximum and perpendicular to both.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Electromagnets and Solenoids</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Solenoid:</strong> A coil of many circular turns of insulated copper wire wrapped closely in the shape of a cylinder.
+                        </div>
+                        <div class="definition">
+                            <strong>Electromagnet:</strong> A coil of many circular turns of insulated copper wire wrapped around a soft iron core.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Electrical Safety</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Live Wire:</strong> Usually has red insulation, carries current at 220V potential (in India).
+                        </div>
+                        <div class="definition">
+                            <strong>Neutral Wire:</strong> Has black insulation.
+                        </div>
+                        <div class="definition">
+                            <strong>Earth Wire:</strong> Has green insulation, connected to a metal plate in the earth.
+                        </div>
+                        <div class="important">
+                            <strong>Electric Fuse:</strong> Safety device that prevents damage due to overloading or short-circuiting.
+                        </div>
+                        <div class="important">
+                            <strong>Short Circuit:</strong> Occurs when live and neutral wires come in direct contact.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Light Tab -->
+            <div class="tab-content" id="light">
+                <h2>Light, Reflection and Refraction</h2>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Reflection of Light</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Reflection of Light:</strong> Bouncing back of light after it falls on a reflecting surface or a polished surface such as a mirror.
+                        </div>
+                        <div class="important">
+                            <strong>Image formed by plane mirror:</strong> A plane mirror forms a virtual, erect image. The size of the image is equal to the size of the object. The image is laterally inverted.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Spherical Mirrors</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Spherical Mirrors:</strong> Mirrors whose reflecting surfaces are curved are called spherical mirrors.
+                        </div>
+                        <div class="definition">
+                            <strong>Concave Mirror:</strong> Its reflecting surface is curved inside (inwards).
+                        </div>
+                        <div class="definition">
+                            <strong>Convex Mirror:</strong> Its reflecting surface is curved outwards.
+                        </div>
+                        <div class="definition">
+                            <strong>Pole:</strong> The centre of the reflecting surface of a spherical mirror is a point called its pole. It lies on the surface. It is represented by 'P'.
+                        </div>
+                        <div class="definition">
+                            <strong>Centre of Curvature:</strong> The reflecting surface of a spherical mirror forms a part of a sphere. The centre of the sphere is called the centre of curvature. It is represented by 'C'.
+                        </div>
+                        <div class="definition">
+                            <strong>Principal Axis:</strong> The imaginary line that passes through the centre of curvature and the pole of the mirror is called principal axis.
+                        </div>
+                        <div class="definition">
+                            <strong>Principal Focus:</strong> The rays which are parallel to the principal axis after reflection from the surface of a convex mirror or after reflection from the surface of a concave mirror appear to have come from a point on its principal axis. This point is called principal focus of the convex mirror or the principal focus of the concave mirror. This point is called 'f'.
+                        </div>
+                        <div class="definition">
+                            <strong>Radius of Curvature:</strong> The distance between pole of the mirror and Centre of curvature. It is represented by 'R'.
+                        </div>
+                        <div class="definition">
+                            <strong>Focal Length:</strong> The distance between pole of the mirror and Principal Focus. It is represented by (f).
+                        </div>
+                        <div class="definition">
+                            <strong>Aperture:</strong> The diameter of reflecting surface of a spherical mirror is called aperture.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Lenses</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Spherical Lens:</strong> A transparent material bounded by two surfaces of which one or both surface are spherical is called a spherical lens.
+                        </div>
+                        <div class="definition">
+                            <strong>Convex Lens:</strong> Both the surfaces are bulged outwards. Thick in the middle and thin at the edges. It is a converging lens.
+                        </div>
+                        <div class="definition">
+                            <strong>Concave Lens:</strong> Both the surfaces are curved inwards. Thick at the edges and thin in the middle. It is a diverging lens.
+                        </div>
+                        <div class="definition">
+                            <strong>Principal Axis:</strong> An imaginary straight line passing through the two centres of curvature of a lens is called its principal axis.
+                        </div>
+                        <div class="definition">
+                            <strong>Optical Centre:</strong> The central point of a lens is its optical centre.
+                        </div>
+                        <div class="definition">
+                            <strong>Aperture:</strong> The effective diameter of the circular outline of a spherical lens is called its aperture.
+                        </div>
+                        <div class="definition">
+                            <strong>Thin Lenses:</strong> Lenses whose aperture is much less than its radius of curvature and the two centres of curvatures are equidistant from the optical centre O. Such lenses are called thin lenses with small apertures.
+                        </div>
+                        <div class="important">
+                            Rays of light parallel to the principal axis are falling on a convex lens. These rays, after refraction from the lens, are converging to a point on the principal axis. This point on the principal axis is called the principal focus of the lens.
+                        </div>
+                        <div class="important">
+                            Rays of light parallel to the principal axis are falling on a concave lens. These rays, after refraction from the lens, are appearing to diverge from a point on the principal axis. This point on the principal axis is called the principal focus of the concave lens.
+                        </div>
+                        <div class="formula">
+                            The degree of convergence or divergence of light rays achieved by a lens is expressed in terms of its power. The power of a lens is defined as the reciprocal of its focal length.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Human Eye Tab -->
+            <div class="tab-content" id="human-eye">
+                <h2>Human Eye and Colorful World</h2>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Structure of Human Eye</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Human Eye:</strong> The human eye is like a camera: Its lens system forms an image on a light-sensitive screen called the retina.
+                        </div>
+                        <div class="definition">
+                            <strong>Cornea:</strong> Light enters the eye through a thin membrane called the cornea. It forms the transparent bulge on the front surface of the eyeball.
+                        </div>
+                        <div class="definition">
+                            <strong>Eyeball:</strong> The eyeball is approximately spherical in shape with a diameter of about 2.3 cm.
+                        </div>
+                        <div class="definition">
+                            <strong>Crystalline Lens:</strong> The crystalline lens merely provides the finer adjustment of focal length required to focus objects at different distances on the retina.
+                        </div>
+                        <div class="definition">
+                            <strong>Iris:</strong> Iris is a dark muscular diaphragm that controls the size of the pupil.
+                        </div>
+                        <div class="definition">
+                            <strong>Pupil:</strong> The pupil regulates and controls the amount of light.
+                        </div>
+                        <div class="definition">
+                            <strong>Eye Lens:</strong> The eye lens forms an inverted real image of the object on the retina.
+                        </div>
+                        <div class="definition">
+                            <strong>Retina:</strong> The retina is a delicate membrane having enormous number of light-sensitive cells.
+                        </div>
+                        <div class="definition">
+                            <strong>Light-sensitive Cells:</strong> The light-sensitive cells get activated upon illumination and generate electrical signals.
+                        </div>
+                        <div class="definition">
+                            <strong>Optic Nerves:</strong> These signals are sent to the brain via the optic nerves. The brain interprets these signals, and finally, processes the information so that we perceive objects as they are.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Vision and Accommodation</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Eye Lens Composition:</strong> The eye lens is composed of a fibrous, jelly-like material. Its curvature can be modified to some extent by the ciliary muscles.
+                        </div>
+                        <div class="definition">
+                            <strong>Power of Accommodation:</strong> The ability of the eye lens to adjust its focal length is called accommodation.
+                        </div>
+                        <div class="definition">
+                            <strong>Least Distance of Distinct Vision:</strong> The minimum distance at which objects can be seen most distinctly without strain. It is also called the near point of the eye.
+                        </div>
+                        <div class="definition">
+                            <strong>Near Point:</strong> For a young adult with normal vision, the near point is about 25 cm.
+                        </div>
+                        <div class="definition">
+                            <strong>Far Point:</strong> The farthest point upto which the eye can see objects clearly. It is infinity for a normal eye.
+                        </div>
+                        <div class="definition">
+                            <strong>Cataract:</strong> Sometimes, the crystalline lens of people at old age becomes milky and cloudy. This condition is called cataract. This causes partial or complete loss of vision.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Light Dispersion and Spectrum</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Angle of Prism:</strong> The angle between two lateral surfaces of prism.
+                        </div>
+                        <div class="definition">
+                            <strong>Spectrum:</strong> The band of the coloured components of a light beam is called its spectrum.
+                        </div>
+                        <div class="definition">
+                            <strong>Dispersion:</strong> The split of light into its component colours is called dispersion.
+                        </div>
+                        <div class="important">
+                            <strong>VIBGYOR:</strong> The acronym VIBGYOR will help you to remember the sequence of colours (Violet, Indigo, Blue, Green, Yellow, Orange and Red).
+                        </div>
+                        <div class="definition">
+                            <strong>White Light:</strong> Any light that gives a spectrum similar to that of sunlight is often referred to as white light. It is caused by dispersion of sunlight by tiny water droplets, present in the atmosphere. A rainbow is always formed in a direction opposite to that of the Sun.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <h3>Scattering of Light</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="topic-content">
+                        <div class="definition">
+                            <strong>Tyndall Effect:</strong> The phenomenon of scattering of light by the colloidal particles gives rise to Tyndall effect.
+                        </div>
+                        <div class="definition">
+                            <strong>Scattering of Light:</strong> When a beam of light strikes such fine particles, the path of the beam becomes visible. The light reaches us, after being reflected diffusely by these particles.
+                        </div>
+                        <div class="important">
+                            <strong>Blue Sky Explanation:</strong> The molecules of air and other fine particles in the atmosphere have size smaller than the wavelength of visible light. These are more effective in scattering light of shorter wavelengths at the blue end than light of longer wavelengths at the red end.
+                        </div>
+                        <div class="important">
+                            <strong>Danger Signal Lights:</strong> The red is least scattered by fog or smoke. Therefore, it can be seen in the same colour.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Physics Exam Prep - Good luck on your exam!</p>
+    </footer>
+    
+    <script>
+        // Topic expansion
+        document.querySelectorAll('.topic-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const topic = header.parentElement;
+                topic.classList.toggle('expanded');
+            });
+        });
+        
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Deactivate all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Activate the clicked tab
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Search functionality
+        const search = document.getElementById('search');
+        search.addEventListener('input', () => {
+            const searchTerm = search.value.toLowerCase();
+            
+            document.querySelectorAll('.topic').forEach(topic => {
+                const topicTitle = topic.querySelector('.topic-header h3').textContent.toLowerCase();
+                const topicContent = topic.querySelector('.topic-content').textContent.toLowerCase();
+                
+                if (topicTitle.includes(searchTerm) || topicContent.includes(searchTerm)) {
+                    topic.style.display = 'block';
+                    topic.classList.add('expanded');
+                } else {
+                    if (searchTerm) {
+                        topic.style.display = 'none';
+                    } else {
+                        topic.style.display = 'block';
+                        topic.classList.remove('expanded');
+                    }
+                }
+            });
+        });
+        
+        // Progress tracking
+        const progressBar = document.getElementById('progress');
+        const topics = document.querySelectorAll('.topic');
+        let completedTopics = 0;
+        
+        function updateProgress() {
+            completedTopics = parseInt(localStorage.getItem('completedTopics') || '0');
+            const totalTopics = topics.length;
+            const progressPercentage = (completedTopics / totalTopics) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+        
+        topics.forEach((topic, index) => {
+            const topicHeader = topic.querySelector('.topic-header');
+            
+            // Add a checkbox to mark topics as completed
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.style.marginRight = '10px';
+            checkbox.checked = localStorage.getItem(`topic_${index}_completed`) === 'true';
+            
+            if (checkbox.checked) {
+                completedTopics++;
+            }
+            
+            checkbox.addEventListener('change', (e) => {
+                e.stopPropagation(); // Prevent the topic from toggling when clicking the checkbox
+                
+                if (checkbox.checked) {
+                    localStorage.setItem(`topic_${index}_completed`, 'true');
+                    completedTopics++;
+                } else {
+                    localStorage.setItem(`topic_${index}_completed`, 'false');
+                    completedTopics--;
+                }
+                
+                localStorage.setItem('completedTopics', completedTopics.toString());
+                updateProgress();
+            });
+            
+            topicHeader.insertBefore(checkbox, topicHeader.firstChild);
+        });
+        
+        updateProgress();
+        
+        // Countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const examDate = new Date();
+            examDate.setDate(examDate.getDate() + 2); // Exam in 2 days
+            
+            const diff = examDate - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown').textContent = `Exam in: ${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Study mode toggle
+        const studyModeToggle = document.getElementById('studyMode');
+        
+        studyModeToggle.addEventListener('change', () => {
+            if (studyModeToggle.checked) {
+                // Enable study mode - focus mode with less distraction
+                document.querySelectorAll('.definition, .formula, .important, .note').forEach(el => {
+                    el.style.backgroundColor = '#fff';
+                });
+            } else {
+                // Disable study mode - show everything with colors
+                document.querySelectorAll('.definition').forEach(el => el.style.backgroundColor = '#f8f9fa');
+                document.querySelectorAll('.formula').forEach(el => el.style.backgroundColor = '#f0f7ff');
+                document.querySelectorAll('.important').forEach(el => el.style.backgroundColor = '#ffebee');
+                document.querySelectorAll('.note').forEach(el => el.style.backgroundColor = '#fff8e1');
+            }
+        });
+        
+        // Expand all topics in a section when first loaded
+        document.querySelectorAll('.tab-content').forEach(content => {
+            if (content.classList.contains('active')) {
+                content.querySelectorAll('.topic').forEach(topic => {
+                    topic.classList.add('expanded');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
